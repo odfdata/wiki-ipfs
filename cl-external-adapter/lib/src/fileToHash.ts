@@ -4,6 +4,7 @@ import {Requester, Validator} from "@chainlink/external-adapter";
 import { Web3Storage } from 'web3.storage'
 // @ts-ignore
 import ab2str from "arraybuffer-to-string";
+import crypto from "crypto";
 
 const chainlinkHashVerifierParams = {
   CIDList: ['CIDList'],
@@ -40,8 +41,8 @@ const generateHash = async (input: any): Promise<HashGenerated> => {
     for (const file of files) {// console.log(hash);
       console.log(`${file.cid} -- ${file.name} -- ${file.size}`)
       const fileBuffer = await file.arrayBuffer();
-      const hashBuffer = await crypto.subtle.digest("SHA-256", fileBuffer);
-      const hashString = ab2str(hashBuffer, "hex");
+      const buf = Buffer.from(fileBuffer);
+      const hashString= crypto.createHash("sha256").update(buf).digest('hex');
       console.log(hashString);
       evaluatedHashList.push('0x' + hashString);
     }
@@ -72,3 +73,13 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     body: JSON.stringify(response)
   };
 };
+
+// @ts-ignore
+lambdaHandler({
+  body: JSON.stringify({
+    "id": 1,
+    "data": {
+      "CIDList": ["bafybeigrw5qh2bvbrno2nsd7fwctensc662zxen4h6b3bmypdbbvtz36ma"]
+    }
+  })
+}, undefined).then(() => {})
