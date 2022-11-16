@@ -30,6 +30,7 @@ const generateHash = async (input: any): Promise<HashGenerated> => {
   const web3Storage = new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN as string });
   const evaluatedHashList: string[] = [];
   for (const CID of CIDList) {
+    console.log(CID);
     const res = await web3Storage.get(CID);
     if (res === null) throw new Error("Got a null response");
     console.log(`Got a response! [${res.status}] ${res.statusText}`);
@@ -71,7 +72,3 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     body: JSON.stringify(response)
   };
 };
-
-// @ts-ignore
-lambdaHandler({body: JSON.stringify({CIDList: ["bafybeigrw5qh2bvbrno2nsd7fwctensc662zxen4h6b3bmypdbbvtz36ma"]})},
-    undefined).then(() => {});

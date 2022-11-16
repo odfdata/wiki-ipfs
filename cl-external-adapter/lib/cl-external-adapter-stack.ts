@@ -25,7 +25,7 @@ export class ClExternalAdapterStack extends Stack {
             minify: true
           },
           environment: {
-            WEB3_STORAGE: web3storageToken
+            WEB3STORAGE_TOKEN: web3storageToken
           },
           logRetention: logs.RetentionDays.TWO_WEEKS,
           depsLockFilePath: path.join(__dirname, 'src/package-lock.json'),
