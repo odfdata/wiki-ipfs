@@ -61,6 +61,7 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     Requester.success(
         result.jobRunID, {data: {CIDList: result.CIDList, evaluatedHashList: result.evaluatedHashList}});
     statusCode = 201;
+    response = { id: result.jobRunID, data: { CIDList: result.CIDList, evaluatedHashList: result.evaluatedHashList }};
   } catch (e) {
     console.error(e);
     // @ts-ignore
