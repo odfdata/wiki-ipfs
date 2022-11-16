@@ -73,13 +73,3 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     body: JSON.stringify(response)
   };
 };
-
-// @ts-ignore
-lambdaHandler({
-  body: JSON.stringify({
-    "id": 1,
-    "data": {
-      "CIDList": ["bafybeigrw5qh2bvbrno2nsd7fwctensc662zxen4h6b3bmypdbbvtz36ma"]
-    }
-  })
-}, undefined).then(() => {})
