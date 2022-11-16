@@ -1,7 +1,7 @@
 import {APIGatewayEvent, APIGatewayProxyResult, Context} from "aws-lambda";
 // @ts-ignore
 import {Requester, Validator} from "@chainlink/external-adapter";
-import { Web3Storage } from 'web3.storage'
+import {Web3Storage} from 'web3.storage'
 // @ts-ignore
 import ab2str from "arraybuffer-to-string";
 import crypto from "crypto";
