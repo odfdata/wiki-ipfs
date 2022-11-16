@@ -1,10 +1,11 @@
-import {APIGatewayEvent, APIGatewayProxyResult, Context} from "aws-lambda";
 // @ts-ignore
 import {Requester, Validator} from "@chainlink/external-adapter";
 import {Web3Storage} from 'web3.storage'
 // @ts-ignore
 import ab2str from "arraybuffer-to-string";
 import crypto from "crypto";
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from "aws-lambda";
+import { create } from "ipfs-http-client";
 
 const chainlinkHashVerifierParams = {
   CIDList: ['CIDList'],
@@ -31,6 +32,13 @@ const generateHash = async (input: any): Promise<HashGenerated> => {
   const web3Storage = new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN as string });
   const evaluatedHashList: string[] = [];
   for (const CID of CIDList) {
+    const url = 'https://dweb.link/api/v0';
+    const ipfs = create({ url });
+    const links = [];
+    for await (const link of ipfs.ls(CID)) {
+      links.push(link);
+    }
+    console.log(links);
     console.log(CID);
     const res = await web3Storage.get(CID);
     if (res === null) throw new Error("Got a null response");
@@ -38,7 +46,8 @@ const generateHash = async (input: any): Promise<HashGenerated> => {
     if (!res.ok) throw new Error(`failed to get ${CID}`);
     // unpack File objects from the response
     const files = await res.files();
-    for (const file of files) {// console.log(hash);
+    for (const file of files) {
+      // console.log(hash);
       console.log(`${file.cid} -- ${file.name} -- ${file.size}`)
       const fileBuffer = await file.arrayBuffer();
       const buf = Buffer.from(fileBuffer);
@@ -80,6 +89,7 @@ lambdaHandler({
     "id": 1,
     "data": {
       "CIDList": ["bafybeigrw5qh2bvbrno2nsd7fwctensc662zxen4h6b3bmypdbbvtz36ma"]
+      // "CIDList": ["bafybeihpjhkeuiq3k6nqa3fkgeigeri7iebtrsuyuey5y6vy36n345xmbi"]
     }
   })
 }, undefined).then(() => {})
