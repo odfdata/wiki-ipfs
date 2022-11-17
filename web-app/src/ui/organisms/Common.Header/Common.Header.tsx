@@ -1,6 +1,5 @@
 import React from 'react';
-import {Box, Chip, Typography, useMediaQuery} from "@mui/material";
-import {Biotech} from "@mui/icons-material";
+import {Box, useMediaQuery} from "@mui/material";
 import {theme} from "../../../GlobalStyles";
 import {useNetwork} from "wagmi";
 
