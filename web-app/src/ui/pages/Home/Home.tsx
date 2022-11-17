@@ -22,12 +22,6 @@ const Home: React.FC<IHome> = (props) => {
   const { address: connectedWalletAddress } = useAccount();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  useEffect(() => {
-    if (connectedWalletAddress) {
-      navigate(RouteKey.dApp);
-    }
-  }, [connectedWalletAddress]);
-
   const toggleUploadFile = () => {
     setShowUploadFile(!showUploadFile);
   }
