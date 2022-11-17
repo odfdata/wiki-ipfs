@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Box, Button} from "@mui/material";
-import PublishCidOnChainProgress from "./PublishCidOnChain_Progress";
+import React, {useEffect, useState} from 'react';
+import {Box, Button, CircularProgress} from "@mui/material";
+import {useStoreHashGivenIpfs} from "../../../hooks/contracts/CIDMatcher/useStoreHashGivenIpfs";
 
 /**
  *
@@ -11,17 +11,33 @@ import PublishCidOnChainProgress from "./PublishCidOnChain_Progress";
 const PublishCidOnChain: React.FC<IPublishCidOnChain> = (props) => {
   const [publish, setPublish] = useState<boolean>(false);
 
+  const storeHashGivenIpfs = useStoreHashGivenIpfs({
+    CIDList: [props.cid]
+  })
+
+  const publishTransaction = () => {
+    setPublish(true);
+    storeHashGivenIpfs.write();
+  }
+
+  useEffect(() => {
+    if (storeHashGivenIpfs.completed)
+      props.onComplete();
+  }, [storeHashGivenIpfs.completed]);
+
   return (
-    <Box width={150}>
+    <Box width={150} ml={6}>
       {
         !publish ?
           <Button variant="outlined"
-                  onClick={() => setPublish(true)}
-                  sx={{textTransform: "none", width: 150, ml: 6}}>
+                  onClick={publishTransaction}
+                  sx={{textTransform: "none"}}>
             Publish CID
           </Button>
           :
-          <PublishCidOnChainProgress cid={props.cid}/>
+          <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
+            <CircularProgress size={24}/>
+          </Box>
       }
 
     </Box>
@@ -29,7 +45,8 @@ const PublishCidOnChain: React.FC<IPublishCidOnChain> = (props) => {
 };
 
 export interface IPublishCidOnChain {
-  cid: string
+  cid: string,
+  onComplete: () => void
 }
 
 export default PublishCidOnChain;

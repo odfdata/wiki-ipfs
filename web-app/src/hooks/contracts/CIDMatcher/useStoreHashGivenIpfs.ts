@@ -7,10 +7,14 @@ export interface UseStoreHashGivenIpfsParams {
   CIDList: string[]
 }
 
+export interface useStoreHashGivenIpfsReturn extends useBaseSmartContractWriteState<undefined> {
+  write: () => void
+}
+
 /**
  * Hook to store the hash of a given IPFS CID
  */
-export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useBaseSmartContractWriteState<undefined> => {
+export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useStoreHashGivenIpfsReturn => {
   const {completed, error, loading, result, txHash, progress, endAsyncActionError, endAsyncActionSuccess, startAsyncAction,
     startAsyncActionWithTxHash} = useBaseSmartContractWrite<undefined>();
   const network = useNetwork();
@@ -18,8 +22,9 @@ export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useB
     address: CONTRACTS_DETAILS[network.chain?.id]?.CID_MATCHER_ADDRESS,
     abi: CONTRACTS_DETAILS[network.chain?.id]?.CID_MATCHER_ABI,
     functionName: 'storeHashGivenIpfs',
-    enabled: true,
-    args: params.CIDList
+    args: [
+      params.CIDList
+    ]
   });
   const contractWrite = useContractWrite(prepareContractWrite.config);
   const waitForTx = useWaitForTransaction({
@@ -32,10 +37,10 @@ export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useB
     else if (waitForTx.status === "error") endAsyncActionError(waitForTx.error.message)
   }, [waitForTx.status]);
 
-  useEffect(() => {
+  const write = (() => {
     startAsyncAction();
     contractWrite.write();
-  }, []);
+  });
 
-  return { completed, error, loading, result, progress, txHash };
+  return { completed, error, loading, result, progress, txHash, write };
 };

@@ -7,6 +7,7 @@ import {useAccount} from "wagmi";
 import PublishCidOnChain from "./PublishCidOnChain";
 import Web3ModalWrapper from "../../atoms/Web3ModalWrapper/Web3ModalWrapper";
 import ConnectWalletButton from "../../atoms/ConnectWalletButton/ConnectWalletButton";
+import {useNavigate} from "react-router-dom";
 
 /**
  *
@@ -19,6 +20,7 @@ const CommonUploadFileDialog: React.FC<ICommonUploadFileDialog> = (props) => {
   const [uploadedCid, setUploadedCid] = useState<string>("");
 
   const account = useAccount();
+  const navigate = useNavigate();
 
   const onFileDeleted = () => {
     setFileSelected(undefined);
@@ -26,6 +28,11 @@ const CommonUploadFileDialog: React.FC<ICommonUploadFileDialog> = (props) => {
 
   const onUploadComplete = (cid: string) => {
     setUploadedCid(cid);
+  }
+
+
+  const goToSearch = (): void => {
+    navigate(`/search?cid=${uploadedCid}`);
   }
 
   return (
@@ -59,7 +66,7 @@ const CommonUploadFileDialog: React.FC<ICommonUploadFileDialog> = (props) => {
                 <Box width={180} display={"flex"} justifyContent={"right"}>
                   {
                     account.isConnected ?
-                      <PublishCidOnChain cid={uploadedCid}/>
+                      <PublishCidOnChain cid={uploadedCid} onComplete={goToSearch}/>
                       :
                       <ConnectWalletButton/>
                   }
