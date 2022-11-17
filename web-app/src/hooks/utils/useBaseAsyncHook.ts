@@ -4,12 +4,14 @@ import {useState} from "react";
  * @param {boolean} completed - true if the async action completed, false otherwise
  * @param {boolean} loading - true if async action is in progress, false otherwise
  * @param {string} error - string containing the error emitted by the async operation
+ * @param {number} progress - the progress of the action (if implemented)
  * @param {T | undefined} result - the result of the async call
  */
 export interface useBaseAsyncHookState<T> {
   completed: boolean,
   loading: boolean,
   error: string,
+  progress: number,
   result: T | undefined
 }
 
@@ -23,7 +25,7 @@ export interface useBaseAsyncHookReturn<T> extends useBaseAsyncHookState<T> {
   startAsyncAction: () => void,
   endAsyncActionSuccess: (_result: T) => void,
   endAsyncActionError: (_error: string) => void,
-  updateAsyncActionProgress: (_result: T) => void
+  updateAsyncActionProgress: (_progressPerc: number) => void
 }
 
 /**
@@ -33,7 +35,7 @@ export interface useBaseAsyncHookReturn<T> extends useBaseAsyncHookState<T> {
  * Set the type of hook
  */
 export const useBaseAsyncHook = <T>(): useBaseAsyncHookReturn<T> => {
-  const [status, setStatus] = useState<useBaseAsyncHookState<T>>({completed: false, error: "", loading: false, result: undefined});
+  const [status, setStatus] = useState<useBaseAsyncHookState<T>>({completed: false, error: "", progress: 0, loading: false, result: undefined});
 
   /**
    * Starts an async action
@@ -43,6 +45,7 @@ export const useBaseAsyncHook = <T>(): useBaseAsyncHookReturn<T> => {
       loading: true,
       error: "",
       completed: false,
+      progress: 0,
       result: undefined
     })
   }
@@ -56,6 +59,7 @@ export const useBaseAsyncHook = <T>(): useBaseAsyncHookReturn<T> => {
       loading: false,
       error: "",
       completed: true,
+      progress: 100,
       result: _result
     })
   }
@@ -69,20 +73,22 @@ export const useBaseAsyncHook = <T>(): useBaseAsyncHookReturn<T> => {
       loading: false,
       error: _error,
       completed: true,
+      progress: 100,
       result: undefined
     })
   }
 
   /**
    * Update the async action progress (like during an upload)
-   * @param {T} _result - the result to be stored in the state
+   * @param {number} _progressPerc - the progress in percentage (0 to 100) of the action
    */
-  const updateAsyncActionProgress = (_result: T) => {
+  const updateAsyncActionProgress = (_progressPerc: number) => {
     setStatus({
       loading: true,
       error: "",
       completed: false,
-      result: _result
+      progress: _progressPerc,
+      result: undefined
     });
   }
 
