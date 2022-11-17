@@ -95,8 +95,3 @@ export const theme = createTheme({
     }
   }
 });
-
-
-declare module '@mui/styles/defaultTheme' {
-  interface DefaultTheme extends Theme {}
-}
