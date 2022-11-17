@@ -1,6 +1,5 @@
 import React from "react";
 import Home from "./ui/pages/Home/Home";
-import DApp from "./ui/pages/dApp/dApp";
 
 export enum RouteKey {
   Home = "/",
@@ -12,9 +11,4 @@ export const routes = [ {
   protected: false,
   path: RouteKey.Home,
   component: <Home/>,
-}, {
-  key: RouteKey.dApp,
-  protected: false,
-  path: RouteKey.dApp,
-  component: <DApp/>,
 }]
