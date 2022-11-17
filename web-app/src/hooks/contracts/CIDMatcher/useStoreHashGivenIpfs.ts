@@ -1,5 +1,5 @@
 import {useBaseSmartContractWrite, useBaseSmartContractWriteState} from "../../utils/useBaseSmartContractWrite";
-import {useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
+import {useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {useEffect} from "react";
 
@@ -14,7 +14,6 @@ export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useB
   const {completed, error, loading, result, txHash, progress, endAsyncActionError, endAsyncActionSuccess, startAsyncAction,
     startAsyncActionWithTxHash} = useBaseSmartContractWrite<undefined>();
   const network = useNetwork();
-  const userAccount = useAccount();
   const prepareContractWrite = usePrepareContractWrite({
     address: CONTRACTS_DETAILS[network.chain?.id]?.CID_MATCHER_ADDRESS,
     abi: CONTRACTS_DETAILS[network.chain?.id]?.CID_MATCHER_ABI,
