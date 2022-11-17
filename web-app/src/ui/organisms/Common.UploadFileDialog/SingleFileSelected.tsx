@@ -3,6 +3,7 @@ import {Box, Button, IconButton, Typography} from "@mui/material";
 import {Close, FileUpload} from "@mui/icons-material";
 import FileUploadWithProgressBar from "./FileUploadWithProgressBar";
 import prettyBytes from "pretty-bytes";
+import {useUploadFile} from "../../../hooks/web3Storage/useUploadFile";
 
 /**
  * Shows a selected file
@@ -14,8 +15,12 @@ const SingleFileSelected: React.FC<ISingleFileSelected> = (props) => {
 
   const [uploadInProgress, setUploadInProgress] = useState<boolean>(false);
 
-  const onCompleteUpload = () => {
-    alert("Upload completed!");
+  /**
+   * Completes the upload, receiving the file CID
+   * @param {string} cid
+   */
+  const onCompleteUpload = (cid: string) => {
+    alert("Upload completed!" + cid);
   }
 
   return (
