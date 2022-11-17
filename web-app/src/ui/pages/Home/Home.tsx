@@ -1,23 +1,12 @@
-import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  InputBase,
-  Paper,
-  Tooltip,
-  Typography,
-  useMediaQuery
-} from '@mui/material';
-import React, {useEffect} from 'react';
+import {Box, Button, Divider, IconButton, InputBase, Paper, Tooltip, Typography, useMediaQuery} from '@mui/material';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import CommonHeader from "../../organisms/Common.Header/Common.Header";
 import {theme} from "../../../GlobalStyles";
 import {RouteKey} from "../../../App.Routes";
-import Web3ModalWrapper from "../../atoms/Web3ModalWrapper/Web3ModalWrapper";
 import {useAccount} from "wagmi";
-import {Description, Directions, Menu, Search} from "@mui/icons-material";
-import Grid from '@mui/material/Unstable_Grid2';
+import {Description, Search} from "@mui/icons-material";
+import CommonUploadFileDialog from "../../organisms/Common.UploadFileDialog/Common.UploadFileDialog";
 
 /**
  *
@@ -28,6 +17,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 const Home: React.FC<IHome> = (props) => {
 
   const navigate = useNavigate();
+  const [showUploadFile, setShowUploadFile] = useState<boolean>(false);
 
   const { address: connectedWalletAddress } = useAccount();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -37,6 +27,10 @@ const Home: React.FC<IHome> = (props) => {
       navigate(RouteKey.dApp);
     }
   }, [connectedWalletAddress]);
+
+  const toggleUploadFile = () => {
+    setShowUploadFile(!showUploadFile);
+  }
 
   return (
     <Box width={"100%"} minHeight={"100vh"}
@@ -67,9 +61,22 @@ const Home: React.FC<IHome> = (props) => {
         </Paper>
 
         <Box mt={3}>
-          <Button variant="outlined" sx={{textTransform: "none", mr: 1, width: 130}}>Search</Button>
-          <Button variant="outlined" sx={{textTransform: "none", ml: 1, width: 130}}>Upload to IPFS</Button>
+          <Button variant="outlined"
+                  sx={{textTransform: "none", mr: 1, width: 130}}>
+            Search
+          </Button>
+          <Button variant="outlined"
+                  onClick={toggleUploadFile}
+                  sx={{textTransform: "none", ml: 1, width: 130}}>
+            Upload to IPFS
+          </Button>
         </Box>
+
+        {/* Show modal to upload file dialog*/}
+        <CommonUploadFileDialog
+          visible={showUploadFile}
+          close={toggleUploadFile}
+        />
 
       </Box>
 
