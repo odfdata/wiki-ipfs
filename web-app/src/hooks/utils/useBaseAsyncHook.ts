@@ -17,11 +17,13 @@ export interface useBaseAsyncHookState<T> {
  * @param {() => void} startAsyncAction - starts the async action
  * @param {(_result: T) => void} endAsyncActionSuccess - ends the async action with success
  * @param {(_error: string) => void} endAsyncActionError - ends the async action with error, setting the error
+ * @param {(_result: T) => void} updateAsyncActionProgress - update the async action progress
  */
 export interface useBaseAsyncHookReturn<T> extends useBaseAsyncHookState<T> {
   startAsyncAction: () => void,
   endAsyncActionSuccess: (_result: T) => void,
   endAsyncActionError: (_error: string) => void,
+  updateAsyncActionProgress: (_result: T) => void
 }
 
 /**
@@ -71,11 +73,25 @@ export const useBaseAsyncHook = <T>(): useBaseAsyncHookReturn<T> => {
     })
   }
 
+  /**
+   * Update the async action progress (like during an upload)
+   * @param {T} _result - the result to be stored in the state
+   */
+  const updateAsyncActionProgress = (_result: T) => {
+    setStatus({
+      loading: true,
+      error: "",
+      completed: false,
+      result: _result
+    });
+  }
+
   return {
     ...status,
     startAsyncAction,
     endAsyncActionSuccess,
-    endAsyncActionError
+    endAsyncActionError,
+    updateAsyncActionProgress
   }
 
 }
