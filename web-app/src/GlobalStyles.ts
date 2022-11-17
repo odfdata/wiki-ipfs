@@ -17,12 +17,12 @@ export const theme = createTheme({
       fontFamily: "Roboto"
     },
     h2: {
-      fontSize: 36,
+      fontSize: 30,
       fontWeight: 400,
       fontFamily: "Roboto"
     },
     h3: {
-      fontSize: 24,
+      fontSize: 22,
       fontFamily: "Roboto",
       fontWeight: "bold"
     },
