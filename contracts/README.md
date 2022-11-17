@@ -7,7 +7,7 @@ Refs about CID creation on IPFS:
 * https://ipfs-search.readthedocs.io/en/latest/ipfs_datatypes.html#id1
 
 Oracle Mumbai contact: https://mumbai.polygonscan.com/address/0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c
-CIDMatcher contract: https://mumbai.polygonscan.com/address/0x9384f457276898D26d1e2fcb06BD37670Ae580eA#readContract
+CIDMatcher contract: https://mumbai.polygonscan.com/address/0x553DcF1b90F0bF964219aC430C547822456EB287#readContract
 
 Example of files:
 * Directory: https://dweb.link/api/v0/ls?arg=bafybeihpjhkeuiq3k6nqa3fkgeigeri7iebtrsuyuey5y6vy36n345xmbi

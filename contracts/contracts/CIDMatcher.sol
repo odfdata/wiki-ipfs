@@ -18,8 +18,12 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
     bytes32 private jobId;
 
     /// mapping
-    /// @dev mapping sha256 to IPFS urls
-    mapping (bytes32 => string[]) public sha2ToIPFS;
+    /// @dev mapping sha256 to CIDs
+    mapping (bytes32 => string[]) public sha2ToCIDs;
+    /// @dev mapping IPFS CID to sha256
+    mapping (string => bytes32) private CIDtoSha2;
+    /// @dev recording the status of the CID verification: 1: pending - 2: success - 3+: error
+    mapping (string => uint) private pendingCID;
 
     /// events
     event NewIPFSHashRequest(string[] _cidList);
@@ -36,6 +40,34 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
         jobId = _stringToBytes32(_jobId);
     }
 
+
+    /**
+      * Given a CID, return the array of hashes stored
+      * @param _hash id of the job for ChainLink
+      * @return CIDs - an array with all the CIDs mapping to that hash
+      */
+    function getCIDsFromHash(bytes32 _hash) public view returns(string[] memory CIDs) {
+        return sha2ToCIDs[_hash];
+    }
+
+    /**
+      * Given a CID, return the array of hashes stored
+      * @param _cid CID to search
+      * @return hash - the hash of that CID, bytes32(0) if not present
+      */
+    function getHashFromCID(string calldata _cid) public view returns(bytes32 hash) {
+        return CIDtoSha2[_cid];
+    }
+
+    /**
+      * Returns the status of the verification for a given _cid
+      * @param _cid CID to search
+      * @return status - the status of verification: 1 for pending - 2 for success - 3+ for errors
+      */
+    function getVerificationStatus(string calldata _cid) public view returns(uint status) {
+        return pendingCID[_cid];
+    }
+
     /**
       * @notice Prepares the call for Chainlink Oracle, sending the CID to verify
       * @param _cidList list of CID to get the hash
@@ -43,6 +75,9 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
     function storeHashGivenIpfs (string[] calldata _cidList) external {
         require(_cidList.length > 0, "Empty array");
 
+        for(uint i=0; i<_cidList.length; ++i) {
+            pendingCID[_cidList[i]] = 1;
+        }
         // perform a request
         Chainlink.Request memory req = buildChainlinkRequest(
             jobId,
@@ -67,13 +102,18 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
 
         for (uint i=0; i<_cidList.length; ++i) {
             if (_hashList[i] != bytes32(0)) {
-                sha2ToIPFS[_hashList[i]].push(_cidList[i]);
+                sha2ToCIDs[_hashList[i]].push(_cidList[i]);
+                CIDtoSha2[_cidList[i]] = _hashList[i];
+                uint returnedHashAsUint = uint(_hashList[i]);
+                if (returnedHashAsUint > 100000)
+                    pendingCID[_cidList[i]] = uint(2);
+                else pendingCID[_cidList[i]] =returnedHashAsUint;
                 emit NewHashRecorded(_cidList[i], _hashList[i]);
             }
         }
     }
 
-    // TODO remove no move available IPFS file (both from IPFStoURL and URLtoIPFS)
+    // TODO remove no move available IPFS file
 
     /**
       * @notice Get the ChainLink token address
