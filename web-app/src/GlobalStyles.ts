@@ -14,46 +14,46 @@ export const theme = createTheme({
     h1: {
       fontSize: 40,
       fontWeight: 500,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     h2: {
       fontSize: 36,
       fontWeight: 400,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     h3: {
       fontSize: 24,
-      fontFamily: "Lekton",
+      fontFamily: "Roboto",
       fontWeight: "bold"
     },
     h4: {
       fontSize: 20,
-      fontFamily: "Lekton",
+      fontFamily: "Roboto",
       fontWeight: "bold"
     },
     h5: {
       fontSize: 16,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     h6: {
       fontSize: 14,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     body1: {
       fontSize: 16,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     body2: {
       fontSize: 12,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     subtitle1: {
       fontSize: 16,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     },
     button: {
       fontWeight: 600,
-      fontFamily: "Lekton"
+      fontFamily: "Roboto"
     }
   },
   palette: {
@@ -89,7 +89,7 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          paddingBottom: 2  // Lekton font makes it not correctly aligned
+          paddingBottom: 2  // Roboto font makes it not correctly aligned
         }
       }
     }
