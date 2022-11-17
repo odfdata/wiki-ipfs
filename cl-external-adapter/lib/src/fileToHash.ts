@@ -42,7 +42,7 @@ const generateHash = async (input: any): Promise<HashGenerated> => {
     // at the moment we just manage ipfs CIDs with just one file inside
     if (ipfsResultJson.Objects[0].Links.length > 1) {
       CIDListResult.push(CID);
-      evaluatedHashList.push("0x0000000000000000000000000000000000000000000000000000000000000000");
+      evaluatedHashList.push("0x0000000000000000000000000000000000000000000000000000000000000003");
     } else {
       const res = await web3Storage.get(CID);
       if (res === null) throw new Error("Got a null response");
