@@ -44,7 +44,7 @@ export const useUploadFile = (params: UploadFileParams): useBaseAsyncHookState<U
 
     // client.put will invoke our callbacks during the upload
     // and return the root cid when the upload completes
-    client.put([params.file], { onRootCidReady, onStoredChunk }).then((cid) => {
+    client.put([params.file], { onRootCidReady, onStoredChunk, name: params.file.name }).then((cid) => {
       endAsyncActionSuccess({cid: cid});
     });
   }, [params.file]);
