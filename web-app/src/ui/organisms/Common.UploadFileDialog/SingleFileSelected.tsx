@@ -3,7 +3,6 @@ import {Box, Button, IconButton, Typography} from "@mui/material";
 import {Close, FileUpload} from "@mui/icons-material";
 import FileUploadWithProgressBar from "./FileUploadWithProgressBar";
 import prettyBytes from "pretty-bytes";
-import {useUploadFile} from "../../../hooks/web3Storage/useUploadFile";
 
 /**
  * Shows a selected file
@@ -14,14 +13,6 @@ import {useUploadFile} from "../../../hooks/web3Storage/useUploadFile";
 const SingleFileSelected: React.FC<ISingleFileSelected> = (props) => {
 
   const [uploadInProgress, setUploadInProgress] = useState<boolean>(false);
-
-  /**
-   * Completes the upload, receiving the file CID
-   * @param {string} cid
-   */
-  const onCompleteUpload = (cid: string) => {
-    alert("Upload completed!" + cid);
-  }
 
   return (
     <Box>
@@ -50,7 +41,7 @@ const SingleFileSelected: React.FC<ISingleFileSelected> = (props) => {
       {
         uploadInProgress ?
           <Box mt={1}>
-            <FileUploadWithProgressBar file={props.file} onComplete={onCompleteUpload}/>
+            <FileUploadWithProgressBar file={props.file} onComplete={props.onUploadComplete}/>
           </Box>
           :
           ""
@@ -64,10 +55,12 @@ const SingleFileSelected: React.FC<ISingleFileSelected> = (props) => {
 /**
  * @param {File} file - file selected
  * @param {function} onFileDeleted - triggered when the user decide to remove the file
+ * @param {function} onUploadComplete - triggered when the upload of the file completes
  */
 export interface ISingleFileSelected {
   file: File,
-  onFileDeleted: () => void
+  onFileDeleted: () => void,
+  onUploadComplete: (cid: string) => void
 }
 
 export default SingleFileSelected;

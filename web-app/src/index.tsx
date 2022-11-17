@@ -7,17 +7,28 @@ import {Provider} from "react-redux";
 import {store} from "./store";
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from "@mui/material";
 import {theme} from "./GlobalStyles";
-import {chain, createClient, WagmiConfig} from "wagmi";
+import {chain, configureChains, createClient, WagmiConfig} from "wagmi";
 import {ConnectKitProvider, getDefaultClient} from "connectkit";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { publicProvider } from 'wagmi/providers/public';
 
-const chains = [chain.polygon];
-const client = createClient(
-  getDefaultClient({
-    appName: "cl-hack-22",
-    autoConnect: false,
-    chains
-  }),
+
+const { provider, chains } = configureChains(
+  [chain.polygonMumbai],
+  [
+    publicProvider()
+  ],
 );
+const client = createClient({
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({
+      chains: chains
+    }),
+  ],
+  provider
+});
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

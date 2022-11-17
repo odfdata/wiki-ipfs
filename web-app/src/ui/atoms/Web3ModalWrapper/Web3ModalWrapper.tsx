@@ -1,5 +1,6 @@
 import React from 'react';
 import {ConnectKitButton} from "connectkit";
+import {useConnect} from "wagmi";
 
 /**
  * This component gets any onClick event on children components and shows the modal to connect to a provider
@@ -10,11 +11,15 @@ import {ConnectKitButton} from "connectkit";
  */
 const Web3ModalWrapper: React.FC<IWeb3ModalWrapper> = (props) => {
 
+  const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
+
+
   return (
       <ConnectKitButton.Custom>
         {({ isConnected, isConnecting, show, hide, address, ensName }) => {
           return (
-            <div onClick={props.disabled ? ()=>{} : show}>
+            // <div onClick={props.disabled ? ()=>{} : () => {connect({connector: connectors[0]})}}>
+            <div onClick={props.disabled ? ()=>{} : show }>
               {props.children}
             </div>
           );
