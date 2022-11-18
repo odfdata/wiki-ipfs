@@ -1,14 +1,10 @@
-# Welcome to your CDK TypeScript project
+# Welcome to Chailink External Adapter CDK TypeScript project
 
-This is a blank project for CDK development with TypeScript.
+This is the CDK template to create the external adapter on AWS console.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Deploy
 
-## Useful commands
+To deploy an update on AWS, run the following commands
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
++ `cdk synth`
++ `cdk deploy --app "cdk.out" ClExternalAdapterStack --profile {profile_name} --region {region_name}`
