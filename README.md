@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/12898752/202745200-345f72bb-1985-494f-a994-26621fb7826a.png"/>
+<img src="https://user-images.githubusercontent.com/12898752/202768591-522fe826-876e-45df-9966-cafcc5d098b4.png"/>
 
 # Wiki IPFS
 
