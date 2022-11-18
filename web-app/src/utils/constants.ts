@@ -14,3 +14,4 @@ export const CHAIN_DETAILS: {80001: ChainDetails} = {
     IS_TESTNET: true
   }
 };
+export const IPFS_GATEWAY_BASE_URL: string = "https://dweb.link/api/v0/ls";
