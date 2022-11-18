@@ -26,6 +26,23 @@ interface HashGenerated {
 
 const ipfsGatewayBaseUrl: string = "https://dweb.link/api/v0/ls";
 
+const downloadIPFSInformation = async (CID: string) => {
+  let retry: boolean = true;
+  let retryNumber = 0;
+  while (retry) {
+    try {
+      const ipfsResult = await axios.get(`${ipfsGatewayBaseUrl}?arg=${CID}`);
+      if (ipfsResult.status !== 200) throw new Error(`CID ${CID} doesn't exist`);
+      return ipfsResult.data;
+    } catch (e) {
+      console.error(e);
+      if (retryNumber < 10) retryNumber++;
+      else retry = false;
+    }
+  }
+  return undefined;
+}
+
 const generateHash = async (input: any): Promise<HashGenerated> => {
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(input, chainlinkHashVerifierParams);
@@ -35,12 +52,10 @@ const generateHash = async (input: any): Promise<HashGenerated> => {
   const evaluatedHashList: string[] = []; const CIDListResult: string[] = [];
   for (const CID of CIDList) {
     console.log(CID);
-    const ipfsResult = await axios.get(`${ipfsGatewayBaseUrl}?arg=${CID}`);
-    if (ipfsResult.status !== 200) throw new Error(`CID ${CID} doesn't exist`);
-    const ipfsResultJson = ipfsResult.data;
-    console.log(ipfsResultJson);
-    // at the moment we just manage ipfs CIDs with just one file inside
-    if (ipfsResultJson.Objects[0].Links.length > 1) {
+    const ipfsResultJson = await downloadIPFSInformation(CID);
+    // check if we didn't get a response or if it's a folder, we just manage ipfs CIDs with just one file inside
+    if (ipfsResultJson === undefined || ipfsResultJson.Objects[0].Links.length > 1) {
+      console.log(ipfsResultJson);
       CIDListResult.push(CID);
       evaluatedHashList.push("0x0000000000000000000000000000000000000000000000000000000000000003");
     } else {
