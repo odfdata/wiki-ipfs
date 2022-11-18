@@ -25,6 +25,7 @@ interface HashGenerated {
 }
 
 const ipfsGatewayBaseUrl: string = "https://dweb.link/api/v0/ls";
+const MAX_RETRY_NUMBER: number = 15;
 
 const downloadIPFSInformation = async (CID: string) => {
   let retry: boolean = true;
@@ -36,7 +37,7 @@ const downloadIPFSInformation = async (CID: string) => {
       return ipfsResult.data;
     } catch (e) {
       console.error(e);
-      if (retryNumber < 10) retryNumber++;
+      if (retryNumber < MAX_RETRY_NUMBER) retryNumber++;
       else retry = false;
     }
   }
@@ -65,7 +66,7 @@ const downloadIPFSFile = async (CID: string): Promise<{fileCID: string, hashStri
       };
     } catch (e) {
       console.error(e);
-      if (retryNumber < 10) retryNumber++;
+      if (retryNumber < MAX_RETRY_NUMBER) retryNumber++;
       else retry = false;
     }
   }
