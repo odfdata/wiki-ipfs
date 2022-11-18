@@ -1,15 +1,28 @@
-Refs about CID creation on IPFS:
+# Smart Contracts
 
-* https://cid.ipfs.tech/#QmVnWhM2qYr9JkjGLaEVSZnCprRLDW8qns1oYYVXjnb4DA
-* https://github.com/multiformats/cid/blob/ef1b2002394b15b1e6c26c30545fd485f2c4c138/README.md#decoding-algorithm
-* https://stackoverflow.com/questions/71418693/possible-to-determine-if-a-file-is-present-on-ipfs-by-calculating-its-hash
-* https://stackoverflow.com/questions/59183147/are-cid-different-for-the-same-file-but-uploaded-by-2-users-in-ipfs
-* https://ipfs-search.readthedocs.io/en/latest/ipfs_datatypes.html#id1
+These smart contracts are connected with the **WIKI IPFS** project for the ChainLink Fall Hackaton 22
 
-Oracle Mumbai contact: https://mumbai.polygonscan.com/address/0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c
-CIDMatcher contract: https://mumbai.polygonscan.com/address/0x553DcF1b90F0bF964219aC430C547822456EB287#readContract
+## How to run
 
-Example of files:
-* Directory: https://dweb.link/api/v0/ls?arg=bafybeihpjhkeuiq3k6nqa3fkgeigeri7iebtrsuyuey5y6vy36n345xmbi
-* Web3.Storage single file: https://dweb.link/api/v0/ls?arg=bafybeigrw5qh2bvbrno2nsd7fwctensc662zxen4h6b3bmypdbbvtz36ma
-* IPFS single file: https://dweb.link/api/v0/ls?arg=Qmc5UM1ZBbb9ZNvsk8sqYxNxqEyXtrve2zRUGbuwBYkGeS
+Contracts have been developed using the [hardhat framework](https://hardhat.org/). 
+
+You need to create a `.secrets.json` file to run the scripts. You can just copy and renaming `.secrets.example.json` file to access al the documents.
+
+These are the commands you need to run the scripts:
+* `yarn install` to install dependencies
+* `yarn hardhat compile` to compile smart contracts
+* `yarn hardhat run scripts/Deployer/deploy.ts` to deploy the Smart Contract (use `--network` flag for a specific network)
+* `yarn hardhat test` to run basic tests
+
+## Current deployment
+
+Contracts are currently deployed on **Polygon Mumbai** testnet
+
+* **Chainlink Oracle contact** [0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c](https://mumbai.polygonscan.com/address/0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c)
+* **CIDMatcher contract** [0x553DcF1b90F0bF964219aC430C547822456EB287](https://mumbai.polygonscan.com/address/0x553DcF1b90F0bF964219aC430C547822456EB287)
+
+## Possible improvements
+
+* Make sure that if a file is written twice, references to same CID is not written twice
+* Integrate PolygonID (or any other DID), to connect a trusted ID to an IPFS link
+* Make the contract upgradable
