@@ -53,16 +53,14 @@ const Search: React.FC<ISearch> = (props) => {
 
   // store the results
   useEffect(() => {
-    if (verificationStatus.completed && hashFromCid.completed && cidFromHash.completed) {
-      let cidList: FoundCid[] = [];
-      if ( isHash ){
-        cidList = cidFromHash.result.map(c => ({cid: c, hash: hashSanitized, status: 2}))
-      } else if (verificationStatus.result > 0) {
-        cidList = [{cid: cidQueryString, hash: hashFromCid.result, status: verificationStatus.result}]
-      }
-      setCidList(cidList);
+    let cidList: FoundCid[] = [];
+    if ( isHash ){
+      cidList = cidFromHash.result.map(c => ({cid: c, hash: hashSanitized, status: 2}))
+    } else if (verificationStatus.result > 0) {
+      cidList = [{cid: cidQueryString, hash: hashFromCid.result, status: verificationStatus.result}]
     }
-  }, [verificationStatus.completed, hashFromCid.completed, cidFromHash.completed]);
+    setCidList(cidList);
+  }, [verificationStatus.result, hashFromCid.result, cidFromHash.result]);
 
 
   const onEnterSearchPress = (input: string) => {
@@ -89,7 +87,7 @@ const Search: React.FC<ISearch> = (props) => {
             cidList.length === 0 ?
               <SearchNothingToShow searchValue={cidQueryString} isHash={isHash}/>
               :
-              cidList.map(c => <Box mt={2}><SearchSingleCidResult key={c.cid} cid={c}/></Box>)
+              cidList.map((c, pos) => <Box mt={2} key={c.cid + pos}><SearchSingleCidResult cid={c}/></Box>)
         }
       </Box>
     </Container>

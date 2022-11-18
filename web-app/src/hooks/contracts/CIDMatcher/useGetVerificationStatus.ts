@@ -26,18 +26,5 @@ export const useGetVerificationStatus = (params: UseGetVerificationStatusParams)
     args: [params.CID]
   });
 
-  // once data il loaded, return
-  useEffect(() => {
-    if (contractRead.data) {
-      const status = contractRead.data as BigNumber;
-      endAsyncActionSuccess(status.toNumber());
-    }
-  }, [contractRead.data]);
-
-  // set as loading while data is fetching
-  useEffect(() => {
-    if (contractRead.isLoading) startAsyncAction();
-  }, [contractRead.isLoading]);
-
-  return { completed, error, loading, progress, result };
+  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: (contractRead.data as BigNumber).toNumber() };
 };

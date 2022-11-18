@@ -26,18 +26,5 @@ export const useGetCIDsFromHash = (params: UseGetCIDsFromHashParams): useBaseAsy
     onError: ((e) => endAsyncActionError(e.message))
   });
 
-  // once data il loaded, return
-  useEffect(() => {
-    if (contractRead.data) {
-      const CIDList = contractRead.data as string[];
-      endAsyncActionSuccess(CIDList);
-    }
-  }, [contractRead.data]);
-
-  // set as loading while data is fetching
-  useEffect(() => {
-    if (contractRead.isLoading) startAsyncAction();
-  }, [contractRead.isLoading]);
-
-  return { completed, error, loading, progress, result };
+  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: contractRead.data as string[] };
 }
