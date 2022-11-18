@@ -34,8 +34,7 @@ const Home: React.FC<IHome> = (props) => {
    * When enter is pressed while searching, the value is taken and the search is performed
    */
   const enterPressedWhileSearching = () => {
-    console.log(RouteKey.Search + "?cid=" + searchValue);
-    // navigate("/search?cid=" + searchValue);
+    navigate("/search?cid=" + searchValue);
   }
 
   return (

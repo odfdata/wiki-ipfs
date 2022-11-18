@@ -26,9 +26,7 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
    * @param e
    */
   const onKeyUp = (e) => {
-    console.log(e.key);
     if (e && e.key === 'Enter'){
-      e.preventDefault();
       if (props.onEnterPressed)
         props.onEnterPressed();
     }
@@ -49,8 +47,11 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
         onChange={(e => onChange(e.target.value))}
         onKeyUp={onKeyUp}
         inputProps={{
-          onSubmit: (e) =>  {e.preventDefault();},
-          onSubmitCapture: (e) =>  {e.preventDefault();},
+          onKeyDown: (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          },
         }}
       />
 

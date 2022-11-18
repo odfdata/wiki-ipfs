@@ -19,6 +19,7 @@ import SearchSingleCidResult from "../../organisms/Search.SingleCidResult/Search
  */
 export interface FoundCid {
   cid: string,
+  hash: string,
   status: number
 }
 
@@ -40,7 +41,8 @@ const Search: React.FC<ISearch> = (props) => {
   const isHash = useMemo(() =>
     new RegExp(/^(0x)?[A-Fa-f0-9]{64}$/).test(searchValue), [searchValueDebounced]);
 
-  const cidFromHash = useGetCIDsFromHash({chainId: network.chain.id, hash: searchValueDebounced.startsWith("0x") ? searchValueDebounced : "0x" + searchValueDebounced});
+  const hashSanitized = useMemo(() => searchValueDebounced.startsWith("0x") ? searchValueDebounced : "0x" + searchValueDebounced, [searchValueDebounced]);
+  const cidFromHash = useGetCIDsFromHash({chainId: network.chain.id, hash: hashSanitized});
   const hashFromCid = useGetHashFromCID({chainId: network.chain.id, CID: searchValueDebounced});
   const verificationStatus = useGetVerificationStatus({chainId: network.chain.id, CID: searchValueDebounced});
 
@@ -54,9 +56,9 @@ const Search: React.FC<ISearch> = (props) => {
     if (verificationStatus.completed && hashFromCid.completed && cidFromHash.completed) {
       let cidList: FoundCid[] = [];
       if ( isHash ){
-        cidList = cidFromHash.result.map(c => ({cid: c, status: 2}))
+        cidList = cidFromHash.result.map(c => ({cid: c, hash: hashSanitized, status: 2}))
       } else if (verificationStatus.result > 0) {
-        cidList = [{cid: searchValueDebounced, status: verificationStatus.result}]
+        cidList = [{cid: searchValueDebounced, hash: hashFromCid.result, status: verificationStatus.result}]
       }
       setCidList(cidList);
     }
