@@ -14,7 +14,7 @@
     "lint": "eslint '*.ts' --quiet --fix",
     "compile": "tsc",
     "test": "npm run compile && npm run unit",
-    "dev": "npx ts-node index.ts",
+    "bacalhau": "npx ts-node index.ts",
     "build": "tsc -p ."
   },
   "devDependencies": {
