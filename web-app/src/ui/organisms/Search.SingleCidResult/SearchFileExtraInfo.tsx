@@ -1,6 +1,8 @@
 import React from 'react';
 import {FoundCid} from "../../pages/Search/Search";
-import {Typography} from "@mui/material";
+import {Box, CircularProgress, Typography} from "@mui/material";
+import {useSearchCID} from "../../../hooks/api/useSearchCID";
+import prettyBytes from "pretty-bytes";
 
 /**
  *
@@ -10,13 +12,23 @@ import {Typography} from "@mui/material";
  */
 const SearchFileExtraInfo: React.FC<ISearchFileExtraInfo> = (props) => {
 
-  
+  const searchCid = useSearchCID(props.cid.cid);
 
   return (
     <div>
-
-      <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}><strong>File Name</strong>: Pippo.xml</Typography>
-      <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}><strong>File Size</strong>: 50.1 MB</Typography>
+      {
+        searchCid.loading || !searchCid.completed ?
+          <CircularProgress/>
+          :
+          <React.Fragment>
+            <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}>
+              <strong>File Name</strong>: {searchCid.result.isFile ? "-" : searchCid.result.directoryFileList[0].name}
+            </Typography>
+            <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}>
+              <strong>File Size</strong>: {searchCid.result.isFile ? "-" : prettyBytes(searchCid.result.directoryFileList[0].size)}
+            </Typography>
+          </React.Fragment>
+      }
     </div>
   );
 };

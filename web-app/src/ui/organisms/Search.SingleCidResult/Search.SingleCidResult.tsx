@@ -38,9 +38,10 @@ const SearchSingleCidResult: React.FC<ISearchSingleCidResult> = (props) => {
   }, [props.cid.status]);
 
   return (
-    <Paper sx={{px: 2, py: 2}}>
+    <Paper sx={{px: 2, py: 2}} elevation={3}>
       <Typography variant="h4">{props.cid.cid}</Typography>
       <Typography variant="body1" color={"text-secondary"} sx={{mt: 1}}><strong>Status</strong>: {verificationStatusAsString}</Typography>
+
       {
         props.cid.status === 2 ?
           <Box mt={0.5} display={"flex"} flexDirection={"row"} alignItems={"center"}>

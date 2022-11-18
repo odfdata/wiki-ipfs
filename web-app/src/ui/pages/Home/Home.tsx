@@ -29,18 +29,16 @@ const Home: React.FC<IHome> = (props) => {
     setShowUploadFile(!showUploadFile);
   }
 
-  console.log(searchValue);
   /**
    * When enter is pressed while searching, the value is taken and the search is performed
    */
-  const enterPressedWhileSearching = () => {
+  const enterPressedWhileSearching = (searchValue: string) => {
     navigate("/search?cid=" + searchValue);
   }
 
   return (
     <Box width={"100%"} minHeight={"100vh"}
          display={"flex"} flexDirection={"column"}>
-      <CommonHeader/>
       <Box display={"flex"} alignItems={"center"} justifyContent={"center"} flexDirection={"column"} mt={"20vh"}>
         <div style={{width: 180, height: 80, backgroundColor: "#e8aeae", borderRadius: 8}}></div>
         <Typography variant="body1" sx={{mt: 2}}>
@@ -53,6 +51,7 @@ const Home: React.FC<IHome> = (props) => {
 
         <Box mt={3}>
           <Button variant="outlined"
+                  onClick={() => {enterPressedWhileSearching(searchValue)}}
                   sx={{textTransform: "none", mr: 1, width: 130}}>
             Search
           </Button>

@@ -11,6 +11,7 @@ import {useGetHashFromCID} from "../../../hooks/contracts/CIDMatcher/useGetHashF
 import {useGetVerificationStatus} from "../../../hooks/contracts/CIDMatcher/useGetVerificationStatus";
 import {useAppDispatch} from "../../../hooks/redux/reduxHooks";
 import SearchSingleCidResult from "../../organisms/Search.SingleCidResult/Search.SingleCidResult";
+import SearchNothingToShow from "../../organisms/Search.NothingToShow/Search.NothingToShow";
 
 /**
  * Define the shape of the information to pass to the list of papers for rendering
@@ -36,6 +37,7 @@ const Search: React.FC<ISearch> = (props) => {
   const [cidList, setCidList] = useState<FoundCid[]>([]);
   const [searchValueDebounced] = useDebounce(searchValue, 500);
   const network = useNetwork();
+  const navigate = useNavigate();
 
   const cidQueryString = useMemo(() => searchParams.get("cid"), [searchParams.get("cid")]);
   const isHash = useMemo(() =>
@@ -66,7 +68,6 @@ const Search: React.FC<ISearch> = (props) => {
 
   // store the value the user has input
   const onChangeSearchBar = (input: string) => {
-    console.log("Change");
     setSearchValue(input);
   }
 
@@ -74,6 +75,9 @@ const Search: React.FC<ISearch> = (props) => {
     <Container maxWidth="md" sx={{pt: "10vh"}}>
 
       <Box width="100%" display="flex" flexDirection={"column"} alignItems={"center"} >
+        <div style={{width: 180, height: 80, backgroundColor: "#e8aeae", borderRadius: 8, marginBottom: 16, cursor: "pointer"}}
+             onClick={() => navigate(RouteKey.Home)}
+        />
         <SearchBar forcedValue={cidQueryString} onChange={onChangeSearchBar}/>
       </Box>
 
@@ -85,9 +89,9 @@ const Search: React.FC<ISearch> = (props) => {
             </Box>
             :
             cidList.length === 0 ?
-              "Nothing to show"
+              <SearchNothingToShow searchValue={searchValueDebounced} isHash={isHash}/>
               :
-              cidList.map(c => <SearchSingleCidResult key={c.cid} cid={c}/>)
+              cidList.map(c => <Box mt={2}><SearchSingleCidResult key={c.cid} cid={c}/></Box>)
         }
       </Box>
     </Container>

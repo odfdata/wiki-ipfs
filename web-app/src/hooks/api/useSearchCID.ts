@@ -1,6 +1,7 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../utils/useBaseAsyncHook";
 import axios from "axios";
 import {IPFS_GATEWAY_BASE_URL} from "../../utils/constants";
+import { useEffect } from "react";
 
 /**
  * @param {string} name
@@ -16,7 +17,7 @@ export interface DirectoryFile {
 /**
  * @param {boolean} isDirectory
  * @param {boolean} isFile
- * @param {DirectoryFile[]} directoryFileList
+ * @param {DirectoryFile[]} directoryFileList - can be empty if querying for a specific file
  */
 export interface SearchCIDResult {
   isDirectory: boolean,
@@ -24,21 +25,15 @@ export interface SearchCIDResult {
   directoryFileList: DirectoryFile[]
 }
 
-/**
- * @param {function(CID: string)} searchCID
- */
-export interface UseSearchCIDResponse extends useBaseAsyncHookState<SearchCIDResult>{
-  searchCID: (CID: string) => void
-}
 
 /**
  * Hook to search CID using IPFS gateway
  */
-export const useSearchCID = (): UseSearchCIDResponse => {
+export const useSearchCID = (CID: string): useBaseAsyncHookState<SearchCIDResult> => {
   const { completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess, endAsyncActionError } = useBaseAsyncHook<SearchCIDResult>();
 
-  const searchCID = (CID: string): void => {
+  useEffect(() => {
     startAsyncAction();
     new Promise (async (resolve, reject) => {
       try {
@@ -49,13 +44,14 @@ export const useSearchCID = (): UseSearchCIDResponse => {
           isDirectory: ipfsResultJson.Objects[0].Links.length > 0,
           isFile: ipfsResultJson.Objects[0].Links.length === 0,
           directoryFileList: ipfsResultJson.Objects[0].Links.map(link => {
-            return { name: link.Name, CID: link.Hash, size: link.Size } })});
+            return { name: link.Name, CID: link.Hash, size: link.Size }
+          })});
       } catch (e) {
         endAsyncActionError(e.message());
       }
     }).then(() => {});
-  };
+  }, []);
 
-  return { completed, error, loading, result, progress, searchCID };
+  return { completed, error, loading, result, progress };
 
 };

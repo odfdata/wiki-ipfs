@@ -4,7 +4,7 @@ import FilePicker from "./FilePicker";
 import SingleFileSelected from "./SingleFileSelected";
 import CidWithLink from "./CidWithLink";
 import {useAccount} from "wagmi";
-import PublishCidOnChain from "./PublishCidOnChain";
+import CommmonPublishCidOnChain from "../Common.PublishCidOnChain/CommmonPublishCidOnChain";
 import Web3ModalWrapper from "../../atoms/Web3ModalWrapper/Web3ModalWrapper";
 import ConnectWalletButton from "../../atoms/ConnectWalletButton/ConnectWalletButton";
 import {useNavigate} from "react-router-dom";
@@ -66,7 +66,7 @@ const CommonUploadFileDialog: React.FC<ICommonUploadFileDialog> = (props) => {
                 <Box width={180} display={"flex"} justifyContent={"right"}>
                   {
                     account.isConnected ?
-                      <PublishCidOnChain cid={uploadedCid} onComplete={goToSearch}/>
+                      <CommmonPublishCidOnChain cid={uploadedCid} onComplete={goToSearch}/>
                       :
                       <ConnectWalletButton/>
                   }
