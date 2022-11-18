@@ -1,15 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Box, CircularProgress, Container, Paper} from "@mui/material";
+import {Box, CircularProgress, Container} from "@mui/material";
 import SearchBar from "../../atoms/SearchBar/SearchBar";
-import {useNetwork, useQuery} from "wagmi";
-import {useParams} from "react-router";
+import {useNetwork} from "wagmi";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {RouteKey} from "../../../App.Routes";
 import {useGetCIDsFromHash} from "../../../hooks/contracts/CIDMatcher/useGetCIDsFromHash";
-import {useDebounce} from "use-debounce";
 import {useGetHashFromCID} from "../../../hooks/contracts/CIDMatcher/useGetHashFromCID";
 import {useGetVerificationStatus} from "../../../hooks/contracts/CIDMatcher/useGetVerificationStatus";
-import {useAppDispatch} from "../../../hooks/redux/reduxHooks";
 import SearchSingleCidResult from "../../organisms/Search.SingleCidResult/Search.SingleCidResult";
 import SearchNothingToShow from "../../organisms/Search.NothingToShow/Search.NothingToShow";
 
@@ -62,7 +59,6 @@ const Search: React.FC<ISearch> = (props) => {
     setCidList(cidList);
   }, [verificationStatus.result, hashFromCid.result, cidFromHash.result]);
 
-
   const onEnterSearchPress = (input: string) => {
     setSearchParams({cid: input});
   }
@@ -71,9 +67,9 @@ const Search: React.FC<ISearch> = (props) => {
     <Container maxWidth="md" sx={{pt: "10vh"}}>
 
       <Box width="100%" display="flex" flexDirection={"column"} alignItems={"center"} >
-        <div style={{width: 180, height: 80, backgroundColor: "#e8aeae", borderRadius: 8, marginBottom: 16, cursor: "pointer"}}
-             onClick={() => navigate(RouteKey.Home)}
-        />
+        <Box mb={2} sx={{cursor: "pointer"}} onClick={() => navigate(RouteKey.Home)}>
+          <img src={"/img/logo.png"} width={180}/>
+        </Box>
         <SearchBar initialValue={cidQueryString} onEnterPressed={onEnterSearchPress}/>
       </Box>
 

@@ -8,10 +8,9 @@ import {store} from "./store";
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from "@mui/material";
 import {theme} from "./GlobalStyles";
 import {chain, configureChains, createClient, WagmiConfig} from "wagmi";
-import {ConnectKitProvider, getDefaultClient} from "connectkit";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { publicProvider } from 'wagmi/providers/public';
+import {ConnectKitProvider} from "connectkit";
+import {MetaMaskConnector} from "wagmi/connectors/metaMask";
+import {publicProvider} from 'wagmi/providers/public';
 
 
 const { provider, chains } = configureChains(

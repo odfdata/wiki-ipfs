@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {Box, IconButton, Paper, Tooltip, Typography} from "@mui/material";
 import {FoundCid} from "../../pages/Search/Search";
-import {Delete, Download, FindInPage, Search} from "@mui/icons-material";
+import {Download, FindInPage, Plagiarism, PlagiarismOutlined, Search} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {RouteKey} from "../../../App.Routes";
 import SearchFileExtraInfo from "./SearchFileExtraInfo";
@@ -20,6 +20,10 @@ const SearchSingleCidResult: React.FC<ISearchSingleCidResult> = (props) => {
 
   const inspectCID = () => {
     window.open(`https://cid.ipfs.tech/#${props.cid.cid}`);
+  }
+
+  const viewRawData = () => {
+    window.open(`https://explore.ipld.io/#/explore/${props.cid.cid}`);
   }
 
   const downloadFile = () => {
@@ -64,6 +68,11 @@ const SearchSingleCidResult: React.FC<ISearchSingleCidResult> = (props) => {
         <Tooltip title={"Inspect CID"}>
           <IconButton size="medium" onClick={inspectCID}>
               <Search fontSize="inherit" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={"View RAW IPFS data"}>
+          <IconButton size="medium" onClick={viewRawData}>
+              <PlagiarismOutlined fontSize="inherit" />
           </IconButton>
         </Tooltip>
         <Tooltip title={"Download file"} onClick={downloadFile}>

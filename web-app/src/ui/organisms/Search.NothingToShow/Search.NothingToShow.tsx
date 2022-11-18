@@ -1,7 +1,6 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import CommmonPublishCidOnChain from "../Common.PublishCidOnChain/CommmonPublishCidOnChain";
-import search from "../../pages/Search/Search";
 import {useNavigate} from "react-router-dom";
 import {RouteKey} from "../../../App.Routes";
 
@@ -17,6 +16,7 @@ const SearchNothingToShow: React.FC<ISearchNothingToShow> = (props) => {
 
   const onAddComplete = () => {
     navigate(RouteKey.Search + "?cid=" + props.searchValue);
+    navigate(0);
   }
 
   return (

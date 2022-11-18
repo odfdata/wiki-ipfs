@@ -1,6 +1,6 @@
 {
-  "short_name": "CL Hack 22",
-  "name": "Search IPFS file on chain, manage ownership and avoid duplicates",
+  "short_name": "Wiki IPFS",
+  "name": "Wiki IPFS | On-chain IPFS file search system",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,6 +1,8 @@
-# CL Fall Hack 22 dApp
+# Wiki IPFS
 
 This repo contains the code for the frontend dApp to access Pythia results.
+
+This is a project for the CL Hall Hackathon 22
 
 ## Project creation
 

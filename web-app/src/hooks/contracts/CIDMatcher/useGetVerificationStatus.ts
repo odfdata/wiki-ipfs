@@ -1,7 +1,7 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
 import {useContractRead} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
-import {useEffect} from "react";
+import {useMemo} from "react";
 import {BigNumber} from "@ethersproject/bignumber";
 
 /**
@@ -26,5 +26,7 @@ export const useGetVerificationStatus = (params: UseGetVerificationStatusParams)
     args: [params.CID]
   });
 
-  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: (contractRead.data as BigNumber).toNumber() };
+  const readResult = contractRead.data ? (contractRead.data as BigNumber).toNumber() : 0;
+
+  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: readResult };
 };

@@ -1,7 +1,7 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../utils/useBaseAsyncHook";
 import axios from "axios";
 import {IPFS_GATEWAY_BASE_URL} from "../../utils/constants";
-import { useEffect } from "react";
+import {useEffect} from "react";
 
 /**
  * @param {string} name

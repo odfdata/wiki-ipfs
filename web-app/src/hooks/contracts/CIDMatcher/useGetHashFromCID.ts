@@ -1,7 +1,6 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
 import {useContractRead} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
-import {useEffect} from "react";
 
 /**
  * @param {number} chainId - The chain id

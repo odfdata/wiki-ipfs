@@ -1,6 +1,6 @@
 import React from 'react';
 import {FoundCid} from "../../pages/Search/Search";
-import {Box, CircularProgress, Typography} from "@mui/material";
+import {CircularProgress, Typography} from "@mui/material";
 import {useSearchCID} from "../../../hooks/api/useSearchCID";
 import prettyBytes from "pretty-bytes";
 

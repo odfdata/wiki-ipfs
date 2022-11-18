@@ -14,10 +14,14 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
 
   useEffect(() => {
     onChange(props.initialValue);
+    if (props.onValueChange)
+      props.onValueChange(props.initialValue)
   }, [props.initialValue])
 
   const onChange = (newValue: string) => {
     setValue(newValue);
+    if (props.onValueChange)
+      props.onValueChange(newValue)
   }
 
   /**
@@ -93,10 +97,12 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
 /**
  * @param {string} forcedValue - when passed, this is the value that's overwritten in the state handling the content of the search Input
  * @param {[function]} onEnterPressed - called when the user press the Enter button to search - passes the search value
+ * @param {[function]} onValueChange - returns the latest value stored
  */
 export interface ISearchBar {
   initialValue: string,
-  onEnterPressed?: (searchValue: string) => void
+  onEnterPressed?: (searchValue: string) => void,
+  onValueChange?: (searchValue: string) => void
 }
 
 export default SearchBar;

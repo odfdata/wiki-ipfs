@@ -1,6 +1,5 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
 import {useContractRead} from "wagmi";
-import {useEffect} from "react";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 
 /**
