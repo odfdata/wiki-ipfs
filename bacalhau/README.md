@@ -1,10 +1,10 @@
 # Bacalhau
 
 This example was used during the Chainlink Fall 2022 Hackaton to make docker images for bacalhau
-to verify the ownership of the files during Bacahlau computation.
+to verify the ownership of the files during Bacahlau computation. 
 
 The current state of the image has been pushed to a docker repo called `wikiipfs/testbacalhau`. 
-It's just an example to show how to check files ownership.
+It's just an example to show how to check files ownership and it's not working because of this issue: https://github.com/filecoin-project/bacalhau/issues/856. Once it will be fixed, it will work.
 
 ## Development
 
