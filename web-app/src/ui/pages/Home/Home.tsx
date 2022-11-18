@@ -46,7 +46,7 @@ const Home: React.FC<IHome> = (props) => {
         </Typography>
 
         <Box mt={4}>
-          <SearchBar forcedValue={""} onChange={(input: string) => setSearchValue(input)} onEnterPressed={enterPressedWhileSearching}/>
+          <SearchBar initialValue={""} onEnterPressed={enterPressedWhileSearching}/>
         </Box>
 
         <Box mt={3}>

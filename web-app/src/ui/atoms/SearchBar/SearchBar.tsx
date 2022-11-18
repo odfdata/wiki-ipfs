@@ -13,12 +13,11 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
   const [value, setValue] = useState<string>("");
 
   useEffect(() => {
-    onChange(props.forcedValue);
-  }, [props.forcedValue])
+    onChange(props.initialValue);
+  }, [props.initialValue])
 
   const onChange = (newValue: string) => {
     setValue(newValue);
-    props.onChange(newValue);
   }
 
   /**
@@ -31,7 +30,6 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
         props.onEnterPressed(value);
     }
   }
-
 
   const onFileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
@@ -94,12 +92,10 @@ const SearchBar: React.FC<ISearchBar> = (props) => {
 
 /**
  * @param {string} forcedValue - when passed, this is the value that's overwritten in the state handling the content of the search Input
- * @param {function} onChange - triggered everytime the input changes
  * @param {[function]} onEnterPressed - called when the user press the Enter button to search - passes the search value
  */
 export interface ISearchBar {
-  forcedValue: string,
-  onChange: (input: string) => void,
+  initialValue: string,
   onEnterPressed?: (searchValue: string) => void
 }
 

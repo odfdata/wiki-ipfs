@@ -33,20 +33,22 @@ export interface FoundCid {
 const Search: React.FC<ISearch> = (props) => {
 
   const [searchParams, setSearchParams]  = useSearchParams();
-  const [searchValue, setSearchValue] = useState<string>(searchParams.get("cid"));
   const [cidList, setCidList] = useState<FoundCid[]>([]);
-  const [searchValueDebounced] = useDebounce(searchValue, 500);
   const network = useNetwork();
   const navigate = useNavigate();
 
-  const cidQueryString = useMemo(() => searchParams.get("cid"), [searchParams.get("cid")]);
+  const cidQueryString = searchParams.get("cid");
   const isHash = useMemo(() =>
-    new RegExp(/^(0x)?[A-Fa-f0-9]{64}$/).test(searchValue), [searchValueDebounced]);
+    new RegExp(/^(0x)?[A-Fa-f0-9]{64}$/).test(cidQueryString), [cidQueryString]);
 
-  const hashSanitized = useMemo(() => searchValueDebounced.startsWith("0x") ? searchValueDebounced : "0x" + searchValueDebounced, [searchValueDebounced]);
+  useEffect(() => {
+    alert(cidQueryString);
+  }, [cidQueryString])
+
+  const hashSanitized = useMemo(() => cidQueryString.startsWith("0x") ? cidQueryString : "0x" + cidQueryString, [cidQueryString]);
   const cidFromHash = useGetCIDsFromHash({chainId: network.chain.id, hash: hashSanitized});
-  const hashFromCid = useGetHashFromCID({chainId: network.chain.id, CID: searchValueDebounced});
-  const verificationStatus = useGetVerificationStatus({chainId: network.chain.id, CID: searchValueDebounced});
+  const hashFromCid = useGetHashFromCID({chainId: network.chain.id, CID: cidQueryString});
+  const verificationStatus = useGetVerificationStatus({chainId: network.chain.id, CID: cidQueryString});
 
   // save if we're loading data
   const isLoading = useMemo(() => {
@@ -60,15 +62,15 @@ const Search: React.FC<ISearch> = (props) => {
       if ( isHash ){
         cidList = cidFromHash.result.map(c => ({cid: c, hash: hashSanitized, status: 2}))
       } else if (verificationStatus.result > 0) {
-        cidList = [{cid: searchValueDebounced, hash: hashFromCid.result, status: verificationStatus.result}]
+        cidList = [{cid: cidQueryString, hash: hashFromCid.result, status: verificationStatus.result}]
       }
       setCidList(cidList);
     }
   }, [verificationStatus.completed, hashFromCid.completed, cidFromHash.completed]);
 
-  // store the value the user has input
-  const onChangeSearchBar = (input: string) => {
-    setSearchValue(input);
+
+  const onEnterSearchPress = (input: string) => {
+    setSearchParams({cid: input});
   }
 
   return (
@@ -78,7 +80,7 @@ const Search: React.FC<ISearch> = (props) => {
         <div style={{width: 180, height: 80, backgroundColor: "#e8aeae", borderRadius: 8, marginBottom: 16, cursor: "pointer"}}
              onClick={() => navigate(RouteKey.Home)}
         />
-        <SearchBar forcedValue={cidQueryString} onChange={onChangeSearchBar}/>
+        <SearchBar initialValue={cidQueryString} onEnterPressed={onEnterSearchPress}/>
       </Box>
 
       <Box display="flex" flexDirection={"column"} mt={4}>
@@ -89,7 +91,7 @@ const Search: React.FC<ISearch> = (props) => {
             </Box>
             :
             cidList.length === 0 ?
-              <SearchNothingToShow searchValue={searchValueDebounced} isHash={isHash}/>
+              <SearchNothingToShow searchValue={cidQueryString} isHash={isHash}/>
               :
               cidList.map(c => <Box mt={2}><SearchSingleCidResult key={c.cid} cid={c}/></Box>)
         }
