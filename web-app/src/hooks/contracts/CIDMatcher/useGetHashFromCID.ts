@@ -22,7 +22,8 @@ export const useGetHashFromCID = (params: UseGetHashFromCIDParams): useBaseAsync
   const contractRead = useContractRead({
     address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
     abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
-    functionName: "getHashFromCID"
+    functionName: "getHashFromCID",
+    args: [params.CID]
   });
 
   // once data il loaded, return

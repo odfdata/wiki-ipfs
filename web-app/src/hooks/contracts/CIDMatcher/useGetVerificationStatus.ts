@@ -22,7 +22,8 @@ export const useGetVerificationStatus = (params: UseGetVerificationStatusParams)
   const contractRead = useContractRead({
     address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
     abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
-    functionName: "getVerificationStatus"
+    functionName: "getVerificationStatus",
+    args: [params.CID]
   });
 
   // once data il loaded, return

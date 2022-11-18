@@ -7,6 +7,9 @@ import {RouteKey} from "../../../App.Routes";
 import {useAccount} from "wagmi";
 import {Description, Search} from "@mui/icons-material";
 import CommonUploadFileDialog from "../../organisms/Common.UploadFileDialog/Common.UploadFileDialog";
+import SearchBar from "../../atoms/SearchBar/SearchBar";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 /**
  *
@@ -16,14 +19,23 @@ import CommonUploadFileDialog from "../../organisms/Common.UploadFileDialog/Comm
  */
 const Home: React.FC<IHome> = (props) => {
 
-  const navigate = useNavigate();
   const [showUploadFile, setShowUploadFile] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const navigate = useNavigate();
 
-  const { address: connectedWalletAddress } = useAccount();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const toggleUploadFile = () => {
     setShowUploadFile(!showUploadFile);
+  }
+
+  console.log(searchValue);
+  /**
+   * When enter is pressed while searching, the value is taken and the search is performed
+   */
+  const enterPressedWhileSearching = () => {
+    console.log(RouteKey.Search + "?cid=" + searchValue);
+    // navigate("/search?cid=" + searchValue);
   }
 
   return (
@@ -35,24 +47,10 @@ const Home: React.FC<IHome> = (props) => {
         <Typography variant="body1" sx={{mt: 2}}>
           Search if a file is already on IPFS, or upload a new one and index it!
         </Typography>
-        <Paper
-          component="form"
-          sx={{ p: '2px 4px', mt: 4, display: 'flex', alignItems: 'center', width: 500 }}
-        >
-          <IconButton sx={{ p: '10px' }} aria-label="menu">
-            <Search />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search by Sha-256 hash or CID"
-          />
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton color="primary" sx={{ p: '10px' }} >
-            <Tooltip title={"Select file to search"}>
-              <Description />
-            </Tooltip>
-          </IconButton>
-        </Paper>
+
+        <Box mt={4}>
+          <SearchBar forcedValue={""} onChange={(input: string) => setSearchValue(input)} onEnterPressed={enterPressedWhileSearching}/>
+        </Box>
 
         <Box mt={3}>
           <Button variant="outlined"
