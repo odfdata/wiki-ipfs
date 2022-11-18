@@ -1,5 +1,5 @@
 {
-  "name": "cl-hackathon-fall-2022",
+  "name": "wiki-ipfs",
   "scripts": {},
   "devDependencies": {
     "@chainlink/contracts": "^0.4.1",

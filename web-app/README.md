@@ -1,8 +1,8 @@
 # Wiki IPFS
 
-This repo contains the code for the frontend dApp to access Pythia results.
+This repo contains the code for the frontend dApp to access Wiki IPFS and interact both with web3.storage and Mumbai deployed Smart Contract.
 
-This is a project for the CL Hall Hackathon 22
+This is a project for the CL Fall Hackathon 22
 
 ## Project creation
 
