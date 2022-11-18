@@ -39,7 +39,9 @@ export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useS
 
   const write = (() => {
     startAsyncAction();
-    contractWrite.write();
+    contractWrite.writeAsync()
+      .then(() => {})
+      .catch(e => endAsyncActionError(e.message));
   });
 
   return { completed, error, loading, result, progress, txHash, write };

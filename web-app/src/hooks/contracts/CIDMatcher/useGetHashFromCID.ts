@@ -1,7 +1,6 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
 import {useContractRead} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
-import {useEffect} from "react";
 
 /**
  * @param {number} chainId - The chain id
@@ -22,21 +21,9 @@ export const useGetHashFromCID = (params: UseGetHashFromCIDParams): useBaseAsync
   const contractRead = useContractRead({
     address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
     abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
-    functionName: "getHashFromCID"
+    functionName: "getHashFromCID",
+    args: [params.CID]
   });
 
-  // once data il loaded, return
-  useEffect(() => {
-    if (contractRead.data) {
-      const hash = contractRead.data as string;
-      endAsyncActionSuccess(hash);
-    }
-  }, [contractRead.data]);
-
-  // set as loading while data is fetching
-  useEffect(() => {
-    if (contractRead.isLoading) startAsyncAction();
-  }, [contractRead.isLoading]);
-
-  return { completed, error, loading, progress, result };
+  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: contractRead.data as string };
 };

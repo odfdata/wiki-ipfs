@@ -36,7 +36,6 @@ export const useUploadFile = (params: UploadFileParams): useBaseAsyncHookState<U
     const onStoredChunk = size => {
       uploaded += size;
       const pct = 100 * (uploaded / totalSize);
-      console.log(`Uploading... ${pct.toFixed(2)}% complete`);
       uploadPercentage(pct);
     };
     // makeStorageClient returns an authorized web3.storage client instance

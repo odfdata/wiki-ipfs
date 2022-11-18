@@ -1,11 +1,10 @@
-import {Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import {Box, Dialog, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 import React, {useState} from 'react';
 import FilePicker from "./FilePicker";
 import SingleFileSelected from "./SingleFileSelected";
 import CidWithLink from "./CidWithLink";
 import {useAccount} from "wagmi";
-import PublishCidOnChain from "./PublishCidOnChain";
-import Web3ModalWrapper from "../../atoms/Web3ModalWrapper/Web3ModalWrapper";
+import CommmonPublishCidOnChain from "../Common.PublishCidOnChain/CommmonPublishCidOnChain";
 import ConnectWalletButton from "../../atoms/ConnectWalletButton/ConnectWalletButton";
 import {useNavigate} from "react-router-dom";
 
@@ -66,7 +65,7 @@ const CommonUploadFileDialog: React.FC<ICommonUploadFileDialog> = (props) => {
                 <Box width={180} display={"flex"} justifyContent={"right"}>
                   {
                     account.isConnected ?
-                      <PublishCidOnChain cid={uploadedCid} onComplete={goToSearch}/>
+                      <CommmonPublishCidOnChain cid={uploadedCid} onComplete={goToSearch}/>
                       :
                       <ConnectWalletButton/>
                   }

@@ -13,7 +13,7 @@ const CidWithLink: React.FC<ICidWithLink> = (props) => {
     <Box display={"flex"} alignItems={"center"}
          justifyContent={"left"} flexDirection={"row"}
          sx={{cursor: "pointer"}}
-         onClick={() => window.open(`ipfs://${props.cid}`)}
+         onClick={() => window.open(`https://${props.cid}.ipfs.w3s.link`)}
     >
       <Typography variant="body2" color="text-secondary"><strong>CID</strong>: {props.cid}</Typography>
       <OpenInNew sx={{fontSize: 14, ml: 1}}/>
