@@ -62,7 +62,7 @@ const CommonUploadFileDialog: React.FC<ICommonUploadFileDialog> = (props) => {
               <CidWithLink cid={uploadedCid}/>
               <Box display={"flex"} alignItems={"start"} mt={2}>
                 <DialogContentText flexGrow={100}>To complete the index process, please connect wallet and publish the CID on chain</DialogContentText>
-                <Box width={180} display={"flex"} justifyContent={"right"}>
+                <Box width={180} display={"flex"} justifyContent={"right"} ml={6}>
                   {
                     account.isConnected ?
                       <CommmonPublishCidOnChain cid={uploadedCid} onComplete={goToSearch}/>

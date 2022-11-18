@@ -24,6 +24,8 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
     mapping (string => bytes32) private CIDtoSha2;
     /// @dev recording the status of the CID verification: 1: pending - 2: success - 3+: error
     mapping (string => uint) private pendingCID;
+    /// @dev records the ownership of a CID
+    mapping (string => address) private CIDowner;
 
     /// events
     event NewIPFSHashRequest(string[] _cidList);
@@ -39,7 +41,6 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
         setChainlinkOracle(_oracle);
         jobId = _stringToBytes32(_jobId);
     }
-
 
     /**
       * Given a CID, return the array of hashes stored
@@ -69,6 +70,15 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
     }
 
     /**
+      * Returns the address that asked for the verification of CID - hash pair
+      * @param _cid CID to search
+      * @return owner - the address that asked for the verification of CID - hash
+      */
+    function getOwnerOfCID(string calldata _cid) public view returns(address owner) {
+        return CIDowner[_cid];
+    }
+
+    /**
       * @notice Prepares the call for Chainlink Oracle, sending the CID to verify
       * @param _cidList list of CID to get the hash
       */
@@ -77,6 +87,7 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
 
         for(uint i=0; i<_cidList.length; ++i) {
             pendingCID[_cidList[i]] = 1;
+            CIDowner[_cidList[i]] = msg.sender;
         }
         // perform a request
         Chainlink.Request memory req = buildChainlinkRequest(
@@ -105,9 +116,12 @@ contract CIDMatcher is ChainlinkClient, ConfirmedOwner{
                 sha2ToCIDs[_hashList[i]].push(_cidList[i]);
                 CIDtoSha2[_cidList[i]] = _hashList[i];
                 uint returnedHashAsUint = uint(_hashList[i]);
-                if (returnedHashAsUint > 100000)
+                if (returnedHashAsUint > 100000) {
                     pendingCID[_cidList[i]] = uint(2);
-                else pendingCID[_cidList[i]] =returnedHashAsUint;
+                } else {
+                    pendingCID[_cidList[i]] = returnedHashAsUint;
+                    CIDowner[_cidList[i]] = address(0);
+                }
                 emit NewHashRecorded(_cidList[i], _hashList[i]);
             }
         }
