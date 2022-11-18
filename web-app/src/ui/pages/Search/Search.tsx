@@ -41,10 +41,6 @@ const Search: React.FC<ISearch> = (props) => {
   const isHash = useMemo(() =>
     new RegExp(/^(0x)?[A-Fa-f0-9]{64}$/).test(cidQueryString), [cidQueryString]);
 
-  useEffect(() => {
-    alert(cidQueryString);
-  }, [cidQueryString])
-
   const hashSanitized = useMemo(() => cidQueryString.startsWith("0x") ? cidQueryString : "0x" + cidQueryString, [cidQueryString]);
   const cidFromHash = useGetCIDsFromHash({chainId: network.chain.id, hash: hashSanitized});
   const hashFromCid = useGetHashFromCID({chainId: network.chain.id, CID: cidQueryString});
