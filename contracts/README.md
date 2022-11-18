@@ -13,13 +13,14 @@ These are the commands you need to run the scripts:
 * `yarn hardhat compile` to compile smart contracts
 * `yarn hardhat run scripts/Deployer/deploy.ts` to deploy the Smart Contract (use `--network` flag for a specific network)
 * `yarn hardhat test` to run basic tests
+* `yarn hardhat verify {contract_address} "arg01" "arg02" "arg03..."` to verify the deployed smart contracts on PolygonScan
 
 ## Current deployment
 
 Contracts are currently deployed on **Polygon Mumbai** testnet
 
 * **Chainlink Oracle contact** [0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c](https://mumbai.polygonscan.com/address/0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c)
-* **CIDMatcher contract** [0x553DcF1b90F0bF964219aC430C547822456EB287](https://mumbai.polygonscan.com/address/0x553DcF1b90F0bF964219aC430C547822456EB287)
+* **CIDMatcher contract** [0xa42761397aB5F2629d7b9e65E0c6A617f718581F](https://mumbai.polygonscan.com/address/0xa42761397aB5F2629d7b9e65E0c6A617f718581F)
 
 ## Possible improvements
 
