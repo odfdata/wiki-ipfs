@@ -20,7 +20,7 @@ export class ClExternalAdapterStack extends Stack {
           runtime: aws_lambda.Runtime.NODEJS_16_X,
           architecture: aws_lambda.Architecture.ARM_64,
           memorySize: 1024,
-          timeout: Duration.seconds(500),
+          timeout: Duration.seconds(900),
           bundling: {
             minify: true
           },
