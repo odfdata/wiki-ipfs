@@ -7,7 +7,7 @@ On-chain IPFS file search solution.
 Use **Wiki IPFS** to:
 * connect IPFS CIDs and their file hash (SHA-256)
 * search CIDs starting from an hash (to avoid duplicates)
-* collect a wallet address to a CID
+* connect a wallet address to a CID
 
 ## How it works
 
