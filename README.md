@@ -48,8 +48,6 @@ At the moment the solution is deployed on Polygon Mumbai
 * **Chainlink Oracle contact** [0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c](https://mumbai.polygonscan.com/address/0xa00c397463fc7dcf8bd4227ad920a6abcb3f216c)
 * **CIDMatcher contract** [0x553DcF1b90F0bF964219aC430C547822456EB287](https://mumbai.polygonscan.com/address/0x553DcF1b90F0bF964219aC430C547822456EB287)
 
-The frontend is hosted on Amazon Web Services [https://master.dkdekidbckxe.amplifyapp.com/](https://master.dkdekidbckxe.amplifyapp.com/)
-
 Chainlink Docker image is running as a serverless container in AWS (using AWS Fargate) and each verification requests is handled by a Lambda Function.
 
 IPFS storage used via our GUI uses the SDK and functionalities of Web3.Storage
