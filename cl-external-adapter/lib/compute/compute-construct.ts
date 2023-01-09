@@ -1,19 +1,14 @@
-import {
-  Stack,
-  StackProps,
-  Duration,
-  aws_lambda,
-  aws_lambda_nodejs as lambda_nodejs,
-  aws_logs as logs
-} from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import {Construct} from "constructs";
+import {aws_lambda, aws_lambda_nodejs as lambda_nodejs, aws_logs as logs, Duration} from "aws-cdk-lib";
 import * as path from "path";
 
-export class ClExternalAdapterStack extends Stack {
-  constructor(scope: Construct, id: string,  web3storageToken: string, props?: StackProps) {
-    super(scope, id, props);
+export class ComputeConstruct extends Construct {
+
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
     // create the aws lambda function to generate hash starting from a IPFS CID
-    console.log(web3storageToken);
+    // console.log(web3storageToken);
     const fileToHashFunction = new lambda_nodejs.NodejsFunction(
         this, "FileToHashFunction", {
           functionName: "cl-external-adapter-file-to-hash-function",
@@ -25,7 +20,7 @@ export class ClExternalAdapterStack extends Stack {
             minify: true
           },
           environment: {
-            WEB3STORAGE_TOKEN: web3storageToken
+            // WEB3STORAGE_TOKEN: web3storageToken
           },
           logRetention: logs.RetentionDays.TWO_WEEKS,
           depsLockFilePath: path.join(__dirname, 'src/package-lock.json'),
