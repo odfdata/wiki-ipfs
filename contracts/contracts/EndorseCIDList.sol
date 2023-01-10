@@ -30,7 +30,7 @@ contract EndorseCIDList {
     * @param _CID list of CIDs to endorse
     **/
     function endorseCID(
-        string[] memory _CID
+        string[] calldata _CID
     ) public {
         for ( uint i = 0; i < _CID.length; ++i) {
             _setEndorseState(_CID[i], msg.sender, true);
@@ -50,7 +50,7 @@ contract EndorseCIDList {
     * @param _s             s of the signature
     **/
     function endorseCIDWithSign(
-        string[] memory _CID,
+        string[] calldata _CID,
         address _from,
         uint256 _validAfter,
         uint256 _validBefore,
@@ -74,7 +74,7 @@ contract EndorseCIDList {
     * @param _CID list of CIDs to oppose
     **/
     function opposeCID(
-        string[] memory _CID
+        string[] calldata _CID
     ) public {
         for ( uint i = 0; i < _CID.length; ++i) {
             _setEndorseState(_CID[i], msg.sender, false);
@@ -94,7 +94,7 @@ contract EndorseCIDList {
     * @param _s             s of the signature
     **/
     function opposeCIDWithSign(
-        string[] memory _CID,
+        string[] calldata _CID,
         address _from,
         uint256 _validAfter,
         uint256 _validBefore,
@@ -118,7 +118,7 @@ contract EndorseCIDList {
     * @param _endorser      address of the endorser to check
     * @return true if the _CID is endorsed by _endorser, false otherwise
     **/
-    function endorseStatus (string memory _CID, address _endorser) public view returns(bool) {
+    function endorseStatus (string calldata _CID, address _endorser) public view returns(bool) {
         return _endorseCIDmap[keccak256(_CID)][_endorser];
     }
 
@@ -134,7 +134,7 @@ contract EndorseCIDList {
     * @param _s             s of the signature
     **/
     function _verifySigner (
-        string[] memory _CID,
+        string[] calldata _CID,
         address _from,
         uint256 _validAfter,
         uint256 _validBefore,
@@ -157,7 +157,7 @@ contract EndorseCIDList {
     * @param _endorse       true to endorse, false to oppose
     **/
     function _setEndorseState (
-        string memory _CID,
+        string calldata _CID,
         address _addr,
         bool _endorse
     ) private {
@@ -165,8 +165,5 @@ contract EndorseCIDList {
         bytes32 CIDhash = keccak256(_CID);
         _endorseCIDmap[CIDhash][_addr] = _endorse;
     }
-
-
-
 
 }
