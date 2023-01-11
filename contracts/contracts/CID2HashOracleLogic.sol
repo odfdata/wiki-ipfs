@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
 import '@chainlink/contracts/src/v0.8/ConfirmedOwner.sol';
+import './CID2HashRegistry.sol';
 
 // Smart contract in charge of connecting with CL Oracle, and store CID 2 Hash results
 // inside CID2HashRegistry
@@ -11,15 +13,24 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
     using Chainlink for Chainlink.Request;
 
     //// uint256
-    address public ORACLE_PAYMENT_TOKEN_ADDRESS;
-    /// @dev the payment to be send in ORACLE_PAYMENT_TOKEN_ADDRESS to the Oracle
-    uint256 constant public ORACLE_PAYMENT = 0;
+    /// @dev the payment to be sent in ORACLE_PAYMENT_TOKEN_ADDRESS tokens to the Oracle
+    uint256 public ORACLE_PAYMENT = 0;
     /// @dev max number of CID a user can send along with one single request
     uint256 public MAX_CID_PER_VERIFICATION = 10;
+
+    /// address
+    address public ORACLE_PAYMENT_TOKEN_ADDRESS;
+
+    /// bytes32
+    /// @dev stores the ID of the ChainLink job
+    bytes32 private jobId;
 
     /// mapping
     /// @dev recording the status of the CID verification: 1: pending - 2: success - 3-10,000: error
     mapping (bytes32 => uint) private pendingCID;
+
+    /// instances
+    CID2HashRegistry public Cid2HashRegistryContract;
 
     /// events
     /**
@@ -36,7 +47,7 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
     /**
     * Event emitted when an error during the generation of hash happens
     * @param _cid       The CID returned
-    * @param _hash      The code of the error (from 3 to 10,000 - see docs for details)
+    * @param _error     The code of the error (from 3 to 10,000 - see docs for details)
     **/
     event CID2HashErrorResponse(string indexed _cid, uint256 _error);
 
@@ -59,12 +70,12 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
     /**
       * Returns the status of the verification for a given _cid
       * @param _cid         CID to search
-      * @return the status of verification: 1 for pending - 2 for success - 3+ for errors
+      * @return status      verification: 1 for pending - 2 for success - 3+ for errors
       */
     function getVerificationStatus(
         string calldata _cid
     ) public view returns(uint status) {
-        bytes32 cidHash = keccak256(_cid);
+        bytes32 cidHash = keccak256(abi.encode(_cid));
         return pendingCID[cidHash];
     }
 
@@ -79,7 +90,7 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
         require(_cidList.length <= MAX_CID_PER_VERIFICATION, "MAX_CID_PER_VERIFICATION exceeded");
 
         for(uint i=0; i<_cidList.length; ++i) {
-            bytes32 cidHash = keccak256(_cidList[i]);
+            bytes32 cidHash = keccak256(abi.encode(_cidList[i]));
             pendingCID[cidHash] = 1;
         }
         // perform a request
@@ -113,13 +124,14 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
             if (_hashList[i] != bytes32(0)) {
                 // record the success of the operation, or the error
                 uint returnedHashAsUint = uint(_hashList[i]);
+                bytes32 cidHash = keccak256(abi.encode(_cidList[i]));
                 if (returnedHashAsUint > 10000) {
                     pendingCID[cidHash] = uint(2);
-                    addHash(_cidList[i], _hashList[i]);
+                    Cid2HashRegistryContract.addHash(_cidList[i], _hashList[i]);
                     emit CID2HashSuccessResponse(_cidList[i], _hashList[i]);
                 } else {
                     pendingCID[cidHash] = returnedHashAsUint;
-                    emit CID2HashErrorResponse(_cidList[i], _hashList[i]);
+                    emit CID2HashErrorResponse(_cidList[i], returnedHashAsUint);
                 }
             }
         }
@@ -127,9 +139,9 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
 
     /**
       * @notice Get the ChainLink token address
-      * @return The address of LINK ERC-20
+      * @return oraclePaymentTokenAddress       The address of LINK ERC-20
       */
-    function getChainlinkToken() public view returns (address) {
+    function getChainlinkToken() public view returns (address oraclePaymentTokenAddress) {
         return ORACLE_PAYMENT_TOKEN_ADDRESS;
     }
 
@@ -197,6 +209,16 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
         setChainlinkToken(_newPaymentToken);
     }
 
+    /**
+      * @notice Sets the address of Cid2Hash Registry
+      * @param _newAddress     ERC20 addres of the payment token
+    **/
+    function setCid2HashRegistryAddress (
+        address _newAddress
+    ) external onlyOwner {
+        Cid2HashRegistryContract = CID2HashRegistry(_newAddress);
+    }
+
     //    ██████╗ ██████╗ ██╗██╗   ██╗ █████╗ ████████╗███████╗    ███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗
     //    ██╔══██╗██╔══██╗██║██║   ██║██╔══██╗╚══██╔══╝██╔════╝    ██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝
     //    ██████╔╝██████╔╝██║██║   ██║███████║   ██║   █████╗      █████╗  ██║   ██║██╔██╗ ██║██║     ███████╗
@@ -206,7 +228,8 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
 
     /**
       * @notice Converts a string into bytes32
-      * @param _source convert the jobID
+      * @param _source      convert the jobID
+      * @return result      the converted string
       */
     function _stringToBytes32(
         string memory _source

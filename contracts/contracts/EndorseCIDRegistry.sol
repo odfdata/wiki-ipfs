@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 // Records the public endorse of CID files
@@ -36,7 +37,7 @@ contract EndorseCIDRegistry {
     ) public {
         for ( uint i = 0; i < _CID.length; ++i) {
             _setEndorseState(_CID[i], msg.sender, true);
-            emit Endorsed(_CID[i], msg.sender, false);
+            emit Endorsed(msg.sender, _CID[i], false);
         }
     }
 
@@ -66,7 +67,7 @@ contract EndorseCIDRegistry {
 
         for ( uint i = 0; i < _CID.length; ++i) {
             _setEndorseState(_CID[i], _from, true);
-            emit Endorsed(_CID[i], _from, true);
+            emit Endorsed(_from, _CID[i], true);
         }
     }
 
@@ -80,7 +81,7 @@ contract EndorseCIDRegistry {
     ) public {
         for ( uint i = 0; i < _CID.length; ++i) {
             _setEndorseState(_CID[i], msg.sender, false);
-            emit Opposed(_CID[i], msg.sender, false);
+            emit Opposed(msg.sender, _CID[i], false);
         }
     }
 
@@ -110,7 +111,7 @@ contract EndorseCIDRegistry {
 
         for ( uint i = 0; i < _CID.length; ++i) {
             _setEndorseState(_CID[i], _from, false);
-            emit Opposed(_CID[i], _from, true);
+            emit Opposed(_from, _CID[i], true);
         }
     }
 
@@ -118,10 +119,10 @@ contract EndorseCIDRegistry {
     * @notice get if a file is endorsed by a specific address
     * @param _CID           the CID to query
     * @param _endorser      address of the endorser to check
-    * @return true if the _CID is endorsed by _endorser, false otherwise
+    * @return isEndorsed    true if the _CID is endorsed by _endorser, false otherwise
     **/
-    function endorseStatus (string calldata _CID, address _endorser) public view returns(bool) {
-        return _endorseCIDmap[keccak256(_CID)][_endorser];
+    function endorseStatus (string calldata _CID, address _endorser) public view returns(bool isEndorsed) {
+        return _endorseCIDmap[keccak256(abi.encode(_CID))][_endorser];
     }
 
     //    ██████╗ ██████╗ ██╗██╗   ██╗ █████╗ ████████╗███████╗    ███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗
@@ -141,6 +142,7 @@ contract EndorseCIDRegistry {
     * @param _v             v of the signature
     * @param _r             r of the signature
     * @param _s             s of the signature
+    * @return isVerified   true if sign is verified, false otherwise
     **/
     function _verifySigner (
         string[] calldata _CID,
@@ -150,12 +152,12 @@ contract EndorseCIDRegistry {
         uint8 _v,
         bytes32 _r,
         bytes32 _s
-    ) private returns (bool) {
+    ) private view returns (bool isVerified) {
         bytes memory data = abi.encode(
             _CID, _from, _validAfter, _validBefore
         );
         bytes32 message = keccak256(data);
-        address signer = ecrecover(message, v, r, s);
+        address signer = ecrecover(message, _v, _r, _s);
         return msg.sender == signer;
     }
 
@@ -171,7 +173,7 @@ contract EndorseCIDRegistry {
         bool _endorse
     ) private {
         // evaluate the CIDs hash for better gas cost
-        bytes32 CIDhash = keccak256(_CID);
+        bytes32 CIDhash = keccak256(abi.encode(_CID));
         _endorseCIDmap[CIDhash][_addr] = _endorse;
     }
 

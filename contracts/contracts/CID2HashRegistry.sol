@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
@@ -26,7 +27,7 @@ contract CID2HashRegistry is AccessControlEnumerable {
     /**
       * @notice Given an hash, returns the array of CIDs stored
       * @param _hash    the hash to search
-      * @return an array with all the CIDs mapping to that hash
+      * @return CIDs    an array with all the CIDs mapping to that hash
       */
     function getCIDsFromHash(
         bytes32 _hash
@@ -37,12 +38,12 @@ contract CID2HashRegistry is AccessControlEnumerable {
     /**
       * @notice Given a CID, return the hash stored
       * @param _cid         CID to search
-      * @return the hash of that CID, bytes32(0) if not present
+      * @return hash        the hash of that CID, bytes32(0) if not present
       */
     function getHashFromCID(
         string calldata _cid
     ) public view returns(bytes32 hash) {
-        bytes32 cidHash = keccak256(_cid);
+        bytes32 cidHash = keccak256(abi.encode(_cid));
         return CIDtoSha2[cidHash];
     }
 
@@ -55,7 +56,7 @@ contract CID2HashRegistry is AccessControlEnumerable {
         string calldata _cid,
         bytes32 _hash
     ) external onlyRole(WRITER) {
-        bytes32 cidHash = keccak256(_cid);
+        bytes32 cidHash = keccak256(abi.encode(_cid));
         sha2ToCIDs[_hash].push(_cid);
         CIDtoSha2[cidHash] = _hash;
     }
