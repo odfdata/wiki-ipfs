@@ -66,7 +66,9 @@ export class WikiIPFSBackendStack extends Stack {
         this,
         `OrchestrationConstruct-${props.environment}`,
         {
-          environment: props.environment
+          environment: props.environment,
+          getAllCIDsFunction: computeSubStack.getAllCIDsFunction,
+          generateFileHashFunction: computeSubStack.generateFileHashFunction
         }
     );
     computeSubStack.startGenerateHashStateMachineFunction.addEnvironment(

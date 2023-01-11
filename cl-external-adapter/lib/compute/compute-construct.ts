@@ -20,6 +20,7 @@ export class ComputeConstruct extends Construct {
   public readonly startGenerateHashStateMachineFunctionIamRole: iam.Role;
   public readonly startGenerateHashStateMachineFunction: lambda_nodejs.NodejsFunction;
   public readonly publishEventToEventBusFunctionUrl: lambda.FunctionUrl;
+  public readonly generateFileHashFunction: lambda_nodejs.NodejsFunction;
 
   constructor(scope: Construct, id: string, props: ComputeProps) {
     super(scope, id);
@@ -102,7 +103,8 @@ export class ComputeConstruct extends Construct {
           timeout: Duration.seconds(900),
           bundling: {
             minify: true,
-            nodeModules: ['kubo-rpc-client']
+            nodeModules: ['kubo-rpc-client'],
+            target: 'es2020'
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
@@ -111,6 +113,26 @@ export class ComputeConstruct extends Construct {
         }
     );
 
+    this.generateFileHashFunction = new lambda_nodejs.NodejsFunction(
+        this,
+        'GenerateFileHashFunction',
+        {
+          functionName: `${props.environment}-wikiipfs-generate-file-hash-function`,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          architecture: lambda.Architecture.ARM_64,
+          memorySize: 1024,
+          timeout: Duration.seconds(900),
+          bundling: {
+            minify: true,
+            nodeModules: ['kubo-rpc-client'],
+            target: 'es2020'
+          },
+          depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
+          logRetention: logs.RetentionDays.TWO_WEEKS,
+          entry: path.join(__dirname, 'src/generate-file-hash.ts'),
+          handler: 'lambdaHandler'
+        }
+    )
     /*
     // create the aws lambda function to generate hash starting from a IPFS CID
     // console.log(web3storageToken);

@@ -6,6 +6,7 @@
   "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
   "author": "SAM CLI",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "@aws-sdk/client-eventbridge": "^3.245.0",
     "@aws-sdk/client-sfn": "^3.245.0",
@@ -20,7 +21,7 @@
     "lint": "eslint '*.ts' --quiet --fix",
     "compile": "tsc",
     "test": "npm run compile && npm run unit",
-    "dev": "npx ts-node fileToHash.ts"
+    "getAllCIDs": "npx ts-node --esm ./get-all-cids.ts"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92",

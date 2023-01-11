@@ -1,15 +1,21 @@
 import {
   aws_events as events,
+  aws_iam as iam,
+  aws_lambda_nodejs as lambda_nodejs,
   aws_stepfunctions as stepfunctions,
-  aws_stepfunctions_tasks as stepfunctions_tasks
+  aws_stepfunctions_tasks as stepfunctions_tasks, Stack
 } from 'aws-cdk-lib';
 import {Construct} from "constructs";
 import {ConstructProps} from "../utils/construct-props";
 
-export interface OrchestrationProps extends ConstructProps { }
+export interface OrchestrationProps extends ConstructProps {
+  readonly generateFileHashFunction: lambda_nodejs.NodejsFunction,
+  readonly getAllCIDsFunction: lambda_nodejs.NodejsFunction,
+}
 
 export class OrchestrationConstruct extends Construct {
   public readonly generateHashStateMachine: stepfunctions.StateMachine;
+  private generateHashStateMachineIamRole: iam.Role;
   constructor(scope: Construct, id: string, props: OrchestrationProps) {
     super(scope, id);
 
@@ -48,12 +54,83 @@ export class OrchestrationConstruct extends Construct {
      *
      */
 
-    const succeedJob = new stepfunctions.Succeed(
+    this.generateHashStateMachineIamRole = new iam.Role(
         this,
-        "Succeed",
+        "GenerateHashStateMachineIamRole",
         {
-          comment: "The StepFunction Succeeded"
+          assumedBy: new iam.ServicePrincipal(`states.${Stack.of(this).region}.amazonaws.com`),
+          description: 'IAM Role used by the State Machine to generate CID hashes',
+          path: '/',
+          managedPolicies: [
+            iam.ManagedPolicy.fromManagedPolicyArn(
+                this,
+                'WikiIPFSGenerateHashesStateMachineCloudWatchEventsFullAccess',
+                'arn:aws:iam::aws:policy/CloudWatchEventsFullAccess'
+            )
+          ],
+          roleName: `${props.environment}.wiki-ipfs-generate-hash-state-machine.iam-role`
         }
+    );
+    this.generateHashStateMachineIamRole.addToPolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['lambda:InvokeFunction'],
+      resources: [
+        props.getAllCIDsFunction.functionArn,
+        props.generateFileHashFunction.functionArn
+      ]
+    }));
+
+    // TODO: manage the CIDList with a map to execute them in parallel
+    // TODO: understand how to combine all the hashes of the step named IterateEachCIDFile in only one key
+    const stateMachineDefinition = new stepfunctions_tasks.LambdaInvoke(
+        this,
+        'GetAllCIDsRecursively',
+        {
+          lambdaFunction: props.getAllCIDsFunction,
+          invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
+          comment: 'Given 1 CID, get all the CIDs recursively',
+          payload: stepfunctions.TaskInput.fromObject({
+            "CID.$": stepfunctions.JsonPath.listAt("$.CIDList")
+          }),
+          resultSelector: {
+            "masterCID.$": "$.Payload.masterCID",
+            "masterCIDType.$": "$.Payload.masterCIDType",
+            "numFiles.$": "$.Payload.numFiles",
+            "schema.$": "$.Payload.schema",
+            "filesCIDs.$": "$.Payload.filesCIDs"
+          }
+        }
+    ).next(
+        new stepfunctions.Map(
+            this,
+            'IterateEachCIDFile',
+            {
+              comment: 'Iterate each CID file and generate its hash',
+              maxConcurrency: 20,
+              inputPath: '$.filesCIDs'
+            }
+        ).iterator(
+            new stepfunctions_tasks.LambdaInvoke(
+                this,
+                'GenerateCIDFileHash',
+                {
+                  lambdaFunction: props.generateFileHashFunction,
+                  invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
+                  comment: 'Given 1 CID file, generate the file hash',
+                  payload: stepfunctions.TaskInput.fromObject({
+                    "CID.$": "$"
+                  })
+                }
+            )
+        )
+    ).next(
+        new stepfunctions.Succeed(
+            this,
+            "Succeed",
+            {
+              comment: "The StepFunction Succeeded"
+            }
+        )
     );
 
     this.generateHashStateMachine = new stepfunctions.StateMachine(
@@ -61,7 +138,7 @@ export class OrchestrationConstruct extends Construct {
         "GenerateHashStateMachine",
         {
           stateMachineName: `${props.environment}.wiki-ipfs-generate-hash.state-machine`,
-          definition: succeedJob,
+          definition: stateMachineDefinition,
           stateMachineType: stepfunctions.StateMachineType.STANDARD
         }
     );
