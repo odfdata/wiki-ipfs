@@ -90,7 +90,7 @@ export class OrchestrationConstruct extends Construct {
           invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
           comment: 'Given 1 CID, get all the CIDs recursively',
           payload: stepfunctions.TaskInput.fromObject({
-            "CID.$": stepfunctions.JsonPath.listAt("$.CIDList")
+            "CID": stepfunctions.JsonPath.listAt("$.CIDList")
           }),
           resultSelector: {
             "masterCID.$": "$.Payload.masterCID",

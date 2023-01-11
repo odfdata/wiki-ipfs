@@ -17,7 +17,8 @@ import {OrchestrationConstruct} from "./orchestration/orchestration-construct";
 import * as cdk from 'aws-cdk-lib';
 
 export interface WikiIPFSBackendProps extends StackProps {
-  readonly environment: string
+  readonly environment: string,
+  readonly ipfsIPAddress: string
 }
 
 export class WikiIPFSBackendStack extends Stack {
@@ -37,7 +38,8 @@ export class WikiIPFSBackendStack extends Stack {
         `ComputeConstruct-${props.environment}`,
         {
           environment: props.environment,
-          eventBus: applicationIntegrationSubStack.eventBus
+          eventBus: applicationIntegrationSubStack.eventBus,
+          ipfsIPAddress: props.ipfsIPAddress
         }
     );
     applicationIntegrationSubStack.eventBus.grantPutEventsTo(computeSubStack.publishEventToEventBusFunction);

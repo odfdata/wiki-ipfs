@@ -12,7 +12,8 @@ const wikiIPFSBackendDevelopment = new WikiIPFSBackendStack(
     app, 'DevWikiIPFSClExternalAdapterStack',
     {
       env: { region: "eu-west-1" },
-      environment: 'dev'
+      environment: 'dev',
+      ipfsIPAddress: process.env.IPFS_IP_ADDRESS as string
     }
 );
 cdk.Tags.of(wikiIPFSBackendDevelopment).add('project', 'wikiipfs');

@@ -9,9 +9,11 @@ import {
 } from "aws-cdk-lib";
 import * as path from "path";
 import {ConstructProps} from "../utils/construct-props";
+import {OutputFormat} from "aws-cdk-lib/aws-lambda-nodejs";
 
 export interface ComputeProps extends ConstructProps {
-  readonly eventBus: events.EventBus
+  readonly eventBus: events.EventBus,
+  readonly ipfsIPAddress: string
 }
 
 export class ComputeConstruct extends Construct {
@@ -104,7 +106,11 @@ export class ComputeConstruct extends Construct {
           bundling: {
             minify: true,
             nodeModules: ['kubo-rpc-client'],
-            target: 'es2020'
+            target: 'es2020',
+            format: OutputFormat.ESM
+          },
+          environment: {
+            IPFS_IP_ADDRESS: props.ipfsIPAddress
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
@@ -125,7 +131,8 @@ export class ComputeConstruct extends Construct {
           bundling: {
             minify: true,
             nodeModules: ['kubo-rpc-client'],
-            target: 'es2020'
+            target: 'es2020',
+            format: OutputFormat.ESM
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
