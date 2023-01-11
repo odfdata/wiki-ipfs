@@ -14,7 +14,7 @@ contract CID2HashRegistry is AccessControlEnumerable {
     mapping (bytes32 => bytes32) private CIDtoSha2;
 
     /// roles
-    bytes32 public constant WRITER = keccak256("WRITER");
+    bytes32 public constant WRITER = keccak256("WRITER_ROLE");
 
     /// events
     /**
@@ -23,6 +23,13 @@ contract CID2HashRegistry is AccessControlEnumerable {
     * @param _hash      The hash added
     **/
     event CID2HashAdded(string indexed _cid, bytes32 indexed _hash);
+
+    /**
+    * Sets the default admin role to the deployer
+    */
+    constructor() {
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    }
 
     /**
       * @notice Given an hash, returns the array of CIDs stored

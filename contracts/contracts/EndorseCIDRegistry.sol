@@ -5,7 +5,6 @@ pragma solidity ^0.8.17;
 
 contract EndorseCIDRegistry {
 
-
     /// mapping
     /// @dev mapping CID to address => bool map. Given a CID, check if an endorser is supporting it.
     ///         CIDs are hashed for gas efficiency

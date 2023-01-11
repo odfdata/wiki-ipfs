@@ -35,7 +35,13 @@ const config: HardhatUserConfig = {
       url: secrets.nodeUrls.mumbai,
       accounts: [secrets.privateKeys.mumbai.deployer],
       gasPrice: "auto"
-    }
+    },
+    wallaby: {
+      chainId: 31415,
+      url: "https://wallaby.node.glif.io/rpc/v0",
+      accounts: [secrets.privateKeys.wallabi.deployer],
+      gasPrice: "auto"
+    },
   },
   etherscan: {
     apiKey: {

@@ -32,13 +32,13 @@ describe("CIDMatcher", () => {
         deployer,
         CHAIN_CONSTANTS[TEST_CHAIN_ID].JOD_ID,
         CHAIN_CONSTANTS[TEST_CHAIN_ID].ORACLE_ADDRESS,
-        CHAIN_CONSTANTS[TEST_CHAIN_ID].LINK_ERC20_ADDRESS
+        CHAIN_CONSTANTS[TEST_CHAIN_ID].PAY_TOKEN_ADDRESS
       );
     });
 
     it("Should return chainlink token address", async () => {
       let clTokenAddress = await cidMatcher.connect(user01).getChainlinkToken();
-      expect(clTokenAddress).to.be.equals(CHAIN_CONSTANTS[TEST_CHAIN_ID].LINK_ERC20_ADDRESS);
+      expect(clTokenAddress).to.be.equals(CHAIN_CONSTANTS[TEST_CHAIN_ID].PAY_TOKEN_ADDRESS);
     });
 
   });
