@@ -1,7 +1,8 @@
 import {Construct} from "constructs";
 import {
-  aws_events as events, aws_iam,
-  aws_lambda,
+  aws_events as events,
+  aws_iam as iam,
+  aws_lambda as lambda,
   aws_lambda_nodejs as lambda_nodejs,
   aws_logs as logs,
   Duration
@@ -16,8 +17,9 @@ export interface ComputeProps extends ConstructProps {
 export class ComputeConstruct extends Construct {
   public readonly getAllCIDsFunction: lambda_nodejs.NodejsFunction;
   public readonly publishEventToEventBusFunction: lambda_nodejs.NodejsFunction;
-  public readonly startGenerateHashStateMachineFunctionIamRole: aws_iam.Role;
+  public readonly startGenerateHashStateMachineFunctionIamRole: iam.Role;
   public readonly startGenerateHashStateMachineFunction: lambda_nodejs.NodejsFunction;
+  public readonly publishEventToEventBusFunctionUrl: lambda.FunctionUrl;
 
   constructor(scope: Construct, id: string, props: ComputeProps) {
     super(scope, id);
@@ -27,8 +29,8 @@ export class ComputeConstruct extends Construct {
       'PublishEventToEventBusFunction',
         {
           functionName: `${props.environment}-wikiipfs-publish-oracle-request-function`,
-          runtime: aws_lambda.Runtime.NODEJS_16_X,
-          architecture: aws_lambda.Architecture.ARM_64,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          architecture: lambda.Architecture.ARM_64,
           memorySize: 256,
           timeout: Duration.seconds(30),
           bundling: {
@@ -43,16 +45,28 @@ export class ComputeConstruct extends Construct {
           handler: "lambdaHandler"
         }
     );
+    // expose the aws lambda function in order to be called as Chainlink
+    this.publishEventToEventBusFunctionUrl = this.publishEventToEventBusFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.NONE,
+      cors: { allowedOrigins: ["*"] }
+    });
 
-    this.startGenerateHashStateMachineFunctionIamRole = new aws_iam.Role(
+    this.startGenerateHashStateMachineFunctionIamRole = new iam.Role(
         this,
         'StartGenerateHashStateMachineFunctionIamRole',
         {
-          assumedBy: new aws_iam.ServicePrincipal("lambda.amazonaws.com"),
+          assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
           description: 'IAM Role used by the AWS Function responsible for starting the AWS State Machine to ' +
               'generate the hashes',
           roleName: `${props.environment}.wikiipfs-start-state-machine-function.iam-role`,
-          path: '/'
+          path: '/',
+          managedPolicies: [
+              iam.ManagedPolicy.fromManagedPolicyArn(
+                  this,
+                  "AWSLambdaBasicExecutionRole",
+                  "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              )
+          ]
         }
     );
 
@@ -62,12 +76,13 @@ export class ComputeConstruct extends Construct {
         {
           functionName: `${props.environment}-wikiipfs-start-state-machine-function`,
           role: this.startGenerateHashStateMachineFunctionIamRole,
-          runtime: aws_lambda.Runtime.NODEJS_16_X,
-          architecture: aws_lambda.Architecture.ARM_64,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          architecture: lambda.Architecture.ARM_64,
           memorySize: 256,
           timeout: Duration.seconds(30),
           bundling: {
-            minify: true
+            minify: true,
+
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
@@ -81,8 +96,8 @@ export class ComputeConstruct extends Construct {
         "GetAllCIDsFunction",
         {
           functionName: `${props.environment}-wikiipfs-get-all-cids-function`,
-          runtime: aws_lambda.Runtime.NODEJS_16_X,
-          architecture: aws_lambda.Architecture.ARM_64,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          architecture: lambda.Architecture.ARM_64,
           memorySize: 1024,
           timeout: Duration.seconds(900),
           bundling: {
@@ -95,11 +110,6 @@ export class ComputeConstruct extends Construct {
           handler: "lambdaHandler"
         }
     );
-    // expose the aws lambda function in order to be called as Chainlink
-    this.getAllCIDsFunction.addFunctionUrl({
-      authType: aws_lambda.FunctionUrlAuthType.NONE,
-      cors: { allowedOrigins: ["*"] }
-    });
 
     /*
     // create the aws lambda function to generate hash starting from a IPFS CID

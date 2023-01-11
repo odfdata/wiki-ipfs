@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-eventbridge": "^3.245.0",
+    "@aws-sdk/client-sfn": "^3.245.0",
     "@chainlink/external-adapter": "^0.2.6",
     "alchemy-sdk": "^2.1.1",
     "arraybuffer-to-string": "^1.0.2",

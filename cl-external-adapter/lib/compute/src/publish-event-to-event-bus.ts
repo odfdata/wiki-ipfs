@@ -14,6 +14,7 @@ const chainlinkHashVerifierParams = {
 export const lambdaHandler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   try {
     console.log(event.body);
+    console.log(eventBridgeBusArn);
     let body: object = (event.body === undefined || event.body === null) ? {} : JSON.parse(event.body);
     // The Validator helps you validate the Chainlink request data
     const validator = new Validator(body, chainlinkHashVerifierParams);
@@ -24,16 +25,16 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
       Entries: [
         {
           Detail: JSON.stringify({eventName: 'CHAINLINK_REQUEST', jobRunID: jobRunID, CIDList: CIDList}),
-          Resources: [
-            eventBridgeBusArn
-          ],
+          EventBusName: eventBridgeBusArn,
           DetailType: "oracleRequestReceived",
           Source: "com.wikiipfs.oracle"
         }
       ]
     });
-    await eventBridgeClient.send(eventBridgeEvent);
+    const result = await eventBridgeClient.send(eventBridgeEvent);
 
+    console.log(result.FailedEntryCount);
+    console.log(result.Entries);
     return {
       statusCode: 200,
       body: JSON.stringify({"pending": true})

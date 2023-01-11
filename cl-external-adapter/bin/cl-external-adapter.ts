@@ -9,7 +9,7 @@ dotenv.config()
 const app = new cdk.App();
 
 const wikiIPFSBackendDevelopment = new WikiIPFSBackendStack(
-    app, 'DevClExternalAdapterStack',
+    app, 'DevWikiIPFSClExternalAdapterStack',
     {
       env: { region: "eu-west-1" },
       environment: 'dev'

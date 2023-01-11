@@ -3,7 +3,8 @@ import {
   StackProps,
   Duration,
   aws_events as events,
-  aws_lambda,
+  aws_iam as iam,
+  aws_lambda as lambda,
   aws_lambda_nodejs as lambda_nodejs,
   aws_logs as logs,
   aws_events_targets as events_targets,
@@ -50,8 +51,9 @@ export class WikiIPFSBackendStack extends Stack {
           description: "The event rule responsible of filtering Chainlink Oracle published in the Event Bus and " +
               "start the correct AWS Lambda Function",
           eventPattern: {
+            source: ['com.wikiipfs.oracle'],
             detail: {
-              eventName: 'CHAINLINK_REQUEST'
+              eventName: ['CHAINLINK_REQUEST']
             }
           },
           targets: [
@@ -69,7 +71,23 @@ export class WikiIPFSBackendStack extends Stack {
     );
     computeSubStack.startGenerateHashStateMachineFunction.addEnvironment(
         'GENERATE_HASH_STATE_MACHINE_ARN', orchestrationSubStack.generateHashStateMachine.stateMachineArn);
+    computeSubStack.startGenerateHashStateMachineFunctionIamRole.addToPolicy(
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: ['states:StartExecution'],
+          resources: [
+              orchestrationSubStack.generateHashStateMachine.stateMachineArn
+          ]
+        })
+    );
 
-
+    new cdk.CfnOutput(
+        this,
+        'CLExternalAdapterURL',
+        {
+          value: computeSubStack.publishEventToEventBusFunctionUrl.url,
+          description: 'The public URL the Chainlink Node will use to generate hashes',
+          exportName: 'clExternalAdapterURL',
+        });
   }
 }
