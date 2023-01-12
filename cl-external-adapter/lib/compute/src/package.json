@@ -14,7 +14,9 @@
     "alchemy-sdk": "^2.1.1",
     "arraybuffer-to-string": "^1.0.2",
     "axios": "^1.1.3",
-    "kubo-rpc-client": "^2.0.2"
+    "kubo-rpc-client": "^2.0.2",
+    "merkletreejs": "^0.3.9",
+    "crypto-js": "^4.1.1"
   },
   "scripts": {
     "unit": "jest",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92",
+    "@types/crypto-js": "^4.1.1",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.13",
     "@typescript-eslint/eslint-plugin": "^5.10.2",

@@ -10,6 +10,7 @@ import {ConstructProps} from "../utils/construct-props";
 
 export interface OrchestrationProps extends ConstructProps {
   readonly generateFileHashFunction: lambda_nodejs.NodejsFunction,
+  readonly generateMerkleRootFunction: lambda_nodejs.NodejsFunction,
   readonly getAllCIDsFunction: lambda_nodejs.NodejsFunction,
 }
 
@@ -76,7 +77,8 @@ export class OrchestrationConstruct extends Construct {
       actions: ['lambda:InvokeFunction'],
       resources: [
         props.getAllCIDsFunction.functionArn,
-        props.generateFileHashFunction.functionArn
+        props.generateFileHashFunction.functionArn,
+        props.generateMerkleRootFunction.functionArn
       ]
     }));
 
@@ -90,7 +92,7 @@ export class OrchestrationConstruct extends Construct {
           invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
           comment: 'Given 1 CID, get all the CIDs recursively',
           payload: stepfunctions.TaskInput.fromObject({
-            "CID": stepfunctions.JsonPath.listAt("$.CIDList")
+            "CIDList.$": "$.CIDList"
           }),
           resultSelector: {
             "masterCID.$": "$.Payload.masterCID",
@@ -98,7 +100,8 @@ export class OrchestrationConstruct extends Construct {
             "numFiles.$": "$.Payload.numFiles",
             "schema.$": "$.Payload.schema",
             "filesCIDs.$": "$.Payload.filesCIDs"
-          }
+          },
+          resultPath: "$.getAllCIDs"
         }
     ).next(
         new stepfunctions.Map(
@@ -107,7 +110,8 @@ export class OrchestrationConstruct extends Construct {
             {
               comment: 'Iterate each CID file and generate its hash',
               maxConcurrency: 20,
-              inputPath: '$.filesCIDs'
+              inputPath: '$.getAllCIDs.filesCIDs',
+              resultPath: "$.fileHashes"
             }
         ).iterator(
             new stepfunctions_tasks.LambdaInvoke(
@@ -119,9 +123,34 @@ export class OrchestrationConstruct extends Construct {
                   comment: 'Given 1 CID file, generate the file hash',
                   payload: stepfunctions.TaskInput.fromObject({
                     "CID.$": "$"
-                  })
+                  }),
+                  resultSelector: {
+                    "CID.$": "$.Payload.CID",
+                    "hash.$": "$.Payload.hash"
+                  }
                 }
             )
+        )
+    ).next(
+        new stepfunctions_tasks.LambdaInvoke(
+            this,
+            'GenerateMerkleRoot',
+            {
+              lambdaFunction: props.generateMerkleRootFunction,
+              invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
+              comment: 'Generate Merkle Root if necessary',
+              payload: stepfunctions.TaskInput.fromObject({
+                "masterCIDType.$": "$.getAllCIDs.masterCIDType",
+                "masterCID.$": "$.getAllCIDs.masterCID",
+                "numFiles.$": "$.getAllCIDs.numFiles",
+                "fileHashes.$": "$.fileHashes"
+              }),
+              resultSelector: {
+                "CIDList.$": "$.Payload.CIDList",
+                "hashList.$": "$.Payload.hashList"
+              },
+              resultPath: "$.merkleRoot"
+            }
         )
     ).next(
         new stepfunctions.Succeed(

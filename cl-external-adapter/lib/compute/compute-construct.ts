@@ -23,6 +23,7 @@ export class ComputeConstruct extends Construct {
   public readonly startGenerateHashStateMachineFunction: lambda_nodejs.NodejsFunction;
   public readonly publishEventToEventBusFunctionUrl: lambda.FunctionUrl;
   public readonly generateFileHashFunction: lambda_nodejs.NodejsFunction;
+  public readonly generateMerkleRootFunction: lambda_nodejs.NodejsFunction;
 
   constructor(scope: Construct, id: string, props: ComputeProps) {
     super(scope, id);
@@ -134,34 +135,39 @@ export class ComputeConstruct extends Construct {
             target: 'es2020',
             format: OutputFormat.ESM
           },
+          environment: {
+            IPFS_IP_ADDRESS: props.ipfsIPAddress
+          },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
           entry: path.join(__dirname, 'src/generate-file-hash.ts'),
           handler: 'lambdaHandler'
         }
-    )
-    /*
-    // create the aws lambda function to generate hash starting from a IPFS CID
-    // console.log(web3storageToken);
-    const fileToHashFunction = new lambda_nodejs.NodejsFunction(
-        this, "FileToHashFunction", {
-          functionName: "cl-external-adapter-file-to-hash-function",
-          runtime: aws_lambda.Runtime.NODEJS_16_X,
-          architecture: aws_lambda.Architecture.ARM_64,
+    );
+
+    this.generateMerkleRootFunction = new lambda_nodejs.NodejsFunction(
+        this,
+        'GenerateMerkleRootFunction',
+        {
+          functionName: `${props.environment}-wikiipfs-generate-merkle-root-function`,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          architecture: lambda.Architecture.ARM_64,
           memorySize: 1024,
           timeout: Duration.seconds(900),
           bundling: {
-            minify: true
+            minify: true,
+            nodeModules: ['kubo-rpc-client', 'crypto-js', 'merkletreejs'],
+            target: 'es2020',
+            format: OutputFormat.ESM
           },
           environment: {
-            // WEB3STORAGE_TOKEN: web3storageToken
+            IPFS_IP_ADDRESS: props.ipfsIPAddress
           },
-          logRetention: logs.RetentionDays.TWO_WEEKS,
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
-          entry: path.join(__dirname, 'src/fileToHash.ts'),
-          handler: "lambdaHandler",
+          logRetention: logs.RetentionDays.TWO_WEEKS,
+          entry: path.join(__dirname, 'src/generate-merkle-root.ts'),
+          handler: 'lambdaHandler'
         }
     );
-     */
   }
 }
