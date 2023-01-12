@@ -152,7 +152,7 @@ export class ComputeConstruct extends Construct {
           functionName: `${props.environment}-wikiipfs-generate-merkle-root-function`,
           runtime: lambda.Runtime.NODEJS_16_X,
           architecture: lambda.Architecture.ARM_64,
-          memorySize: 1024,
+          memorySize: 256,
           timeout: Duration.seconds(900),
           bundling: {
             minify: true,

@@ -1,5 +1,5 @@
 import {Context} from "aws-lambda";
-import {create} from "kubo-rpc-client";
+import {create} from "ipfs-http-client";
 import crypto from "crypto";
 import {Buffer} from "buffer";
 
@@ -21,7 +21,10 @@ export interface GenerateFileHashResponse {
 }
 
 const downloadIPFSFile = async (CID: string) => {
-  const downloadFile = ipfs.get(`/ipfs/${CID}`);
+  const downloadFile = ipfs.get(`/ipfs/${CID}`, {
+
+
+  });
   let uint8Array = new Uint8Array();
   for await (const buf of downloadFile) {
     // sum of individual array lengths
