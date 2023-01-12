@@ -23,7 +23,7 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
 
     /// bytes32
     /// @dev stores the ID of the ChainLink job
-    bytes32 private jobId;
+    bytes32 public jobId;
 
     /// mapping
     /// @dev recording the status of the CID verification: 1: pending - 2: success - 3-10,000: error
@@ -155,9 +155,9 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
     //
 
     /**
-      * @notice Move extra LNK to the owner
+      * @notice Move extra Payment Token to the owner
       */
-    function withdrawLink() public onlyOwner {
+    function withdrawPaymentToken() public onlyOwner {
         LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
         require(link.transfer(msg.sender, link.balanceOf(address(this))), 'Unable to transfer');
     }

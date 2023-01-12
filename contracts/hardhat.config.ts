@@ -8,7 +8,11 @@ import secrets from './.secrets.json';
  */
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.17",
+    compilers: [{
+      version: "0.8.17",
+    },{
+      version: "0.7.6",
+    }],
     settings: {
       viaIR: false,
       optimizer: {

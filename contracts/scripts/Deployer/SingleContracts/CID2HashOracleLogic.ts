@@ -26,3 +26,28 @@ export async function deployCID2HashOracleLogic(
     { nonce: next_nonce }
   ) as CID2HashOracleLogic;
 }
+
+
+/**
+ * Adds the WRITER_ROLE role to the given address
+ * @param signer - who's going to sign the transaction
+ * @param cid2hashOracleLogic - address of the deployed CID2HashOracleLogic
+ * @param cid2hashRegistryAddress - address of the deployed CID2HashRegistry
+ * @param [nonce] - if we want to pass a nonce, rather than having the code to evaluate it
+ */
+export async function cid2hashOracleLogic_setCid2HashRegistryAddress(
+  signer: SignerWithAddress,
+  cid2hashOracleLogic: string,
+  cid2hashRegistryAddress: string,
+  nonce: number = -1
+): Promise<void> {
+  let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
+  const contractFactory = await ethers.getContractFactory("CID2HashOracleLogic", signer);
+  await contractFactory
+    .attach(cid2hashOracleLogic)
+    .setCid2HashRegistryAddress(
+      cid2hashRegistryAddress,
+      { nonce: next_nonce }
+    );
+  return;
+}
