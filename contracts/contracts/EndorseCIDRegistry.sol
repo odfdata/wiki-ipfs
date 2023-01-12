@@ -1,9 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+import "hardhat/console.sol";
+
 // Records the public endorse of CID files
 
 contract EndorseCIDRegistry {
+
+    /// uint256
+    uint256 MAX_SIGN_VALIDITY = 60*60*24*7;  // 7 days for max sign validity
 
     /// mapping
     /// @dev mapping CID to address => bool map. Given a CID, check if an endorser is supporting it.
@@ -152,12 +157,16 @@ contract EndorseCIDRegistry {
         bytes32 _r,
         bytes32 _s
     ) private view returns (bool isVerified) {
+        require(_validBefore <= (block.timestamp + MAX_SIGN_VALIDITY), "Max sign validity exceeds MAX_SIGN_VALIDITY");
         bytes memory data = abi.encode(
             _CID, _from, _validAfter, _validBefore
         );
-        bytes32 message = keccak256(data);
-        address signer = ecrecover(message, _v, _r, _s);
-        return msg.sender == signer;
+        console.logBytes32(keccak256(data));
+        bytes32 messageHash = keccak256(abi.encode("\x19Ethereum Signed Message:\n32", keccak256(data)));
+        address signer = ecrecover(messageHash, _v, _r, _s);
+        console.log(signer);
+        console.log(_from);
+        return _from == signer;
     }
 
     /**

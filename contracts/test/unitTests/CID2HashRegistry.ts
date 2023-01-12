@@ -1,17 +1,9 @@
 import {expect} from "chai";
 import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
-import {CHAIN_CONSTANTS} from "../../scripts/ProjectConstants";
-import {TEST_CHAIN_ID} from "../_setup/TestConstants";
 import {ethers} from "hardhat";
-import {CID2HashOracleLogic, CID2HashRegistry, Operator} from "../../typechain-types";
-import CID2HashOracleLogicABI from "../../artifacts/contracts/CID2HashOracleLogic.sol/CID2HashOracleLogic.json";
-import {deployCID2HashOracleLogic} from "../../scripts/Deployer/SingleContracts/CID2HashOracleLogic";
-import {BigNumber} from "ethers";
-import {deployOperator} from "../../scripts/Deployer/SingleContracts/ChainLinkOracle/Operator";
-import {time} from "@nomicfoundation/hardhat-network-helpers";
+import {CID2HashRegistry} from "../../typechain-types";
 import {deployCID2HashRegistry} from "../../scripts/Deployer/SingleContracts/CID2HashRegistry";
 import {generateRandomCid, generateRandomHash} from "../../scripts/utils/CID";
-import exp from "constants";
 
 let DEFAULT_ADMIN_ROLE = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32);
 const WRITER_ROLE = ethers.utils.solidityKeccak256(["string"], ["WRITER_ROLE"]);
@@ -31,9 +23,9 @@ describe("CID2HashRegistry", () => {
     user03 = us3;
   })
 
-  describe("Constructor parameters", async () => {
+  describe("Deploy", async () => {
 
-    it("Should deploy with correct constructor parameters", async () => {
+    it("Should deploy correctly", async () => {
       cid2HashRegistry = await deployCID2HashRegistry(deployer);
 
       // check that DEFAULT_ADMIN_ROLE role has been assigned to deployer

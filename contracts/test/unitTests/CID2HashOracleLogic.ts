@@ -10,6 +10,7 @@ import {BigNumber} from "ethers";
 import {deployOperator} from "../../scripts/Deployer/SingleContracts/ChainLinkOracle/Operator";
 import {time} from "@nomicfoundation/hardhat-network-helpers";
 import {deployCID2HashRegistry} from "../../scripts/Deployer/SingleContracts/CID2HashRegistry";
+import {generateRandomCid} from "../../scripts/utils/CID";
 
 
 let ORACLE_ADDRESS: string = "";
@@ -55,14 +56,14 @@ describe("CID2HashOracleLogic", () => {
   describe("Getters", async () => {
 
     it('getVerificationStatus - Should return the correct status for a given CID', async () => {
-      const cid = 'QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V';
+      const cid = generateRandomCid();
       await cid2HashOracleLogic.requestCID2Hash([cid]);
       const status = await cid2HashOracleLogic.getVerificationStatus(cid);
       expect(status).to.be.equals(BigNumber.from(1));
     });
 
     it('getVerificationStatus - Should return 0 for non-existing CID', async () => {
-      const cid = 'Qmn0n0n0n0n0n0n0n0n0n0n0n0FXzCVVEcRTWJBmLgn0n0';
+      const cid = generateRandomCid();
       const status = await cid2HashOracleLogic.getVerificationStatus(cid);
       expect(status).to.be.equals(0);
     });
@@ -77,7 +78,7 @@ describe("CID2HashOracleLogic", () => {
   describe("Verification request", async () => {
 
     it("Should correctly add verification", async () => {
-      const cid = 'QmpoUYer77Z14xgmQjYEiHjVjMFXzCVVEcRTYuRTNNdreT';  // TODO create a function to generate random CIDs
+      const cid = generateRandomCid();
       let tx = await cid2HashOracleLogic.connect(user01).requestCID2Hash([cid]);
       let res = await tx.wait();
       let e = res.events?.find(e => e.event === "CID2HashRequest");
@@ -128,7 +129,7 @@ describe("CID2HashOracleLogic", () => {
 
     it("cancelRequest - Should cancel the verification request", async () => {
       // send a request
-      const cid = 'QmpoUYer77Z14xgmQjYEiHjVjMFXzCVVEcRTYuRTNNdreT';
+      const cid = generateRandomCid();
       const hash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(cid));  // generated a random one, just for testing purpose
       let tx = await cid2HashOracleLogic.connect(user01).requestCID2Hash([cid]);
       let res = await tx.wait();

@@ -5,11 +5,8 @@ import {TEST_CHAIN_ID} from "../_setup/TestConstants";
 import {ethers} from "hardhat";
 import {CID2HashOracleLogic, CID2HashRegistry, EndorseCIDRegistry, Operator} from "../../typechain-types";
 import CID2HashOracleLogicABI from "../../artifacts/contracts/CID2HashOracleLogic.sol/CID2HashOracleLogic.json";
-import OperatorABI from "@chainlink/contracts/abi/v0.7/Operator.json";
-import {deployCID2HashOracleLogic} from "../../scripts/Deployer/SingleContracts/CID2HashOracleLogic";
-import {BigNumber} from "ethers";
 import {deployOperator} from "../../scripts/Deployer/SingleContracts/ChainLinkOracle/Operator";
-import { setBalance } from "@nomicfoundation/hardhat-network-helpers";
+import {setBalance} from "@nomicfoundation/hardhat-network-helpers";
 import {deploy} from "../../scripts/Deployer/deploy";
 
 
