@@ -7,7 +7,7 @@ import {CID2HashOracleLogic, CID2HashRegistry, EndorseCIDRegistry, Operator} fro
 import CID2HashOracleLogicABI from "../../artifacts/contracts/CID2HashOracleLogic.sol/CID2HashOracleLogic.json";
 import {deployOperator} from "../../scripts/Deployer/SingleContracts/ChainLinkOracle/Operator";
 import {setBalance} from "@nomicfoundation/hardhat-network-helpers";
-import {deploy} from "../../scripts/Deployer/deploy";
+import {deployContractStructure} from "../../scripts/Deployer/deployContractStructure";
 import {generateRandomCid, generateRandomHash} from "../../scripts/utils/CID";
 import {BigNumber} from "ethers";
 
@@ -37,7 +37,7 @@ describe("Oracle Verification Integration Tests", () => {
     fakeOracleOwner = fo;
     oracleOperator = await deployOperator(fakeOracleOwner, CHAIN_CONSTANTS[TEST_CHAIN_ID].PAY_TOKEN_ADDRESS, fakeOracleOwner.address);
     ORACLE_ADDRESS = oracleOperator.address;
-    const deployedStack = await deploy(
+    const deployedStack = await deployContractStructure(
       CHAIN_CONSTANTS[TEST_CHAIN_ID].JOD_ID,
       ORACLE_ADDRESS,
       CHAIN_CONSTANTS[TEST_CHAIN_ID].PAY_TOKEN_ADDRESS,

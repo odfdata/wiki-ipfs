@@ -25,7 +25,7 @@ describe("CID2HashRegistry", () => {
 
   describe("Deploy", async () => {
 
-    it("Should deploy correctly", async () => {
+    it("Should deployContractStructure correctly", async () => {
       cid2HashRegistry = await deployCID2HashRegistry(deployer);
 
       // check that DEFAULT_ADMIN_ROLE role has been assigned to deployer

@@ -11,7 +11,7 @@ You need to create a `.secrets.json` file to run the scripts. You can just copy 
 These are the commands you need to run the scripts:
 * `yarn install` to install dependencies
 * `yarn hardhat compile` to compile smart contracts
-* `yarn hardhat run scripts/Deployer/deploy.ts` to deploy the Smart Contract (use `--network` flag for a specific network)
+* `yarn hardhat run scripts/Deployer/deployContractStructure.ts` to deployContractStructure the Smart Contract (use `--network` flag for a specific network)
 * `yarn hardhat test` to run basic tests
 * `yarn hardhat verify {contract_address} "arg01" "arg02" "arg03..."` to verify the deployed smart contracts on PolygonScan
 

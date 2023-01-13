@@ -9,7 +9,7 @@ import {
 } from "./SingleContracts/CID2HashOracleLogic";
 
 /**
- * Function to deploy all the contracts on a new chain. We've used a dedicate function, so that we can call it
+ * Function to deployContractStructure all the contracts on a new chain. We've used a dedicate function, so that we can call it
  * also during testing
  *
  * @param {string} jobId - id of the Chainlink JobId to certify the match between URL and hash
@@ -17,7 +17,7 @@ import {
  * @param {string} payTokenAddress - payment token ERC-20 address
  * @param {boolean} [withLogs] - true if we want to print the logs, false otherwise
  */
-export const deploy = async (
+export const deployContractStructure = async (
   jobId: string,
   oracleAddress: string,
   payTokenAddress: string,
@@ -28,7 +28,7 @@ export const deploy = async (
   CID2HashOracleLogic: CID2HashOracleLogic
 }> => {
 
-  // We get the contract to deploy
+  // We get the contract to deployContractStructure
   const [owner] = await ethers.getSigners();
 
   // get the next nouce
@@ -60,7 +60,7 @@ export const deploy = async (
 
 if (typeof require !== 'undefined' && require.main === module) {
   let chainId: "80001" | "31415" | "1337" = "31415";
-  deploy(
+  deployContractStructure(
     CHAIN_CONSTANTS[chainId].JOD_ID,
     CHAIN_CONSTANTS[chainId].ORACLE_ADDRESS,
     CHAIN_CONSTANTS[chainId].PAY_TOKEN_ADDRESS

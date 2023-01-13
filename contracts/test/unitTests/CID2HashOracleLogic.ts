@@ -37,7 +37,7 @@ describe("CID2HashOracleLogic", () => {
   })
 
   describe("Constructor parameters", async () => {
-    it("Should deploy with correct constructor parameters", async () => {
+    it("Should deployContractStructure with correct constructor parameters", async () => {
       cid2HashOracleLogic = await deployCID2HashOracleLogic(
         deployer,
         CHAIN_CONSTANTS[TEST_CHAIN_ID].JOD_ID,

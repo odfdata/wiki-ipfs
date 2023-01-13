@@ -25,7 +25,7 @@ describe("EndorseCIDRegistry", () => {
 
   describe("deploy", async () => {
 
-    it("Should deploy correctly", async () => {
+    it("Should deployContractStructure correctly", async () => {
       endorseCIDRegistry = await deployEndorseCIDRegistry(deployer);
       expect(endorseCIDRegistry.address).to.not.be.undefined;
     });
