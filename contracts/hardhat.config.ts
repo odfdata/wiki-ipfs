@@ -32,13 +32,13 @@ const config: HardhatUserConfig = {
     },
     mumbai: {
       url: secrets.nodeUrls.mumbai,
-      accounts: [secrets.privateKeys.mumbai.deployer, secrets.privateKeys.mumbai.oracleAdmin],
+      accounts: [secrets.privateKeys.mumbai.deployer],
       gasPrice: "auto"
     },
     wallaby: {
       chainId: 31415,
       url: secrets.nodeUrls.wallaby,
-      accounts: [secrets.privateKeys.wallaby.deployer, secrets.privateKeys.wallaby.oracleAdmin],
+      accounts: [secrets.privateKeys.wallaby.deployer],
       gasPrice: "auto"
     },
   },
