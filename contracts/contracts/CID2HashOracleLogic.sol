@@ -121,18 +121,17 @@ contract CID2HashOracleLogic is ChainlinkClient, ConfirmedOwner {
         require(_cidList.length == _hashList.length, "Response has different size");
 
         for (uint i=0; i<_cidList.length; ++i) {
-            if (_hashList[i] != bytes32(0)) {
-                // record the success of the operation, or the error
-                uint returnedHashAsUint = uint(_hashList[i]);
-                bytes32 cidHash = keccak256(abi.encode(_cidList[i]));
-                if (returnedHashAsUint > 10000) {
-                    pendingCID[cidHash] = uint(2);
-                    Cid2HashRegistryContract.addHash(_cidList[i], _hashList[i]);
-                    emit CID2HashSuccessResponse(_cidList[i], _hashList[i]);
-                } else {
-                    pendingCID[cidHash] = returnedHashAsUint;
-                    emit CID2HashErrorResponse(_cidList[i], returnedHashAsUint);
-                }
+            require(_hashList[i] != bytes32(0), "Empty hash received");
+            // record the success of the operation, or the error
+            uint returnedHashAsUint = uint(_hashList[i]);
+            bytes32 cidHash = keccak256(abi.encode(_cidList[i]));
+            if (returnedHashAsUint > 10000) {
+                pendingCID[cidHash] = uint(2);
+                Cid2HashRegistryContract.addHash(_cidList[i], _hashList[i]);
+                emit CID2HashSuccessResponse(_cidList[i], _hashList[i]);
+            } else {
+                pendingCID[cidHash] = returnedHashAsUint;
+                emit CID2HashErrorResponse(_cidList[i], returnedHashAsUint);
             }
         }
     }
