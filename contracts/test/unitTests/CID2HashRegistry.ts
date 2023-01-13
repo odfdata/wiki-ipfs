@@ -81,6 +81,30 @@ describe("CID2HashRegistry", () => {
       expect(cidList[0]).to.be.equals(cid);
     })
 
+
+    it("Should remove the CID to the old hash-CID association after an operation of hash-CID update", async() => {
+      const cid = generateRandomCid();
+      const hash = generateRandomHash();
+      await cid2HashRegistry.connect(user01).addHash(cid, hash);
+      expect(await cid2HashRegistry.getHashFromCID(cid)).to.be.equals(hash);
+      let cidList = await cid2HashRegistry.getCIDsFromHash(hash);
+      expect(cidList.length).to.be.equals(1);
+      expect(cidList[0]).to.be.equals(cid);
+
+      // generate a new hash, pretending that the previous associaction was somehow wrong
+      const updatedHash = generateRandomHash();
+      await cid2HashRegistry.connect(user01).addHash(cid, updatedHash);
+      expect(await cid2HashRegistry.getHashFromCID(cid)).to.be.equals(updatedHash);
+      cidList = await cid2HashRegistry.getCIDsFromHash(updatedHash);
+      expect(cidList.length).to.be.equals(1);
+      expect(cidList[0]).to.be.equals(cid);
+      // check that the CID is no more associated with the original hash version, when searching the CIDs from the hash
+      cidList = await cid2HashRegistry.getCIDsFromHash(hash);
+      expect(cidList.length).to.be.equals(1);
+      expect(cidList[0]).to.be.equals("");
+
+    })
+
   })
 
   describe("Test CID and Hash getters", async () => {

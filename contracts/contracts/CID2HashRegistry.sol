@@ -64,8 +64,26 @@ contract CID2HashRegistry is AccessControlEnumerable {
         bytes32 _hash
     ) external onlyRole(WRITER) {
         bytes32 cidHash = keccak256(abi.encode(_cid));
-        sha2ToCIDs[_hash].push(_cid);
+        bytes32 existingHash = CIDtoSha2[cidHash];
+
         CIDtoSha2[cidHash] = _hash;
+        sha2ToCIDs[_hash].push(_cid);
+
+        // if there was another hash already associated with the given CID, make sure to remove
+        // the CID from the list of previous hash by setting that CID to empty string
+        if (existingHash != bytes32(0)) {
+            bytes32 cidHash = keccak256(bytes(_cid));
+            for (uint i=0; i<sha2ToCIDs[existingHash].length; ++i) {
+
+                if(
+                    keccak256(bytes(sha2ToCIDs[existingHash][i])) == cidHash
+                ) {
+                    sha2ToCIDs[existingHash][i] = "";
+                    break;
+                }
+            }
+        }
+
     }
 
 }
