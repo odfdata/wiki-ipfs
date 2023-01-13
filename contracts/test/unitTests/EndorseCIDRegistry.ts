@@ -1,9 +1,8 @@
 import {expect} from "chai";
 import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
 import {ethers} from "hardhat";
-import {CID2HashRegistry, EndorseCIDRegistry} from "../../typechain-types";
-import {deployCID2HashRegistry} from "../../scripts/Deployer/SingleContracts/CID2HashRegistry";
-import {generateRandomCid, generateRandomHash} from "../../scripts/utils/CID";
+import {EndorseCIDRegistry} from "../../typechain-types";
+import {generateRandomCid} from "../../scripts/utils/CID";
 import {deployEndorseCIDRegistry} from "../../scripts/Deployer/SingleContracts/EndorseCIDRegistry";
 import {time} from "@nomicfoundation/hardhat-network-helpers";
 

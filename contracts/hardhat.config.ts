@@ -30,20 +30,15 @@ const config: HardhatUserConfig = {
         blockNumber: 29183813
       }
     },
-    mainnetPoly: {
-      url: secrets.nodeUrls.mainnetPoly,
-      accounts: [secrets.privateKeys.mainnetPoly.deployer],
-      gasPrice: "auto"
-    },
     mumbai: {
       url: secrets.nodeUrls.mumbai,
-      accounts: [secrets.privateKeys.mumbai.deployer],
+      accounts: [secrets.privateKeys.mumbai.deployer, secrets.privateKeys.mumbai.oracleAdmin],
       gasPrice: "auto"
     },
     wallaby: {
       chainId: 31415,
-      url: "https://wallaby.node.glif.io/rpc/v0",
-      accounts: [secrets.privateKeys.wallabi.deployer],
+      url: secrets.nodeUrls.wallaby,
+      accounts: [secrets.privateKeys.wallaby.deployer, secrets.privateKeys.wallaby.oracleAdmin],
       gasPrice: "auto"
     },
   },
