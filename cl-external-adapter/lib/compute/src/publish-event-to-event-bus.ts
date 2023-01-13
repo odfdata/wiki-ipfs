@@ -20,11 +20,17 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     const validator = new Validator(body, chainlinkHashVerifierParams);
     const jobRunID: string = validator.validated.id;
     const CIDList: string[] = validator.validated.data.CIDList;
+    const requestURL: string = validator.validated.requestURL;
 
     const eventBridgeEvent = new PutEventsCommand({
       Entries: [
         {
-          Detail: JSON.stringify({eventName: 'CHAINLINK_REQUEST', jobRunID: jobRunID, CIDList: CIDList}),
+          Detail: JSON.stringify({
+            eventName: 'CHAINLINK_REQUEST',
+            jobRunID: jobRunID,
+            CIDList: CIDList,
+            requestURL: requestURL
+          }),
           EventBusName: eventBridgeBusArn,
           DetailType: "oracleRequestReceived",
           Source: "com.wikiipfs.oracle"
@@ -44,6 +50,6 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     return {
       statusCode: 200,
       body: JSON.stringify({"error": "something went wrong"})
-    }
+    };
   }
 };

@@ -30,6 +30,7 @@ export interface GetAllCIDsResponse {
 const getIPFSSchema = async (CID: string): Promise<SchemaObjResponse[]> => {
   // TODO: understand how to manage file's CIDs
   console.log(`Getting IPFS Schema for CID ${CID}`);
+  console.log('Got stats for CID');
   let ipfsSchema: SchemaObjResponse[] = [];
   const ipfsLsResponse = ipfs.ls(`/ipfs/${CID}`);
   for await (const ipfsEntry of ipfsLsResponse) {

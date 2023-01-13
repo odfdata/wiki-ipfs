@@ -10,7 +10,9 @@ export const lambdaHandler = async (event: EventBridgeEvent<any, any>, context: 
   await sfnClient.send(new StartExecutionCommand({
     input: JSON.stringify({
       jobRunID: event.detail.jobRunID,
-      CIDList: event.detail.CIDList
+      CIDList: event.detail.CIDList,
+      requestURL: event.detail.requestURL,
+      publishResultToChainlink: true
     }),
     stateMachineArn: generateHashStateMachineArn
   }));

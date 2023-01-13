@@ -12,6 +12,7 @@ export interface OrchestrationProps extends ConstructProps {
   readonly generateFileHashFunction: lambda_nodejs.NodejsFunction,
   readonly generateMerkleRootFunction: lambda_nodejs.NodejsFunction,
   readonly getAllCIDsFunction: lambda_nodejs.NodejsFunction,
+  readonly publishResultToChainlinkFunction: lambda_nodejs.NodejsFunction
 }
 
 export class OrchestrationConstruct extends Construct {
@@ -78,12 +79,39 @@ export class OrchestrationConstruct extends Construct {
       resources: [
         props.getAllCIDsFunction.functionArn,
         props.generateFileHashFunction.functionArn,
-        props.generateMerkleRootFunction.functionArn
+        props.generateMerkleRootFunction.functionArn,
+        props.publishResultToChainlinkFunction.functionArn
       ]
     }));
 
-    // TODO: manage the CIDList with a map to execute them in parallel
-    // TODO: understand how to combine all the hashes of the step named IterateEachCIDFile in only one key
+    const publishResultToChainlinkTask = new stepfunctions_tasks.LambdaInvoke(
+        this,
+        'PublishResultToChainlink',
+        {
+          lambdaFunction: props.publishResultToChainlinkFunction,
+          invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
+          comment: 'Publish result generated to Chainlink Oracle',
+          payload: stepfunctions.TaskInput.fromObject({
+            'responseURL.$': '$.responseURL',
+            'jobRunID.$': '$.jobRunID',
+            'CIDList.$': '$.merkleRoot.CIDList',
+            'hashList.$': '$.merkleRoot.hashList'
+          }),
+          resultSelector: {
+            'success.$': '$.Payload.success',
+            'errorMessage.$': '$.Payload.errorMessage'
+          },
+          resultPath: '$.publishResultToChainlinkResult'
+        }
+    );
+    const stateMachineSucceeded = new stepfunctions.Succeed(
+        this,
+        "Succeed",
+        {
+          comment: "The StepFunction Succeeded"
+        }
+    );
+
     const stateMachineDefinition = new stepfunctions_tasks.LambdaInvoke(
         this,
         'GetAllCIDsRecursively',
@@ -153,15 +181,17 @@ export class OrchestrationConstruct extends Construct {
             }
         )
     ).next(
-        new stepfunctions.Succeed(
-            this,
-            "Succeed",
+        new stepfunctions.Choice(this,
+            'DoIHaveToPublishResultToChainlink',
             {
-              comment: "The StepFunction Succeeded"
+              comment: 'Check if I have to publish result to Chainlink Oracle'
             }
-        )
-    );
-
+        ).when(stepfunctions.Condition.and(
+            stepfunctions.Condition.isPresent('$.publishResultToChainlink'),
+            stepfunctions.Condition.booleanEquals('$.publishResultToChainlink', true)),
+            publishResultToChainlinkTask)
+            .afterwards({includeOtherwise: true, includeErrorHandlers: true})
+    ).next(stateMachineSucceeded)
     this.generateHashStateMachine = new stepfunctions.StateMachine(
         this,
         "GenerateHashStateMachine",

@@ -71,7 +71,8 @@ export class WikiIPFSBackendStack extends Stack {
           environment: props.environment,
           getAllCIDsFunction: computeSubStack.getAllCIDsFunction,
           generateFileHashFunction: computeSubStack.generateFileHashFunction,
-          generateMerkleRootFunction: computeSubStack.generateMerkleRootFunction
+          generateMerkleRootFunction: computeSubStack.generateMerkleRootFunction,
+          publishResultToChainlinkFunction: computeSubStack.publishResultToChainlinkFunction
         }
     );
     computeSubStack.startGenerateHashStateMachineFunction.addEnvironment(

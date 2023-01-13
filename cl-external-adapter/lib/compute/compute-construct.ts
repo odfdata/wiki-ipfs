@@ -24,6 +24,7 @@ export class ComputeConstruct extends Construct {
   public readonly publishEventToEventBusFunctionUrl: lambda.FunctionUrl;
   public readonly generateFileHashFunction: lambda_nodejs.NodejsFunction;
   public readonly generateMerkleRootFunction: lambda_nodejs.NodejsFunction;
+  public readonly publishResultToChainlinkFunction: lambda_nodejs.NodejsFunction;
 
   constructor(scope: Construct, id: string, props: ComputeProps) {
     super(scope, id);
@@ -166,6 +167,28 @@ export class ComputeConstruct extends Construct {
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
           entry: path.join(__dirname, 'src/generate-merkle-root.ts'),
+          handler: 'lambdaHandler'
+        }
+    );
+
+    this.publishResultToChainlinkFunction = new lambda_nodejs.NodejsFunction(
+        this,
+        'PublishResultToChainlinkFunction',
+        {
+          functionName: `${props.environment}-wikiipfs-publish-result-to-chainlink-function`,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          architecture: lambda.Architecture.ARM_64,
+          memorySize: 256,
+          timeout: Duration.seconds(30),
+          bundling: {
+            minify: true,
+            nodeModules: ['axios'],
+            target: 'es2020',
+            format: OutputFormat.ESM
+          },
+          depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
+          logRetention: logs.RetentionDays.TWO_WEEKS,
+          entry: path.join(__dirname, 'src/publish-result-to-chainlink.ts'),
           handler: 'lambdaHandler'
         }
     );
