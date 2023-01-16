@@ -44,7 +44,9 @@ describe("EndorseCIDRegistry", () => {
       let cid = [generateRandomCid()];
       await endorseCIDRegistry.connect(user01).endorseCID(cid);
       let endorseStatus = await endorseCIDRegistry.endorseStatus(cid[0], user01.address);
+      let numOfEndorser = await endorseCIDRegistry.numberOfEndorser(cid[0]);
       expect(endorseStatus).to.be.true;
+      expect(numOfEndorser).to.be.equals(1);
     });
 
     it("Should be false if an endorse is made by user01 and the check happens on user02", async () => {
@@ -62,6 +64,21 @@ describe("EndorseCIDRegistry", () => {
       let cid = generateRandomCid();
       await endorseCIDRegistry.connect(user01).endorseCID([cid]);
       expect(await endorseCIDRegistry.endorseStatus(cid, user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cid)).to.be.equals(1);
+    });
+
+    it("Should be 1 the number of endorse number if the same CID is endorsed twice by same user", async () => {
+      let cid = [generateRandomCid()];
+      await endorseCIDRegistry.connect(user01).endorseCID(cid);
+      let endorseStatus = await endorseCIDRegistry.endorseStatus(cid[0], user01.address);
+      let numOfEndorser = await endorseCIDRegistry.numberOfEndorser(cid[0]);
+      expect(endorseStatus).to.be.true;
+      expect(numOfEndorser).to.be.equals(1);
+      await endorseCIDRegistry.connect(user01).endorseCID(cid);
+      endorseStatus = await endorseCIDRegistry.endorseStatus(cid[0], user01.address);
+      numOfEndorser = await endorseCIDRegistry.numberOfEndorser(cid[0]);
+      expect(endorseStatus).to.be.true;
+      expect(numOfEndorser).to.be.equals(1);
     });
 
     it("Should endorse a CID sent by another user, using the user01 sign", async () => {
@@ -86,6 +103,7 @@ describe("EndorseCIDRegistry", () => {
         signature.s
       );
       expect(await endorseCIDRegistry.endorseStatus(cidList[0], user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[0])).to.be.equals(1);
     });
 
     it("Should endorse 3 CIDs sent by another user, using the user01 sign", async () => {
@@ -112,6 +130,9 @@ describe("EndorseCIDRegistry", () => {
       expect(await endorseCIDRegistry.endorseStatus(cidList[0], user01.address)).to.be.true;
       expect(await endorseCIDRegistry.endorseStatus(cidList[1], user01.address)).to.be.true;
       expect(await endorseCIDRegistry.endorseStatus(cidList[2], user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[0])).to.be.equals(1);
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[1])).to.be.equals(1);
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[2])).to.be.equals(1);
     });
 
     it("Should fail when endorsing a CID sent by the another user, using a not yet valid user01 sign", async () => {
@@ -242,8 +263,23 @@ describe("EndorseCIDRegistry", () => {
       let cid = generateRandomCid();
       await endorseCIDRegistry.connect(user01).endorseCID([cid]);
       expect(await endorseCIDRegistry.endorseStatus(cid, user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cid)).to.be.equals(1);
       await endorseCIDRegistry.connect(user01).opposeCID([cid]);
       expect(await endorseCIDRegistry.endorseStatus(cid, user01.address)).to.be.false;
+      expect(await endorseCIDRegistry.numberOfEndorser(cid)).to.be.equals(0);
+    });
+
+    it("Should be 0 the number of endorse number if the same CID is opposed twice by same user", async () => {
+      let cid = [generateRandomCid()];
+      await endorseCIDRegistry.connect(user01).endorseCID(cid);
+      expect(await endorseCIDRegistry.endorseStatus(cid[0], user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cid[0])).to.be.equals(1);
+      await endorseCIDRegistry.connect(user01).opposeCID(cid);
+      expect(await endorseCIDRegistry.endorseStatus(cid[0], user01.address)).to.be.false;
+      expect(await endorseCIDRegistry.numberOfEndorser(cid[0])).to.be.equals(0);
+      await endorseCIDRegistry.connect(user01).opposeCID(cid);
+      expect(await endorseCIDRegistry.endorseStatus(cid[0], user01.address)).to.be.false;
+      expect(await endorseCIDRegistry.numberOfEndorser(cid[0])).to.be.equals(0);
     });
 
     it("Should oppose a CID sent by another user, using the user01 sign", async () => {
@@ -251,6 +287,7 @@ describe("EndorseCIDRegistry", () => {
       // start by endorsing a CID, then later opposing with a sign
       await endorseCIDRegistry.connect(user01).endorseCID(cidList);
       expect(await endorseCIDRegistry.endorseStatus(cidList[0], user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[0])).to.be.equals(1);
       let validAfter = (await time.latest()) - 1;
       let validBefore = (await time.latest()) + 3600;
       let dataToSign = ethers.utils.defaultAbiCoder.encode(
@@ -271,6 +308,7 @@ describe("EndorseCIDRegistry", () => {
         signature.s
       );
       expect(await endorseCIDRegistry.endorseStatus(cidList[0], user01.address)).to.be.false;
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[0])).to.be.equals(0);
     });
 
     it("Should oppose 3 CIDs sent by another user, using the user01 sign", async () => {
@@ -280,6 +318,9 @@ describe("EndorseCIDRegistry", () => {
       expect(await endorseCIDRegistry.endorseStatus(cidList[0], user01.address)).to.be.true;
       expect(await endorseCIDRegistry.endorseStatus(cidList[1], user01.address)).to.be.true;
       expect(await endorseCIDRegistry.endorseStatus(cidList[2], user01.address)).to.be.true;
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[0])).to.be.equals(1);
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[1])).to.be.equals(1);
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[2])).to.be.equals(1);
       let validAfter = (await time.latest()) - 1;
       let validBefore = (await time.latest()) + 3600;
       let dataToSign = ethers.utils.defaultAbiCoder.encode(
@@ -302,6 +343,9 @@ describe("EndorseCIDRegistry", () => {
       expect(await endorseCIDRegistry.endorseStatus(cidList[0], user01.address)).to.be.false;
       expect(await endorseCIDRegistry.endorseStatus(cidList[1], user01.address)).to.be.false;
       expect(await endorseCIDRegistry.endorseStatus(cidList[2], user01.address)).to.be.false;
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[0])).to.be.equals(0);
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[1])).to.be.equals(0);
+      expect(await endorseCIDRegistry.numberOfEndorser(cidList[2])).to.be.equals(0);
     });
 
     it("Should fail when opposing a CID sent by the another user, using a not yet valid user01 sign", async () => {
