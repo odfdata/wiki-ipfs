@@ -12,19 +12,19 @@ export interface UseGetOwnerOfCIDParams {
 }
 
 /**
- * Hook to get index verification status
+ * Hook to get number of endorser for a given CID
  */
-export const useGetOwnerOfCID = (params: UseGetOwnerOfCIDParams): useBaseAsyncHookState<string> => {
+export const useGetNumberOfEndorser = (params: UseGetOwnerOfCIDParams): useBaseAsyncHookState<number> => {
   const {completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess} = useBaseAsyncHook<number>();
   const contractRead = useContractRead({
-    address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
-    abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
-    functionName: "getOwnerOfCID",
+    address: CONTRACTS_DETAILS[params.chainId]?.ENDORSE_CID_REGISTRY_ADDRESS,
+    abi: CONTRACTS_DETAILS[params.chainId]?.ENDORSE_CID_REGISTRY_ABI,
+    functionName: "numberOfEndorser",
     args: [params.CID]
   });
 
-  const readResult = contractRead.data as string;
+  const readResult = contractRead.data as number;
 
   return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: readResult };
 };

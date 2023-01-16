@@ -26,8 +26,6 @@ export interface ChainDetails {
  * @param {AbiItem} ENDORSE_CID_REGISTRY_ABI - ABI of the Endorse Cid Registry
  */
 export interface ContractDetails {
-  CID_MATCHER_ADDRESS: string,  // TODO remove this
-  CID_MATCHER_ABI: AbiItem, // TODO remove this
   CID_2_HASH_REGISTRY_ADDRESS: string,
   CID_2_HASH_REGISTRY_ABI: AbiItem,
   CID_2_HASH_ORACLE_LOGIC_ADDRESS: string,

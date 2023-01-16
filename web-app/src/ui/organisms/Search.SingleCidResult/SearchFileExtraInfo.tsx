@@ -3,7 +3,7 @@ import {FoundCid} from "../../pages/Search/Search";
 import {CircularProgress, Typography} from "@mui/material";
 import {useSearchCID} from "../../../hooks/api/useSearchCID";
 import prettyBytes from "pretty-bytes";
-import {useGetOwnerOfCID} from "../../../hooks/contracts/CIDMatcher/useGetOwnerOfCID";
+import {useGetNumberOfEndorser} from "../../../hooks/contracts/EndorseCIDRegistry/useGetNumberOfEndorser";
 import {useNetwork} from "wagmi";
 
 /**
@@ -16,7 +16,7 @@ const SearchFileExtraInfo: React.FC<ISearchFileExtraInfo> = (props) => {
 
   const network = useNetwork();
   const searchCid = useSearchCID(props.cid.cid);
-  const getOwnerOfCid = useGetOwnerOfCID({
+  const numberOfEndorser = useGetNumberOfEndorser({
     CID: props.cid.cid,
     chainId: network.chain.id
   });
@@ -32,7 +32,7 @@ const SearchFileExtraInfo: React.FC<ISearchFileExtraInfo> = (props) => {
               <strong>File Name</strong>: {searchCid.result.isFile ? "-" : searchCid.result.directoryFileList[0].name}
             </Typography>
             <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}>
-              <strong>CID Verifier</strong>: <a href={`https://mumbai.polygonscan.com/address/${getOwnerOfCid.result}`} target={"_blank"}>{getOwnerOfCid.result}</a>
+              <strong>Number of Endorser</strong>: {numberOfEndorser.result}
             </Typography>
           </React.Fragment>
       }
