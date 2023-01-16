@@ -1,10 +1,11 @@
 import React from 'react';
 import {FoundCid} from "../../pages/Search/Search";
-import {CircularProgress, Typography} from "@mui/material";
+import {Button, CircularProgress, Typography} from "@mui/material";
 import {useSearchCID} from "../../../hooks/api/useSearchCID";
 import prettyBytes from "pretty-bytes";
 import {useGetNumberOfEndorser} from "../../../hooks/contracts/EndorseCIDRegistry/useGetNumberOfEndorser";
 import {useNetwork} from "wagmi";
+import {useEndorseCIDList} from "../../../hooks/contracts/EndorseCIDRegistry/useEndorseCIDList";
 
 /**
  *
@@ -20,6 +21,7 @@ const SearchFileExtraInfo: React.FC<ISearchFileExtraInfo> = (props) => {
     CID: props.cid.cid,
     chainId: network.chain.id
   });
+  const endorseCidList = useEndorseCIDList({CIDList: [props.cid.cid]});
 
   return (
     <div>
@@ -34,6 +36,9 @@ const SearchFileExtraInfo: React.FC<ISearchFileExtraInfo> = (props) => {
             <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}>
               <strong>Number of Endorser</strong>: {numberOfEndorser.result}
             </Typography>
+            <Button variant={"outlined"} size={"small"} sx={{fontSize: 4}} onClick={() => endorseCidList?.write()}>
+              Endorse
+            </Button>
           </React.Fragment>
       }
     </div>

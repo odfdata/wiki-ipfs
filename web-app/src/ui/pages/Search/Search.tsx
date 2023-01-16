@@ -14,7 +14,7 @@ import SearchDialogConnectWallet from "../../organisms/Search.DialogConnectWalle
 /**
  * Define the shape of the information to pass to the list of papers for rendering
  * @param {string} cid - the CID
- * @param {number} status - the status - 1 pending - 2 completed - 3+ error in verificatin process
+ * @param {number} status - the status - 0 never indexed - 1 pending - 2 completed - 3+ error in verificatin process
  */
 export interface FoundCid {
   cid: string,
@@ -55,7 +55,7 @@ const Search: React.FC<ISearch> = (props) => {
     let cidList: FoundCid[] = [];
     if ( isHash && cidFromHash.result ){
       cidList = cidFromHash.result.map(c => ({cid: c, hash: hashSanitized, status: 2}))
-    } else if (verificationStatus.result > 0) {
+    } else {
       cidList = [{cid: cidQueryString, hash: hashFromCid.result, status: verificationStatus.result}]
     }
     setCidList(cidList);
@@ -86,7 +86,7 @@ const Search: React.FC<ISearch> = (props) => {
                   <CircularProgress/>
                 </Box>
                 :
-                cidList.length === 0 ?
+                cidList.length === 0 && isHash ?
                   <SearchNothingToShow searchValue={cidQueryString} isHash={isHash}/>
                   :
                   cidList.map((c, pos) => <Box mt={2} key={c.cid + pos}><SearchSingleCidResult cid={c}/></Box>)

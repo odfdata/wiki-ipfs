@@ -25,5 +25,5 @@ export const useGetHashFromCID = (params: UseGetHashFromCIDParams): useBaseAsync
     args: [params.CID]
   });
 
-  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: contractRead.data as string };
+  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: contractRead.data as unknown as string };
 };
