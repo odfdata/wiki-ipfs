@@ -18,8 +18,20 @@ export interface ChainDetails {
  *
  * @param {string} CID_MATCHER_ADDRESS - sc address of the CID Matcher
  * @param {AbiItem} CID_MATCHER_ABI - ABI of the CID Matcher SC
+ * @param {string} CID_2_HASH_REGISTRY_ADDRESS - sc address of the Cid2Hash Registry
+ * @param {AbiItem} CID_2_HASH_REGISTRY_ABI - ABI of the Cid2Hash Registry
+ * @param {string} CID_2_HASH_ORACLE_LOGIC_ADDRESS - sc address of the Cid2Hash Oracle Logic
+ * @param {AbiItem} CID_2_HASH_ORACLE_LOGIC_ABI - ABI of the Cid2Hash Oracle Logic
+ * @param {string} ENDORSE_CID_REGISTRY_ADDRESS - sc address of the Endorse Cid Registry
+ * @param {AbiItem} ENDORSE_CID_REGISTRY_ABI - ABI of the Endorse Cid Registry
  */
 export interface ContractDetails {
-  CID_MATCHER_ADDRESS: string,
-  CID_MATCHER_ABI: AbiItem
+  CID_MATCHER_ADDRESS: string,  // TODO remove this
+  CID_MATCHER_ABI: AbiItem, // TODO remove this
+  CID_2_HASH_REGISTRY_ADDRESS: string,
+  CID_2_HASH_REGISTRY_ABI: AbiItem,
+  CID_2_HASH_ORACLE_LOGIC_ADDRESS: string,
+  CID_2_HASH_ORACLE_LOGIC_ABI: AbiItem,
+  ENDORSE_CID_REGISTRY_ADDRESS: string,
+  ENDORSE_CID_REGISTRY_ABI: AbiItem,
 }

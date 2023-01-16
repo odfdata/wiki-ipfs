@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, CircularProgress, Typography} from "@mui/material";
-import {useStoreHashGivenIpfs} from "../../../hooks/contracts/CIDMatcher/useStoreHashGivenIpfs";
+import {useRequestCid2Hash} from "../../../hooks/contracts/CID2HashOracleLogic/useRequestCid2Hash";
 import {theme} from "../../../GlobalStyles";
 
 /**
@@ -12,7 +12,7 @@ import {theme} from "../../../GlobalStyles";
 const CommmonPublishCidOnChain: React.FC<ICommonPublishCidOnChain> = (props) => {
   const [publish, setPublish] = useState<boolean>(false);
 
-  const storeHashGivenIpfs = useStoreHashGivenIpfs({
+  const storeHashGivenIpfs = useRequestCid2Hash({
     CIDList: [props.cid]
   })
 

@@ -3,25 +3,25 @@ import {useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransac
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {useEffect} from "react";
 
-export interface UseStoreHashGivenIpfsParams {
+export interface UseRequestCid2HashParams {
   CIDList: string[]
 }
 
-export interface useStoreHashGivenIpfsReturn extends useBaseSmartContractWriteState<undefined> {
+export interface useRequestCid2HashReturn extends useBaseSmartContractWriteState<undefined> {
   write: () => void
 }
 
 /**
  * Hook to store the hash of a given IPFS CID
  */
-export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useStoreHashGivenIpfsReturn => {
+export const useRequestCid2Hash = (params: UseRequestCid2HashParams): useRequestCid2HashReturn => {
   const {completed, error, loading, result, txHash, progress, endAsyncActionError, endAsyncActionSuccess, startAsyncAction,
     startAsyncActionWithTxHash} = useBaseSmartContractWrite<undefined>();
   const network = useNetwork();
   const prepareContractWrite = usePrepareContractWrite({
-    address: CONTRACTS_DETAILS[network.chain?.id]?.CID_MATCHER_ADDRESS,
-    abi: CONTRACTS_DETAILS[network.chain?.id]?.CID_MATCHER_ABI,
-    functionName: 'storeHashGivenIpfs',
+    address: CONTRACTS_DETAILS[network.chain?.id]?.CID_2_HASH_ORACLE_LOGIC_ADDRESS,
+    abi: CONTRACTS_DETAILS[network.chain?.id]?.CID_2_HASH_ORACLE_LOGIC_ABI,
+    functionName: 'requestCID2Hash',
     args: [
       params.CIDList
     ]
@@ -31,6 +31,7 @@ export const useStoreHashGivenIpfs = (params: UseStoreHashGivenIpfsParams): useS
     hash: contractWrite.data?.hash,
   });
 
+  // TODO why do I have the asyncAction, end and start?
   useEffect(() => {
     if (waitForTx.status === "success") endAsyncActionSuccess(undefined)
     else if (waitForTx.status === "loading") startAsyncActionWithTxHash(contractWrite.data?.hash)
