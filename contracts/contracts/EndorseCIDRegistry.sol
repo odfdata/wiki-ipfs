@@ -14,6 +14,8 @@ contract EndorseCIDRegistry {
     /// @dev mapping CID to address => bool map. Given a CID, check if an endorser is supporting it.
     ///         CIDs are hashed for gas efficiency
     mapping (bytes32 => mapping(address => bool)) private _endorseCIDmap;
+    /// @dev how many endorser a CID has
+    mapping (bytes32 => uint256) private _numOfEndorser;
 
     /// events
     /**
@@ -129,6 +131,15 @@ contract EndorseCIDRegistry {
         return _endorseCIDmap[keccak256(abi.encode(_CID))][_endorser];
     }
 
+    /**
+    * @notice get the amount of addresses that are endorsing a file
+    * @param _CID               the CID to query
+    * @return numberOfEndorser  number of addresses that endorsed this CID
+    **/
+    function numberOfEndorser (string calldata _CID) public view returns(uint numberOfEndorser) {
+        return _numOfEndorser[keccak256(abi.encode(_CID))];
+    }
+
     //    ██████╗ ██████╗ ██╗██╗   ██╗ █████╗ ████████╗███████╗    ███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗
     //    ██╔══██╗██╔══██╗██║██║   ██║██╔══██╗╚══██╔══╝██╔════╝    ██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝
     //    ██████╔╝██████╔╝██║██║   ██║███████║   ██║   █████╗      █████╗  ██║   ██║██╔██╗ ██║██║     ███████╗
@@ -179,6 +190,12 @@ contract EndorseCIDRegistry {
     ) private {
         // evaluate the CIDs hash for better gas cost
         bytes32 CIDhash = keccak256(abi.encode(_CID));
+        // update the number of endorser, if there's a change in the endorse status
+        if (_endorseCIDmap[CIDhash][_addr] != _endorse) {
+            if (_endorse) _numOfEndorser[CIDhash] += 1;
+            else _numOfEndorser[CIDhash] -= 1;
+        }
+        // record the endorse status
         _endorseCIDmap[CIDhash][_addr] = _endorse;
     }
 
