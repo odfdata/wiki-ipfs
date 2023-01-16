@@ -27,25 +27,31 @@ export interface GetAllCIDsResponse {
   filesCIDs: string[]
 }
 
-const getIPFSSchema = async (CID: string): Promise<SchemaObjResponse[]> => {
+
+const getIPFSSchema = async (CID: string): Promise<{masterCIDType: CIDType, schema: SchemaObjResponse[]}> => {
   // TODO: understand how to manage file's CIDs
   console.log(`Getting IPFS Schema for CID ${CID}`);
-  console.log('Got stats for CID');
+  // const stat = await ipfs.files.stat(`/ipfs/${CID}`);
+  // const masterCIDType = stat.type === "file" ? CIDType.FILE : CIDType.FOLDER;
+  const masterCIDType = CIDType.FILE;
   let ipfsSchema: SchemaObjResponse[] = [];
-  const ipfsLsResponse = ipfs.ls(`/ipfs/${CID}`);
-  for await (const ipfsEntry of ipfsLsResponse) {
-    console.log(ipfsEntry.cid.toString());
-    const schemaObj: SchemaObjResponse = {
-      CID: ipfsEntry.cid.toString(),
-      CIDType: ipfsEntry.type === "dir" ? CIDType.FOLDER : CIDType.FILE
-    }
-    ipfsSchema.push(schemaObj);
-    if (schemaObj.CIDType === CIDType.FOLDER) {
-      console.log(`Found CID ${schemaObj.CID} which is a folder`);
-      ipfsSchema = [...ipfsSchema, ...(await getIPFSSchema(schemaObj.CID))];
+  if (masterCIDType === CIDType.FILE) ipfsSchema.push({CIDType: CIDType.FILE, CID: CID});
+  else {
+    const ipfsLsResponse = ipfs.ls(`/ipfs/${CID}`);
+    for await (const ipfsEntry of ipfsLsResponse) {
+      console.log(ipfsEntry.cid.toString());
+      const schemaObj: SchemaObjResponse = {
+        CID: ipfsEntry.cid.toString(),
+        CIDType: ipfsEntry.type === "dir" ? CIDType.FOLDER : CIDType.FILE
+      }
+      ipfsSchema.push(schemaObj);
+      if (schemaObj.CIDType === CIDType.FOLDER) {
+        console.log(`Found CID ${schemaObj.CID} which is a folder`);
+        ipfsSchema = [...ipfsSchema, ...(await getIPFSSchema(schemaObj.CID)).schema];
+      }
     }
   }
-  return ipfsSchema;
+  return {schema: ipfsSchema, masterCIDType: masterCIDType};
 }
 
 const getCIDFilesFromIPFSSchema = (ipfsSchema: SchemaObjResponse[]): string[] => {
@@ -57,13 +63,13 @@ export const lambdaHandler = async (event: GetAllCIDsParams, context: Context): 
   console.log(event);
   if (event.CIDList === undefined || event.CIDList.length === 0) throw new Error("Parameter CIDList not set");
   const ipfsSchema = await getIPFSSchema(event.CIDList[0]);
-  const filesCIDs = getCIDFilesFromIPFSSchema(ipfsSchema);
+  const filesCIDs = getCIDFilesFromIPFSSchema(ipfsSchema.schema);
   return {
     masterCID: event.CIDList[0],
-    masterCIDType: CIDType.FOLDER,
+    masterCIDType: ipfsSchema.masterCIDType,
     numFiles: filesCIDs.length > 1 ? 'multiple' : 'single',
     filesCIDs: filesCIDs,
-    schema: ipfsSchema
+    schema: ipfsSchema.schema
   };
 };
 
