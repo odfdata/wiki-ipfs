@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@ethersproject/address": "^5.6.1",
-    "@openzeppelin/contracts": "^4.7.3"
+    "@openzeppelin/contracts": "^4.7.3",
+    "bs58": "^5.0.0"
   }
 }
