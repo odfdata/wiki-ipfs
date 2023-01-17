@@ -11,7 +11,7 @@ export const lambdaHandler = async (event: EventBridgeEvent<any, any>, context: 
     input: JSON.stringify({
       jobRunID: event.detail.jobRunID,
       CIDList: event.detail.CIDList,
-      requestURL: event.detail.requestURL,
+      responseURL: event.detail.responseURL,
       publishResultToChainlink: true
     }),
     stateMachineArn: generateHashStateMachineArn

@@ -92,7 +92,7 @@ export class OrchestrationConstruct extends Construct {
           invocationType: stepfunctions_tasks.LambdaInvocationType.REQUEST_RESPONSE,
           comment: 'Publish result generated to Chainlink Oracle',
           payload: stepfunctions.TaskInput.fromObject({
-            'requestURL.$': '$.requestURL',
+            'responseURL.$': '$.responseURL',
             'jobRunID.$': '$.jobRunID',
             'CIDList.$': '$.merkleRoot.CIDList',
             'hashList.$': '$.merkleRoot.hashList'

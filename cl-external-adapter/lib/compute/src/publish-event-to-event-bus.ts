@@ -20,7 +20,7 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     const validator = new Validator(body, chainlinkHashVerifierParams);
     const jobRunID: string = validator.validated.id;
     const CIDList: string[] = validator.validated.data.CIDList;
-    const requestURL: string = validator.validated.requestURL;
+    const responseURL: string = validator.validated.responseURL;
 
     const eventBridgeEvent = new PutEventsCommand({
       Entries: [
@@ -29,7 +29,7 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
             eventName: 'CHAINLINK_REQUEST',
             jobRunID: jobRunID,
             CIDList: CIDList,
-            requestURL: requestURL
+            responseURL: responseURL
           }),
           EventBusName: eventBridgeBusArn,
           DetailType: "oracleRequestReceived",
