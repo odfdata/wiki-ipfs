@@ -27,7 +27,7 @@ const config: HardhatUserConfig = {
       chainId: 1337,
       forking: {
         url: secrets.nodeUrls.mumbai,
-        blockNumber: 29183813
+        blockNumber: 31064556
       }
     },
     mumbai: {
