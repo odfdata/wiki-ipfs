@@ -6,7 +6,7 @@ const ipfsIPAddress = process.env.IPFS_IP_ADDRESS as string;
 // connect to ipfs daemon API server
 const ipfs = create({
   host: ipfsIPAddress,
-  port: 8080,
+  port: 5001,
   protocol: 'http'
 });
 
@@ -31,9 +31,9 @@ export interface GetAllCIDsResponse {
 const getIPFSSchema = async (CID: string): Promise<{masterCIDType: CIDType, schema: SchemaObjResponse[]}> => {
   // TODO: understand how to manage file's CIDs
   console.log(`Getting IPFS Schema for CID ${CID}`);
-  // const stat = await ipfs.files.stat(`/ipfs/${CID}`);
-  // const masterCIDType = stat.type === "file" ? CIDType.FILE : CIDType.FOLDER;
-  const masterCIDType = CIDType.FILE;
+  const stat = await ipfs.files.stat(`/ipfs/${CID}`);
+  console.log(stat);
+  const masterCIDType = stat.type === "file" ? CIDType.FILE : CIDType.FOLDER;
   let ipfsSchema: SchemaObjResponse[] = [];
   if (masterCIDType === CIDType.FILE) ipfsSchema.push({CIDType: CIDType.FILE, CID: CID});
   else {
