@@ -31,7 +31,7 @@ export const deployContractStructure = async (
   // We get the contract to deployContractStructure
   const [owner] = await ethers.getSigners();
 
-  // get the next nouce
+  // get the next nonce
   let next_nonce = await owner.getTransactionCount();
 
   const endorseCIDRegistry = await deployEndorseCIDRegistry(owner, next_nonce);

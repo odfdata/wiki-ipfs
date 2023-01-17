@@ -17,7 +17,7 @@ export async function deployEndorseCIDRegistry(
   return await contractFactory.deploy(
     {
       nonce: next_nonce,
-      maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+      maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as EndorseCIDRegistry;
 }

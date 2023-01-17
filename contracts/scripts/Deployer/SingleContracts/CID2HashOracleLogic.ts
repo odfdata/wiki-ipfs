@@ -26,7 +26,7 @@ export async function deployCID2HashOracleLogic(
     payTokenAddress,
     {
       nonce: next_nonce,
-      maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+      maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as CID2HashOracleLogic;
 }
@@ -54,7 +54,7 @@ export async function cid2hashOracleLogic_setCid2HashRegistryAddress(
       cid2hashRegistryAddress,
       {
         nonce: next_nonce,
-        maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+        maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
       }
     );
   return;

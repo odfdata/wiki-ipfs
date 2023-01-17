@@ -17,7 +17,7 @@ export async function deployCID2HashRegistry(
   return await contractFactory.deploy(
     {
       nonce: next_nonce,
-      maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+      maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as CID2HashRegistry;
 }
@@ -46,7 +46,7 @@ export async function cid2hashRegistry_setWriterRole(
       writerAddress,
       {
         nonce: next_nonce,
-        maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+        maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
       }
     );
   return;
