@@ -30,3 +30,9 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+## Possible improvements
+
+* Improve the `useSearchCID` hook to understand if a CID represents a file or a folder
+* Listen to events to better reload information in memory (like # of endorsers or verification status)
+* refactor the UI
+
