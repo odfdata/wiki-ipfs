@@ -16,10 +16,14 @@ export async function deployOperator(
   nonce: number = -1
 ): Promise<Operator> {
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
+  let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("Operator", signer);
   return await contractFactory.deploy(
     linkTokenAddress,
     ownerAddress,
-    { nonce: next_nonce }
+    {
+      nonce: next_nonce,
+      maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+    }
   ) as Operator;
 }
