@@ -18,12 +18,16 @@ export async function deployCID2HashOracleLogic(
   nonce: number = -1
 ): Promise<CID2HashOracleLogic> {
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
+  let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("CID2HashOracleLogic", signer);
   return await contractFactory.deploy(
     jobId,
     oracle,
     payTokenAddress,
-    { nonce: next_nonce }
+    {
+      nonce: next_nonce,
+      maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+    }
   ) as CID2HashOracleLogic;
 }
 
@@ -42,12 +46,16 @@ export async function cid2hashOracleLogic_setCid2HashRegistryAddress(
   nonce: number = -1
 ): Promise<void> {
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
+  let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("CID2HashOracleLogic", signer);
   await contractFactory
     .attach(cid2hashOracleLogic)
     .setCid2HashRegistryAddress(
       cid2hashRegistryAddress,
-      { nonce: next_nonce }
+      {
+        nonce: next_nonce,
+        maxPriorityFeePerGas: gasData.maxPriorityFeePerGas?.toHexString()
+      }
     );
   return;
 }
