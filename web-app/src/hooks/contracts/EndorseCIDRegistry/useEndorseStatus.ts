@@ -1,24 +1,36 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
-import {useContractRead} from "wagmi";
+import {useContractRead, useNetwork} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
+import {useBaseSmartContractReadReturn} from "../../utils/useBaseSmartContractRead";
 
 export interface UseGetEndorseStatusParams {
-  chainId: number,
   CID: string,
   endorser: string
 }
 
-export const useGetEndorseStatus = (params: UseGetEndorseStatusParams): useBaseAsyncHookState<boolean> => {
+export const useGetEndorseStatus = (params: UseGetEndorseStatusParams): useBaseSmartContractReadReturn<boolean> => {
   const {completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess} = useBaseAsyncHook<number>();
+  const network = useNetwork();
   const contractRead = useContractRead({
-    address: CONTRACTS_DETAILS[params.chainId]?.ENDORSE_CID_REGISTRY_ADDRESS,
-    abi: CONTRACTS_DETAILS[params.chainId]?.ENDORSE_CID_REGISTRY_ABI,
+    address: CONTRACTS_DETAILS[network.chain?.id]?.ENDORSE_CID_REGISTRY_ADDRESS,
+    abi: CONTRACTS_DETAILS[network.chain?.id]?.ENDORSE_CID_REGISTRY_ABI,
     functionName: "endorseStatus",
     args: [params.CID, params.endorser]
   });
 
   const readResult = contractRead.data as unknown as boolean;
 
-  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: readResult };
+  const refetch = () => {
+    contractRead.refetch().then((result) => { })
+  }
+
+  return {
+    completed: contractRead.isSuccess,
+    error,
+    loading: contractRead.isFetching,
+    progress,
+    result: readResult,
+    refetch
+  };
 };

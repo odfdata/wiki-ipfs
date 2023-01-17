@@ -2,6 +2,7 @@ import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncH
 import {useContractRead} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {BigNumber} from "@ethersproject/bignumber";
+import {useBaseSmartContractReadReturn} from "../../utils/useBaseSmartContractRead";
 
 /**
  * @param {number} chainId - The chain id
@@ -15,7 +16,7 @@ export interface UseGetOwnerOfCIDParams {
 /**
  * Hook to get number of endorser for a given CID
  */
-export const useGetNumberOfEndorser = (params: UseGetOwnerOfCIDParams): useBaseAsyncHookState<number> => {
+export const useGetNumberOfEndorser = (params: UseGetOwnerOfCIDParams): useBaseSmartContractReadReturn<number> => {
   const {completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess} = useBaseAsyncHook<number>();
   const contractRead = useContractRead({
@@ -27,5 +28,16 @@ export const useGetNumberOfEndorser = (params: UseGetOwnerOfCIDParams): useBaseA
 
   const readResult = contractRead.data as unknown as BigNumber;
 
-  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: readResult.toNumber() };
+  const refetch = () => {
+    contractRead.refetch().then((result) => { })
+  }
+
+  return {
+    completed: contractRead.isSuccess,
+    error,
+    loading: contractRead.isFetching,
+    progress,
+    result: readResult ? readResult.toNumber() : undefined,
+    refetch
+  };
 };

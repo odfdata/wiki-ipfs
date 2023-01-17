@@ -2,6 +2,7 @@ import {useBaseAsyncHook, useBaseAsyncHookState} from "../utils/useBaseAsyncHook
 import axios from "axios";
 import {IPFS_GATEWAY_BASE_URL} from "../../utils/constants";
 import {useEffect} from "react";
+import {isCIDaFile} from "../../utils/IPFS/utils";
 
 /**
  * @param {string} name
@@ -17,12 +18,10 @@ export interface DirectoryFile {
 /**
  * @param {boolean} isDirectory
  * @param {boolean} isFile
- * @param {DirectoryFile[]} directoryFileList - can be empty if querying for a specific file
  */
 export interface SearchCIDResult {
   isDirectory: boolean,
-  isFile: boolean,
-  directoryFileList: DirectoryFile[]
+  isFile: boolean
 }
 
 
@@ -37,15 +36,11 @@ export const useSearchCID = (CID: string): useBaseAsyncHookState<SearchCIDResult
     startAsyncAction();
     new Promise (async (resolve, reject) => {
       try {
-        const ipfsResult = await axios.get(`${IPFS_GATEWAY_BASE_URL}/api/v0/ls?arg=${CID}`);
-        if (ipfsResult.status !== 200) throw new Error(`CID ${CID} doesn't exist`);
-        const ipfsResultJson = ipfsResult.data;
+        let isFile = await isCIDaFile(CID);
         endAsyncActionSuccess({
-          isDirectory: ipfsResultJson.Objects[0].Links.length > 0,
-          isFile: ipfsResultJson.Objects[0].Links.length === 0,
-          directoryFileList: ipfsResultJson.Objects[0].Links.map(link => {
-            return { name: link.Name, CID: link.Hash, size: link.Size }
-          })});
+          isDirectory: !isFile,
+          isFile: isFile
+        });
       } catch (e) {
         endAsyncActionError(e.message());
       }
