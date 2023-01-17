@@ -12,9 +12,13 @@ export async function deployCID2HashRegistry(
   nonce: number = -1
 ): Promise<CID2HashRegistry> {
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
+  let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("CID2HashRegistry", signer);
   return await contractFactory.deploy(
-    { nonce: next_nonce }
+    {
+      nonce: next_nonce,
+      maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+    }
   ) as CID2HashRegistry;
 }
 
@@ -33,13 +37,17 @@ export async function cid2hashRegistry_setWriterRole(
   nonce: number = -1
 ): Promise<void> {
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
+  let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("CID2HashRegistry", signer);
   await contractFactory
     .attach(cid2hashRegistryAddress)
     .grantRole(
       ethers.utils.keccak256(ethers.utils.toUtf8Bytes("WRITER_ROLE")),
       writerAddress,
-      { nonce: next_nonce }
+      {
+        nonce: next_nonce,
+        maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+      }
     );
   return;
 }
