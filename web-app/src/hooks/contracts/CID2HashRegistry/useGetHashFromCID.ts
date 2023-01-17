@@ -19,11 +19,11 @@ export const useGetHashFromCID = (params: UseGetHashFromCIDParams): useBaseAsync
   const {completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess} = useBaseAsyncHook<string>();
   const contractRead = useContractRead({
-    address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
-    abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
+    address: CONTRACTS_DETAILS[params.chainId]?.CID_2_HASH_REGISTRY_ADDRESS,
+    abi: CONTRACTS_DETAILS[params.chainId]?.CID_2_HASH_REGISTRY_ABI,
     functionName: "getHashFromCID",
     args: [params.CID]
   });
 
-  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: contractRead.data as string };
+  return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: contractRead.data as unknown as string };
 };

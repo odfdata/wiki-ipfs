@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, CircularProgress, Typography} from "@mui/material";
-import {useStoreHashGivenIpfs} from "../../../hooks/contracts/CIDMatcher/useStoreHashGivenIpfs";
+import {useRequestCid2Hash} from "../../../hooks/contracts/CID2HashOracleLogic/useRequestCid2Hash";
 import {theme} from "../../../GlobalStyles";
 
 /**
@@ -12,27 +12,27 @@ import {theme} from "../../../GlobalStyles";
 const CommmonPublishCidOnChain: React.FC<ICommonPublishCidOnChain> = (props) => {
   const [publish, setPublish] = useState<boolean>(false);
 
-  const storeHashGivenIpfs = useStoreHashGivenIpfs({
+  const requestCid2Hash = useRequestCid2Hash({
     CIDList: [props.cid]
   })
 
   const publishTransaction = () => {
     setPublish(true);
-    storeHashGivenIpfs.write();
+    requestCid2Hash.write();
   }
 
   useEffect(() => {
-    if (storeHashGivenIpfs.completed) {
+    if (requestCid2Hash.completed) {
       setPublish(false);
       props.onComplete();
     }
-  }, [storeHashGivenIpfs.completed]);
+  }, [requestCid2Hash.completed]);
 
   useEffect(() => {
-    if (storeHashGivenIpfs.error) {
+    if (requestCid2Hash.error) {
       setPublish(false);
     }
-  }, [storeHashGivenIpfs.error]);
+  }, [requestCid2Hash.error]);
 
   return (
     <Box width={150} ml={6}>
@@ -45,9 +45,9 @@ const CommmonPublishCidOnChain: React.FC<ICommonPublishCidOnChain> = (props) => 
               Publish CID
             </Button>
             {
-              storeHashGivenIpfs.error ?
+              requestCid2Hash.error ?
                 <Typography color={theme.palette.error.main} variant="body2" sx={{mt: 1}}>
-                  {storeHashGivenIpfs.error.startsWith("user rejected transaction") ? "Transaction refused" : ""}
+                  {requestCid2Hash.error.startsWith("user rejected transaction") ? "Transaction refused" : ""}
                 </Typography>
                 :
                 ""

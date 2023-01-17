@@ -18,8 +18,8 @@ export const useGetCIDsFromHash = (params: UseGetCIDsFromHashParams): useBaseAsy
   const {completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess, endAsyncActionError} = useBaseAsyncHook<string[]>();
   const contractRead = useContractRead({
-    address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
-    abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
+    address: CONTRACTS_DETAILS[params.chainId]?.CID_2_HASH_REGISTRY_ADDRESS,
+    abi: CONTRACTS_DETAILS[params.chainId]?.CID_2_HASH_REGISTRY_ABI,
     functionName: "getCIDsFromHash",
     args: [params.hash],
     onError: ((e) => endAsyncActionError(e.message))

@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useBaseAsyncHook, useBaseAsyncHookReturn, useBaseAsyncHookState} from "./useBaseAsyncHook";
 
 /**
- @param {string} txHash - hash of the tx, empty if not set
+ * @param {string} txHash - hash of the tx, empty if not set
  */
 export interface useBaseSmartContractWriteState<T> extends useBaseAsyncHookState<T> {
   txHash: string
@@ -13,6 +13,14 @@ export interface useBaseSmartContractWriteState<T> extends useBaseAsyncHookState
  */
 export interface useBaseSmartContractWriteReturn<T> extends useBaseSmartContractWriteState<T>, useBaseAsyncHookReturn<T> {
   startAsyncActionWithTxHash: (_txHash: string) => void
+}
+
+/**
+ * This is the return that any smart contract writer should implement
+ * @param {() => void | undefined} write - once called, starts the call
+ */
+export interface useBaseSmartContractWriteExternalReturn<T> extends useBaseSmartContractWriteState<T> {
+  write: () => void | undefined
 }
 
 /**

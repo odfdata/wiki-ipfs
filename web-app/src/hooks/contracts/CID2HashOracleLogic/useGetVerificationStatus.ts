@@ -1,7 +1,6 @@
 import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
 import {useContractRead} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
-import {useMemo} from "react";
 import {BigNumber} from "@ethersproject/bignumber";
 
 /**
@@ -14,19 +13,19 @@ export interface UseGetVerificationStatusParams {
 }
 
 /**
- * Hook to get index verification status
+ * Hook to get verification status of CID 2 Hash Oracle procedure
  */
 export const useGetVerificationStatus = (params: UseGetVerificationStatusParams): useBaseAsyncHookState<number> => {
   const {completed, error, loading, result, progress,
     startAsyncAction, endAsyncActionSuccess} = useBaseAsyncHook<number>();
   const contractRead = useContractRead({
-    address: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ADDRESS,
-    abi: CONTRACTS_DETAILS[params.chainId]?.CID_MATCHER_ABI,
+    address: CONTRACTS_DETAILS[params.chainId]?.CID_2_HASH_ORACLE_LOGIC_ADDRESS,
+    abi: CONTRACTS_DETAILS[params.chainId]?.CID_2_HASH_ORACLE_LOGIC_ABI,
     functionName: "getVerificationStatus",
     args: [params.CID]
   });
 
-  const readResult = contractRead.data ? (contractRead.data as BigNumber).toNumber() : 0;
+  const readResult = contractRead.data ? (contractRead.data as unknown as BigNumber).toNumber() : 0;
 
   return { completed: contractRead.isSuccess, error, loading: contractRead.isFetching, progress, result: readResult };
 };

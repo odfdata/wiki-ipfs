@@ -7,14 +7,16 @@ import {Provider} from "react-redux";
 import {store} from "./store";
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from "@mui/material";
 import {theme} from "./GlobalStyles";
-import {chain, configureChains, createClient, WagmiConfig} from "wagmi";
+import {configureChains, createClient, WagmiConfig} from "wagmi";
+import {polygonMumbai} from "wagmi/chains";
 import {ConnectKitProvider} from "connectkit";
 import {MetaMaskConnector} from "wagmi/connectors/metaMask";
 import {publicProvider} from 'wagmi/providers/public';
+import {wallaby} from "./utils/fevmChainConfiguration";
 
 
 const { provider, chains } = configureChains(
-  [chain.polygonMumbai],
+  [polygonMumbai, wallaby],
   [
     publicProvider()
   ],
