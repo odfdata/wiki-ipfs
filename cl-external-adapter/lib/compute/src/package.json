@@ -17,7 +17,8 @@
     "kubo-rpc-client": "^2.0.2",
     "merkletreejs": "^0.3.9",
     "crypto-js": "^4.1.1",
-    "ipfs-core": "^0.18.0"
+    "ipfs-core": "^0.18.0",
+    "node-wget-promise": "^0.1.6"
   },
   "scripts": {
     "unit": "jest",
@@ -31,6 +32,7 @@
     "@types/crypto-js": "^4.1.1",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.13",
+    "@types/node-wget-promise": "^0.1.1",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
     "concurrently": "^7.2.1",

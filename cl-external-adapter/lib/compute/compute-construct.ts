@@ -132,9 +132,9 @@ export class ComputeConstruct extends Construct {
           timeout: Duration.seconds(900),
           bundling: {
             minify: true,
-            nodeModules: ['kubo-rpc-client'],
+            nodeModules: ['node-wget-promise'],
             target: 'es2020',
-            format: OutputFormat.ESM
+            // format: OutputFormat.ESM
           },
           environment: {
             IPFS_IP_ADDRESS: props.ipfsIPAddress
