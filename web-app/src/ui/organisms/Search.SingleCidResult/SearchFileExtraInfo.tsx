@@ -36,7 +36,7 @@ const SearchFileExtraInfo: React.FC<ISearchFileExtraInfo> = (props) => {
             <Typography variant="body1" color={"text-secondary"} sx={{mt: 0.5}}>
               <strong>Number of Endorser</strong>: {numberOfEndorser.result}
             </Typography>
-            <Button variant={"outlined"} size={"small"} sx={{fontSize: 4}} onClick={() => endorseCidList?.write()}>
+            <Button variant={"outlined"} size={"small"} sx={{fontSize: 10}} onClick={() => endorseCidList?.write()}>
               Endorse
             </Button>
           </React.Fragment>

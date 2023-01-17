@@ -37,7 +37,7 @@ export const useSearchCID = (CID: string): useBaseAsyncHookState<SearchCIDResult
     startAsyncAction();
     new Promise (async (resolve, reject) => {
       try {
-        const ipfsResult = await axios.get(`${IPFS_GATEWAY_BASE_URL}?arg=${CID}`);
+        const ipfsResult = await axios.get(`${IPFS_GATEWAY_BASE_URL}/api/v0/ls?arg=${CID}`);
         if (ipfsResult.status !== 200) throw new Error(`CID ${CID} doesn't exist`);
         const ipfsResultJson = ipfsResult.data;
         endAsyncActionSuccess({
