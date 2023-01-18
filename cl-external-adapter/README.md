@@ -9,6 +9,13 @@ to notify the Chainlink Job that it has to wait for a callback.
 The AWS Lambda responsible for starting the hashing process and the publication on Chainlink is subscribed to
 the AWS Event Bus. Once the correct event is received, it is triggered and the process starts.
 
+## Backend Structure
+
+Here you can find the Backend Structure and how resources communicates between each other.
+
+![WikiIPFSBackend drawio](https://user-images.githubusercontent.com/31770652/213199861-ff946eef-7708-4329-8722-139b54a604f3.png)
+
+
 ## How to deploy
 
 You need to create a `.env` file to create and deploy the AWS CDK template. You can just copy and rename the 
@@ -30,3 +37,4 @@ following commands:
 
 + Max file size supported is 500 MB if you want to index hash and CID. This limitation applies since 
   we are using AWS Lambda with no storage attached.
++ We support a list with just one master CID, if you need to generate hash for more than one master CID, you have to call the function multiple times.
