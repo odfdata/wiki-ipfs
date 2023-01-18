@@ -13,6 +13,15 @@ export interface PublishResultToChainlinkResponse {
   errorMessage: string
 }
 
+/**
+ * The AWS Lambda handler called to make the API call to resume the Chainlink job paused before because the invocation
+ * was in async mode.
+ * @param {PublishResultToChainlinkParams} event - The event containing all the information needed to call the Chainlink
+ * Node to resume the Chainlink Job paused.
+ * @param {Context} context - The AWS Lambda context
+ * @return {Promise<PublishResultToChainlinkResponse>} - The promise containing the information generated calling
+ * the HTTP PATCH endpoint to resume the Chainlink Job.
+ */
 export const lambdaHandler = async (
     event: PublishResultToChainlinkParams, context: Context): Promise<PublishResultToChainlinkResponse> => {
 

@@ -11,6 +11,16 @@ const chainlinkHashVerifierParams = {
   endpoint: false
 }
 
+/**
+ * The lambda handler invoked once the Chainlink Job calls the bridge to generate hashes. It's responsible for
+ * sending the information in a custom EventBridge Bus.
+ *
+ * @param {APIGatewayEvent} event - The API gateway event received. Inside the body parameter is present the information
+ * sent from the Chainlink Job
+ * @param {Context} context - The AWS lambda context
+ * @return {Promise<APIGatewayProxyResult>} - The API gateway proxy result containing the body to be sent to the
+ * Chainlink Node to pause the Job execution.
+ */
 export const lambdaHandler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   try {
     console.log(event.body);
@@ -38,10 +48,7 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
         }
       ]
     });
-    const result = await eventBridgeClient.send(eventBridgeEvent);
-
-    console.log(result.FailedEntryCount);
-    console.log(result.Entries);
+    await eventBridgeClient.send(eventBridgeEvent);
     return {
       statusCode: 200,
       body: JSON.stringify({"pending": true})

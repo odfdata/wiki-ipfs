@@ -39,7 +39,6 @@ const getIPFSSchema = async (CID: string): Promise<{masterCIDType: CIDType, sche
   // TODO: understand how to manage file's CIDs
   console.log(`Getting IPFS Schema for CID ${CID}`);
   const stat = await ipfs.files.stat(`/ipfs/${CID}`);
-  console.log(stat);
   const masterCIDType = stat.type === "file" ? CIDType.FILE : CIDType.FOLDER;
   let ipfsSchema: SchemaObjResponse[] = [];
   if (masterCIDType === CIDType.FILE) ipfsSchema.push({CIDType: CIDType.FILE, CID: CID});

@@ -16,6 +16,12 @@ export interface GenerateMerkleRootResponse {
   hashList: string[]
 }
 
+/**
+ * Lambda handler invoked by AWS Lambda to generate CID merkle tree, if necessary.
+ * @param {GenerateMerkleRootParams} event - The event received containing the CIDList and the hashes previously generated.
+ * @param {Context} context - The AWS Lambda context
+ * @return {Promise<GenerateMerkleRootResponse>} - The promise containing the merkle root generated
+ */
 export const lambdaHandler = async (
     event: GenerateMerkleRootParams, context: Context): Promise<GenerateMerkleRootResponse> => {
   console.log('Event received: ');
@@ -38,16 +44,6 @@ export const lambdaHandler = async (
     const tree = new MerkleTree(leaves, sha256);
     const root = tree.getRoot().toString('hex');
     const leaf = leaves[0];
-    const proof = tree.getProof(leaf);
-    console.log('Tree:');
-    console.log(tree.toString());
-    console.log('Root:');
-    console.log(root.toString());
-    console.log('Leaf:');
-    console.log(leaf);
-    console.log('Proof:');
-    console.log(proof);
-    console.log('Is tree verified? ' + tree.verify(proof, leaf, root)); // true
     response.hashList.push('0x' + root.toString());
   }
   return response;

@@ -27,8 +27,16 @@ file `.env.example` with the correct variable names.
 + `IPFS_API_DOWNLOAD_FILE_PORT`: the HTTP port to be used to download files from
 + `IPFS_AUTHORIZATION_TOKEN`: the authorization token to be used to call the IPFS node
 
-Once you have your `.env` file correctly configured, you are ready to deploy everything on AWS running the 
-following commands:
+Once you have your `.env` file correctly configured, it's time to install the node dependencies:
+
+```bash
+cd cl-external-adapter
+yarn install
+cd lib/compute/src
+yarn install
+```
+
+Now go back to the `cl-external-adapter/` folder and you are ready to deploy everything on AWS running the following commands:
 
 + `cdk synth` --> synthetize the AWS CDK template
 + `cdk deploy --profile {profile_name} --region {region_name}` --> deploy all the resources on AWS

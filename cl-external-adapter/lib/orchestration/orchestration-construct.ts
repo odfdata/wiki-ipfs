@@ -21,41 +21,6 @@ export class OrchestrationConstruct extends Construct {
   constructor(scope: Construct, id: string, props: OrchestrationProps) {
     super(scope, id);
 
-    // get CIDs (recursive)
-
-    /**
-     * {
-     *   "masterCID": "string",
-     *   "masterCIDtype": "folder | file",
-     *   "numFiles": "single | multiple",
-     *   "schema": [
-     *     {
-     *       "CIDType": "folder | file",
-     *       "CID: "string"
-     *     }
-     *   ],
-     *   "filesCIDs": ["string", "string", "string"]
-     * }
-     */
-
-    // generate hashes for each CID -> // iterate each filesCIDs
-    /**
-     * aggiunge "fileHashes" a tutto quello di prima
-     */
-
-    // generate merkle root
-    /**
-     * è singolo e masterCIDtype è folder --> 2 hash con differenti CID
-     * altrimenti 1
-     *
-     * se è multiple e masterCIDtype folder, genero merkle root: da lista di hash torna un hash (libreria node)
-     */
-
-    // publish CIDs on Chain
-    /**
-     *
-     */
-
     this.generateHashStateMachineIamRole = new iam.Role(
         this,
         "GenerateHashStateMachineIamRole",
