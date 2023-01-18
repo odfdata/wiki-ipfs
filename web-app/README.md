@@ -1,8 +1,11 @@
 # Wiki IPFS
 
-This repo contains the code for the frontend dApp to access Wiki IPFS and interact both with web3.storage and Mumbai deployed Smart Contract.
+This repo contains the code for the frontend dApp to access Wiki IPFS and interact both with web3.storage and deployed Smart Contracts.
 
-This is a project for the CL Fall Hackathon 22
+Currently, it's configured to work with:
+
+* Filecoin Virtual Machine (FEVM) testnet
+* Polygon Mumbai testnet
 
 ## Project creation
 
