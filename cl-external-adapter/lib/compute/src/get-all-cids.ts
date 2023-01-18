@@ -2,12 +2,19 @@ import {Context} from "aws-lambda";
 import {create} from "kubo-rpc-client";
 import {CIDType} from "./utils/cid-utils";
 
+const ipfsProtocol = process.env.IPFS_PROTOCOL as string;
 const ipfsIPAddress = process.env.IPFS_IP_ADDRESS as string;
+const ipfsApiPort = parseInt(process.env.IPFS_API_PORT as string);
+const ipfsAuthorizationToken = process.env.IPFS_AUTHORIZATION_TOKEN as string;
+
 // connect to ipfs daemon API server
 const ipfs = create({
+  protocol: ipfsProtocol,
   host: ipfsIPAddress,
-  port: 5001,
-  protocol: 'http'
+  port: ipfsApiPort,
+  headers: {
+    Authorization: ipfsAuthorizationToken
+  }
 });
 
 export interface GetAllCIDsParams {

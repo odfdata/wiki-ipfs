@@ -14,9 +14,14 @@ the AWS Event Bus. Once the correct event is received, it is triggered and the p
 You need to create a `.env` file to create and deploy the AWS CDK template. You can just copy and rename the 
 file `.env.example` with the correct variable names.
 
++ `IPFS_PROTOCOL`: the HTTP protocol we need to use to communicate with your IPFS node
++ `IPFS_IP_ADDRESS`: the IPFS node address
++ `IPFS_API_PORT`: the HTTP port to be used to call the APIs
++ `IPFS_API_DOWNLOAD_FILE_PORT`: the HTTP port to be used to download files from
++ `IPFS_AUTHORIZATION_TOKEN`: the authorization token to be used to call the IPFS node
+
 Once you have your `.env` file correctly configured, you are ready to deploy everything on AWS running the 
 following commands:
-
 
 + `cdk synth` --> synthetize the AWS CDK template
 + `cdk deploy --profile {profile_name} --region {region_name}` --> deploy all the resources on AWS

@@ -3,7 +3,7 @@ import axios from "axios";
 
 export interface PublishResultToChainlinkParams {
   jobRunID: number,
-  requestURL: string,
+  responseURL: string,
   CIDList: string[],
   hashList: string[],
 }
@@ -20,8 +20,10 @@ export const lambdaHandler = async (
   let errorMessage = '';
 
   try {
-    await axios.patch(event.requestURL, {CIDList: event.CIDList, hashList: event.CIDList});
+    await axios.patch(
+        event.responseURL, {value: {data: {CIDList: event.CIDList, evaluatedHashList: event.hashList}}});
   } catch (e) {
+    console.error(e);
     success = false;
     errorMessage = (e as Error).toString();
   }

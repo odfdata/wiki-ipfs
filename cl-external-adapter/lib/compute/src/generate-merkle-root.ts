@@ -20,9 +20,6 @@ export const lambdaHandler = async (
     event: GenerateMerkleRootParams, context: Context): Promise<GenerateMerkleRootResponse> => {
   console.log('Event received: ');
   console.log(event);
-  // check if the masterCIDType is equal to CIDType.FOLDER fileHashes.length === 1 --> same hash for CID folder and CID file
-  // check if the masterCIDType is equal to CIDType.FILE --> 1 hash
-  // check if the masterCIDType is equal to CIDType.FOLDER and fileHashes.length > 1 --> merkle root
   const response: GenerateMerkleRootResponse = {CIDList: [], hashList: []};
   if (event.masterCIDType === CIDType.FOLDER && event.fileHashes.length === 1) {
     // same hash for masterCID and fileCID (1 folder with just 1 file inside)
@@ -51,7 +48,7 @@ export const lambdaHandler = async (
     console.log('Proof:');
     console.log(proof);
     console.log('Is tree verified? ' + tree.verify(proof, leaf, root)); // true
-    response.hashList.push(root.toString());
+    response.hashList.push('0x' + root.toString());
   }
   return response;
 }

@@ -13,7 +13,11 @@ const wikiIPFSBackendDevelopment = new WikiIPFSBackendStack(
     {
       env: { region: "eu-west-1" },
       environment: 'dev',
-      ipfsIPAddress: process.env.IPFS_IP_ADDRESS as string
+      ipfsIPAddress: process.env.IPFS_IP_ADDRESS as string,
+      ipfsAuthorizationToken: process.env.IPFS_AUTHORIZATION_TOKEN as string,
+      ipfsApiPort: parseInt(process.env.IPFS_API_PORT as string),
+      ipfsApiDownloadFilePort: parseInt(process.env.IPFS_API_DOWNLOAD_FILE_PORT as string),
+      ipfsProtocol: process.env.IPFS_PROTOCOL as string
     }
 );
 cdk.Tags.of(wikiIPFSBackendDevelopment).add('project', 'wikiipfs');

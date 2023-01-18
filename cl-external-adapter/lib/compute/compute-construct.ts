@@ -13,7 +13,11 @@ import {OutputFormat} from "aws-cdk-lib/aws-lambda-nodejs";
 
 export interface ComputeProps extends ConstructProps {
   readonly eventBus: events.EventBus,
-  readonly ipfsIPAddress: string
+  readonly ipfsProtocol: string,
+  readonly ipfsIPAddress: string,
+  readonly ipfsApiPort: number,
+  readonly ipfsApiDownloadFilePort: number,
+  readonly ipfsAuthorizationToken: string
 }
 
 export class ComputeConstruct extends Construct {
@@ -112,7 +116,11 @@ export class ComputeConstruct extends Construct {
             format: OutputFormat.ESM
           },
           environment: {
-            IPFS_IP_ADDRESS: props.ipfsIPAddress
+            IPFS_PROTOCOL: props.ipfsProtocol,
+            IPFS_IP_ADDRESS: props.ipfsIPAddress,
+            IPFS_API_PORT: props.ipfsApiPort.toString(),
+            IPFS_API_DOWNLOAD_FILE_PORT: props.ipfsApiDownloadFilePort.toString(),
+            IPFS_AUTHORIZATION_TOKEN: props.ipfsAuthorizationToken
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
@@ -132,12 +140,16 @@ export class ComputeConstruct extends Construct {
           timeout: Duration.seconds(900),
           bundling: {
             minify: true,
-            nodeModules: ['node-wget-promise'],
+            nodeModules: ['axios'],
             target: 'es2020',
             // format: OutputFormat.ESM
           },
           environment: {
-            IPFS_IP_ADDRESS: props.ipfsIPAddress
+            IPFS_PROTOCOL: props.ipfsProtocol,
+            IPFS_IP_ADDRESS: props.ipfsIPAddress,
+            IPFS_API_PORT: props.ipfsApiPort.toString(),
+            IPFS_API_DOWNLOAD_FILE_PORT: props.ipfsApiDownloadFilePort.toString(),
+            IPFS_AUTHORIZATION_TOKEN: props.ipfsAuthorizationToken
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,
@@ -162,7 +174,11 @@ export class ComputeConstruct extends Construct {
             format: OutputFormat.ESM
           },
           environment: {
-            IPFS_IP_ADDRESS: props.ipfsIPAddress
+            IPFS_PROTOCOL: props.ipfsProtocol,
+            IPFS_IP_ADDRESS: props.ipfsIPAddress,
+            IPFS_API_PORT: props.ipfsApiPort.toString(),
+            IPFS_API_DOWNLOAD_FILE_PORT: props.ipfsApiDownloadFilePort.toString(),
+            IPFS_AUTHORIZATION_TOKEN: props.ipfsAuthorizationToken
           },
           depsLockFilePath: path.join(__dirname, 'src/yarn.lock'),
           logRetention: logs.RetentionDays.TWO_WEEKS,

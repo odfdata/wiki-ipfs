@@ -18,9 +18,10 @@ export const lambdaHandler = async (event: APIGatewayEvent, context: Context): P
     let body: object = (event.body === undefined || event.body === null) ? {} : JSON.parse(event.body);
     // The Validator helps you validate the Chainlink request data
     const validator = new Validator(body, chainlinkHashVerifierParams);
+    console.log(validator);
     const jobRunID: string = validator.validated.id;
     const CIDList: string[] = validator.validated.data.CIDList;
-    const responseURL: string = validator.validated.responseURL;
+    const responseURL: string = validator.input.responseURL;
 
     const eventBridgeEvent = new PutEventsCommand({
       Entries: [

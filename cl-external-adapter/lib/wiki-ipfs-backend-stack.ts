@@ -18,7 +18,11 @@ import * as cdk from 'aws-cdk-lib';
 
 export interface WikiIPFSBackendProps extends StackProps {
   readonly environment: string,
-  readonly ipfsIPAddress: string
+  readonly ipfsProtocol: string,
+  readonly ipfsIPAddress: string,
+  readonly ipfsApiPort: number,
+  readonly ipfsApiDownloadFilePort: number,
+  readonly ipfsAuthorizationToken: string
 }
 
 export class WikiIPFSBackendStack extends Stack {
@@ -39,7 +43,11 @@ export class WikiIPFSBackendStack extends Stack {
         {
           environment: props.environment,
           eventBus: applicationIntegrationSubStack.eventBus,
-          ipfsIPAddress: props.ipfsIPAddress
+          ipfsIPAddress: props.ipfsIPAddress,
+          ipfsAuthorizationToken: props.ipfsAuthorizationToken,
+          ipfsApiDownloadFilePort: props.ipfsApiDownloadFilePort,
+          ipfsApiPort: props.ipfsApiPort,
+          ipfsProtocol: props.ipfsProtocol
         }
     );
     applicationIntegrationSubStack.eventBus.grantPutEventsTo(computeSubStack.publishEventToEventBusFunction);
