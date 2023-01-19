@@ -12,11 +12,11 @@ import {polygonMumbai} from "wagmi/chains";
 import {ConnectKitProvider} from "connectkit";
 import {MetaMaskConnector} from "wagmi/connectors/metaMask";
 import {publicProvider} from 'wagmi/providers/public';
-import {wallaby} from "./utils/fevmChainConfiguration";
+import {hyperspace} from "./utils/fevmChainConfiguration";
 
 
 const { provider, chains } = configureChains(
-  [polygonMumbai, wallaby],
+  [polygonMumbai, hyperspace],
   [
     publicProvider()
   ],
