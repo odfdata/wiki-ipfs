@@ -59,7 +59,7 @@ export const deployContractStructure = async (
 
 
 if (typeof require !== 'undefined' && require.main === module) {
-  let chainId: "80001" | "31415" | "1337" = "31415";
+  let chainId: "80001" | "3141" | "1337" = "3141";
   deployContractStructure(
     CHAIN_CONSTANTS[chainId].JOD_ID,
     CHAIN_CONSTANTS[chainId].ORACLE_ADDRESS,

@@ -31,7 +31,7 @@ export const deployOracle = async (
 }
 
 if (typeof require !== 'undefined' && require.main === module) {
-  let chainId: "80001" | "31415" | "1337" = "31415";
+  let chainId: "80001" | "3141" | "1337" = "3141";
   deployOracle(
     CHAIN_CONSTANTS[chainId].PAY_TOKEN_ADDRESS,
     CHAIN_CONSTANTS[chainId].ORACLE_AUTHORIZED_SENDER_ADDRESS

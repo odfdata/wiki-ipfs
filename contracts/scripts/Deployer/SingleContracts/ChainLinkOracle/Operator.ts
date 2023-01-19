@@ -23,7 +23,7 @@ export async function deployOperator(
     ownerAddress,
     {
       nonce: next_nonce,
-      maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+      maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as Operator;
 }
@@ -50,7 +50,7 @@ export async function setAuthorizedSender(
       [authorizedSenderAddress],
       {
         nonce: next_nonce,
-        maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+        maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
       }
     );
   return;

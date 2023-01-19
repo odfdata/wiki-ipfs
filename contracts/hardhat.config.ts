@@ -35,10 +35,10 @@ const config: HardhatUserConfig = {
       accounts: [secrets.privateKeys.mumbai.deployer],
       gasPrice: "auto"
     },
-    wallaby: {
-      chainId: 31415,
-      url: secrets.nodeUrls.wallaby,
-      accounts: [secrets.privateKeys.wallaby.deployer],
+    hyperspace: {
+      chainId: 3141,
+      url: secrets.nodeUrls.hyperspace,
+      accounts: [secrets.privateKeys.hyperspace.deployer],
       gasPrice: "auto"
     },
   },

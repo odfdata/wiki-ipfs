@@ -60,7 +60,7 @@ Check the console to see the address of the deployed addresses.
 
 ## Current deployment
 
-We're currently migrating to Filecoin Virtual Machine, in their EVM-compatible version. Due to the fact that Wallaby 
+We're currently migrating to Filecoin Virtual Machine, in their EVM-compatible version. Due to the fact that hyperspace 
 testnet keeps getting reset, it's hard to write a contract address. We'll add the deployed version once a 
 permanent testnet (or mainnet) is released.
 
