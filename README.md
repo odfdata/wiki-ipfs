@@ -38,6 +38,14 @@ and you want to make sure you're processing only files approved by a specific wa
 You can also **endorse** a CID you trust, or oppose, if you don't want to endorse anymore. Calling the smart contract `EndorseListRegistry.sol`, you can 
 query if a specific CID is endorsed by a specific wallet address.
 
+## How to deploy
+
+1. Set up an [IPFS node](https://github.com/odfdata/wiki-ipfs/tree/master/ipfs-node)
+2. Launch your [Chainlink Node](https://github.com/odfdata/wiki-ipfs/tree/master/cl-node)
+3. Deploy the [backend infrastracture](https://github.com/odfdata/wiki-ipfs/tree/master/cl-external-adapter) to listen to incoming oracle requests
+4. Deploy the [smart contracts](https://github.com/odfdata/wiki-ipfs/tree/master/contracts)
+4. Launch the [frontend](https://github.com/odfdata/wiki-ipfs/tree/master/web-app)
+
 ## Benefits
 
 We can list the top 3 main benefits:
