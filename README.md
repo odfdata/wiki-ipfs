@@ -38,6 +38,14 @@ and you want to make sure you're processing only files approved by a specific wa
 You can also **endorse** a CID you trust, or oppose, if you don't want to endorse anymore. Calling the smart contract `EndorseListRegistry.sol`, you can 
 query if a specific CID is endorsed by a specific wallet address.
 
+## How to deploy
+
+1. Set up an [IPFS node](https://github.com/odfdata/wiki-ipfs/tree/master/ipfs-node)
+2. Launch your [Chainlink Node](https://github.com/odfdata/wiki-ipfs/tree/master/cl-node)
+3. Deploy the [backend infrastracture](https://github.com/odfdata/wiki-ipfs/tree/master/cl-external-adapter) to listen to incoming oracle requests
+4. Deploy the [smart contracts](https://github.com/odfdata/wiki-ipfs/tree/master/contracts)
+4. Launch the [frontend](https://github.com/odfdata/wiki-ipfs/tree/master/web-app)
+
 ## Benefits
 
 We can list the top 3 main benefits:
@@ -47,23 +55,33 @@ We can list the top 3 main benefits:
 
 ## Current deployment
 
-At the moment the solution is deployed on Polygon Mumbai
+At the moment the solution is deployed on Hyperspace (FEVM) and Polygon Mumbai
+
+### Hyperspace FEVM smart contracts
+
+* **Operator.sol**  [0x9bcBf2b8468B8985e07E057EC3F339Ad9c886eE0](https://hyperspace.filfox.info/en/address/0x9bcBf2b8468B8985e07E057EC3F339Ad9c886eE0)
+* **EndorseCIDRegistry.sol** [0x58Ef2EDBf4808C3ab0538eA19d5f510Fc07e4E83](https://hyperspace.filfox.info/en/address/0x58Ef2EDBf4808C3ab0538eA19d5f510Fc07e4E83)
+* **CID2HashRegistry.sol** [0xe04892004FD581Ed14A8eB3C6CBf4F97394c16Dd](https://hyperspace.filfox.info/en/address/0xe04892004FD581Ed14A8eB3C6CBf4F97394c16Dd)
+* **CID2HashOracleLogic.sol** [0xFA052A2794DC5194b3900De74D605deb12c941BB](https://hyperspace.filfox.info/en/address/0xFA052A2794DC5194b3900De74D605deb12c941BB)
+
+### Polygon Mumbai smart contracts
 
 * **Operator.sol**  [0x3c72382DB6FB9410fe33f72e9e04619b6737A965](https://mumbai.polygonscan.com/address/0x3c72382db6fb9410fe33f72e9e04619b6737a965)
 * **EndorseCIDRegistry.sol** [0xD843359f82D82306CB9d6c5FC1290a93b558AF87](https://mumbai.polygonscan.com/address/0xd843359f82d82306cb9d6c5fc1290a93b558af87)
 * **CID2HashRegistry.sol** [0x35912ec51ED76af08311346A118047dBC1d06Fe7](https://mumbai.polygonscan.com/address/0x35912ec51ed76af08311346a118047dbc1d06fe7)
 * **CID2HashOracleLogic.sol** [0x3B558E71D2A6203D08B2FA8751d743Fa9F181Eac](https://mumbai.polygonscan.com/address/0x3b558e71d2a6203d08b2fa8751d743fa9f181eac)
 
-It is also deployable on Filecoin Virtual Machine (FEVM), see the instruction in the `contracts` readme. Once the FEVM will be put
-in production, this will be the only chain supported.
+⚠️ FEVM is a chain currently under development. It is possible that is periodically reset, thus the addresses posted
+above may not work anymore. You can always re-deploy the smart contracts on FEVM, see `contracts` readme. 
+Once the FEVM will be considered production-ready, **it will be the only chain supported by this project**.
 
-For the Chainlink Oracle, its Docker image is running as a serverless container in AWS (using AWS Fargate) and each verification requests is handled by a Lambda Function.
+For the **Chainlink Oracle**, its Docker image is running as a serverless container in AWS (using AWS Fargate) and each verification requests is handled by a Lambda Function.
 
-IPFS storage used via our GUI uses the SDK and functionalities of Web3.Storage
+IPFS storage used via our GUI uses the SDK and functionalities of **Web3.Storage**
 
 ## Examples
 
-You can check our [Bacalhau example](https://github.com/fedecastelli/wiki-ipfs/tree/master/bacalhau)
+You can check our [Bacalhau example](https://github.com/odfdata/wiki-ipfs/tree/master/bacalhau)
 
 ## Known limitations
 

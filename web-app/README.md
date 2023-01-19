@@ -4,7 +4,7 @@ This repo contains the code for the frontend dApp to access Wiki IPFS and intera
 
 Currently, it's configured to work with:
 
-* Filecoin Virtual Machine (FEVM) testnet
+* Filecoin Virtual Machine (FEVM) hyperspace testnet
 * Polygon Mumbai testnet
 
 ## Project creation

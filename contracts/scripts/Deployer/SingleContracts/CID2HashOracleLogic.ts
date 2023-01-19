@@ -20,15 +20,17 @@ export async function deployCID2HashOracleLogic(
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
   let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("CID2HashOracleLogic", signer);
-  return await contractFactory.deploy(
+  const contract = await contractFactory.deploy(
     jobId,
     oracle,
     payTokenAddress,
     {
       nonce: next_nonce,
-      maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+      maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as CID2HashOracleLogic;
+  await contract.deployed();
+  return contract;
 }
 
 
@@ -48,14 +50,15 @@ export async function cid2hashOracleLogic_setCid2HashRegistryAddress(
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
   let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("CID2HashOracleLogic", signer);
-  await contractFactory
+  let tx = await contractFactory
     .attach(cid2hashOracleLogic)
     .setCid2HashRegistryAddress(
       cid2hashRegistryAddress,
       {
         nonce: next_nonce,
-        maxPriorityFeePerGas: ethers.provider.network.chainId === 31415 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+        maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
       }
     );
+  await tx.wait();
   return;
 }
