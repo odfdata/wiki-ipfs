@@ -18,7 +18,7 @@ export async function deployOperator(
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
   let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("Operator", signer);
-  return await contractFactory.deploy(
+  let contract = await contractFactory.deploy(
     linkTokenAddress,
     ownerAddress,
     {
@@ -26,6 +26,8 @@ export async function deployOperator(
       maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as Operator;
+  await contract.deployed();
+  return contract;
 }
 
 /**
@@ -44,7 +46,7 @@ export async function setAuthorizedSender(
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
   let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("Operator", signer);
-  await contractFactory
+  let tx = await contractFactory
     .attach(operatorAddress)
     .setAuthorizedSenders(
       [authorizedSenderAddress],
@@ -53,5 +55,6 @@ export async function setAuthorizedSender(
         maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
       }
     );
+  await tx.wait();
   return;
 }

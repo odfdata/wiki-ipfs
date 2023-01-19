@@ -14,10 +14,12 @@ export async function deployEndorseCIDRegistry(
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
   let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("EndorseCIDRegistry", signer);
-  return await contractFactory.deploy(
+  const contract = await contractFactory.deploy(
     {
       nonce: next_nonce,
       maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as EndorseCIDRegistry;
+  await contract.deployed();
+  return contract;
 }
