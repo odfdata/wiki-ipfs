@@ -8,7 +8,11 @@ import secrets from './.secrets.json';
  */
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.17",
+    compilers: [{
+      version: "0.8.17",
+    },{
+      version: "0.7.6",
+    }],
     settings: {
       viaIR: false,
       optimizer: {
@@ -23,19 +27,20 @@ const config: HardhatUserConfig = {
       chainId: 1337,
       forking: {
         url: secrets.nodeUrls.mumbai,
-        blockNumber: 29183813
+        blockNumber: 31064556
       }
-    },
-    mainnetPoly: {
-      url: secrets.nodeUrls.mainnetPoly,
-      accounts: [secrets.privateKeys.mainnetPoly.deployer],
-      gasPrice: "auto"
     },
     mumbai: {
       url: secrets.nodeUrls.mumbai,
       accounts: [secrets.privateKeys.mumbai.deployer],
       gasPrice: "auto"
-    }
+    },
+    hyperspace: {
+      chainId: 3141,
+      url: secrets.nodeUrls.hyperspace,
+      accounts: [secrets.privateKeys.hyperspace.deployer],
+      gasPrice: "auto"
+    },
   },
   etherscan: {
     apiKey: {

@@ -1,10 +1,11 @@
-import React, {useMemo} from 'react';
-import {Box, IconButton, Paper, Tooltip, Typography} from "@mui/material";
+import React, {useEffect, useMemo} from 'react';
+import {Box, Button, IconButton, Paper, Tooltip, Typography} from "@mui/material";
 import {FoundCid} from "../../pages/Search/Search";
 import {Download, FindInPage, Plagiarism, PlagiarismOutlined, Search} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {RouteKey} from "../../../App.Routes";
 import SearchFileExtraInfo from "./SearchFileExtraInfo";
+import {useRequestCid2Hash} from "../../../hooks/contracts/CID2HashOracleLogic/useRequestCid2Hash";
 
 /**
  *
@@ -14,9 +15,18 @@ import SearchFileExtraInfo from "./SearchFileExtraInfo";
  */
 const SearchSingleCidResult: React.FC<ISearchSingleCidResult> = (props) => {
 
-  //TODO get the extra data from a custom hook
-
   const navigate = useNavigate();
+  const requestCid2Hash = useRequestCid2Hash({
+    CIDList: [props.cid.cid]
+  });
+
+  useEffect(() => {
+    if (requestCid2Hash.completed) {
+      // refresh the page to reload CID status
+      // TODO better to create a component that listen to events and on those events reloads data from SCs
+      window.location.reload();
+    }
+  }, [requestCid2Hash.completed]);
 
   const inspectCID = () => {
     window.open(`https://cid.ipfs.tech/#${props.cid.cid}`);
@@ -35,7 +45,7 @@ const SearchSingleCidResult: React.FC<ISearchSingleCidResult> = (props) => {
   }
 
   const verificationStatusAsString = useMemo(() => {
-    if (props.cid.status === 0) return "Verification not submitted";
+    if (props.cid.status === 0) return "Verification NOT submitted";
     else if (props.cid.status === 1) return "Verification Pending";
     else if (props.cid.status === 2) return "Certified!";
     else return "Error during certification";
@@ -44,7 +54,22 @@ const SearchSingleCidResult: React.FC<ISearchSingleCidResult> = (props) => {
   return (
     <Paper sx={{px: 2, py: 2}} elevation={3}>
       <Typography variant="h4">{props.cid.cid}</Typography>
-      <Typography variant="body1" color={"text-secondary"} sx={{mt: 1}}><strong>Status</strong>: {verificationStatusAsString}</Typography>
+      <Box display={"flex"} flexDirection={"row"} alignItems={"center"} mt={1}>
+        <Typography variant="body1" color={"text-secondary"}>
+          <strong>Status</strong>: {verificationStatusAsString}
+        </Typography>
+        {
+          props.cid.status === 0 ?
+            <Button variant={"outlined"}
+                    size={"small"}
+                    sx={{fontSize: 10, marginLeft: 2, paddingX: 1}}
+                    onClick={() => requestCid2Hash?.write()}>
+              Verify It!
+            </Button>
+            :
+            ""
+        }
+      </Box>
 
       {
         props.cid.status === 2 ?
