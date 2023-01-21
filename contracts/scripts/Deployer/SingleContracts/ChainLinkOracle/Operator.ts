@@ -60,7 +60,7 @@ export async function setAuthorizedSender(
       );
   } catch (e) {
     // @ts-ignore
-    console.log(error.toString())
+    console.log(e.toString())
     process.exit(1)
   }
   await tx.wait();
