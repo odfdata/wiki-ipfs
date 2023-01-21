@@ -26,7 +26,8 @@ export async function deployOperator(
       maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
     }
   ) as Operator;
-  await contract.deployed();
+  // TODO re-enable this line to avoid error
+  // await contract.deployed();
   return contract;
 }
 
@@ -46,15 +47,22 @@ export async function setAuthorizedSender(
   let next_nonce = nonce >= 0 ? nonce : await signer.getTransactionCount();
   let gasData = await ethers.provider.getFeeData();
   const contractFactory = await ethers.getContractFactory("Operator", signer);
-  let tx = await contractFactory
-    .attach(operatorAddress)
-    .setAuthorizedSenders(
-      [authorizedSenderAddress],
-      {
-        nonce: next_nonce,
-        maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
-      }
-    );
+  let tx;
+  try {
+    tx = await contractFactory
+      .attach(operatorAddress)
+      .setAuthorizedSenders(
+        [authorizedSenderAddress],
+        {
+          nonce: next_nonce,
+          maxPriorityFeePerGas: ethers.provider.network.chainId === 3141 ? gasData.maxPriorityFeePerGas?.toHexString() : undefined
+        }
+      );
+  } catch (e) {
+    // @ts-ignore
+    console.log(error.toString())
+    process.exit(1)
+  }
   await tx.wait();
   return;
 }
