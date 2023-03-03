@@ -33,6 +33,8 @@ export const deployOracle = async (
 if (typeof require !== 'undefined' && require.main === module) {
   let chainId: "80001" | "3141" | "1337" = network.config.chainId?.toString() as "80001" | "3141" | "1337";
   console.log("Deploying on chain " + chainId);
+  console.log("PAY_TOKEN_ADDRESS " + CHAIN_CONSTANTS[chainId].PAY_TOKEN_ADDRESS);
+  console.log("ORACLE_AUTHORIZED_SENDER_ADDRESS " + CHAIN_CONSTANTS[chainId].ORACLE_AUTHORIZED_SENDER_ADDRESS);
   deployOracle(
     CHAIN_CONSTANTS[chainId].PAY_TOKEN_ADDRESS,
     CHAIN_CONSTANTS[chainId].ORACLE_AUTHORIZED_SENDER_ADDRESS
