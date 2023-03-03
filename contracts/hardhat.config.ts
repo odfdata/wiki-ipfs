@@ -12,6 +12,8 @@ const config: HardhatUserConfig = {
       version: "0.8.17",
     },{
       version: "0.7.6",
+    },{
+      version: "0.4.26",
     }],
     settings: {
       viaIR: false,
@@ -26,8 +28,8 @@ const config: HardhatUserConfig = {
       allowUnlimitedContractSize: true,
       chainId: 1337,
       forking: {
-        url: secrets.nodeUrls.mumbai,
-        blockNumber: 31064556
+        url: secrets.nodeUrls.hyperspace,
+        blockNumber: 133429
       }
     },
     mumbai: {

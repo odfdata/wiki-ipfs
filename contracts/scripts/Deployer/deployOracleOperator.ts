@@ -1,4 +1,4 @@
-import {ethers} from "hardhat";
+import {ethers, network} from "hardhat";
 import {EndorseCIDRegistry, Operator} from "../../typechain-types";
 import {CHAIN_CONSTANTS} from "../ProjectConstants";
 import {string} from "hardhat/internal/core/params/argumentTypes";
@@ -31,7 +31,8 @@ export const deployOracle = async (
 }
 
 if (typeof require !== 'undefined' && require.main === module) {
-  let chainId: "80001" | "3141" | "1337" = "3141";
+  let chainId: "80001" | "3141" | "1337" = network.config.chainId?.toString() as "80001" | "3141" | "1337";
+  console.log("Deploying on chain " + chainId);
   deployOracle(
     CHAIN_CONSTANTS[chainId].PAY_TOKEN_ADDRESS,
     CHAIN_CONSTANTS[chainId].ORACLE_AUTHORIZED_SENDER_ADDRESS

@@ -46,7 +46,13 @@ report in `ProjectConstants.js` ( `JOD_ID` filed).
 
 Finally, make sure that `PAY_TOKEN_ADDRESS` (in `ProjectConstants.js`) is correct. 
 Ideally that should be the `LNK` token ERC-20 address on the chain you're deploying to. 
-If the chain doesn't have an official `LNK` token, you can deploy a generic ERC-20 token and 
+If the chain doesn't have an official `LNK` token, you can deploy a generic ERC-20 token. You can use
+the following commands
+
+```bash
+yarn hardhat compile
+yarn hardhat test && yarn hardhat run scripts/Deployer/deploySampleLNK.ts
+```
 
 You can now proceed to deploy Wiki-IPFS files
 

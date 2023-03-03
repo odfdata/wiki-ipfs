@@ -6,6 +6,7 @@ import {
 import {useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {useEffect} from "react";
+import {BigNumber} from "@ethersproject/bignumber/lib.esm";
 
 export interface UseRequestCid2HashParams {
   CIDList: string[]
@@ -24,7 +25,11 @@ export const useRequestCid2Hash = (params: UseRequestCid2HashParams): useBaseSma
     functionName: 'requestCID2Hash',
     args: [
       params.CIDList
-    ]
+    ],
+    overrides: {
+      gasLimit: 10000000,
+      gasPrice: BigNumber.from(10).pow(9)
+    }
   });
   const contractWrite = useContractWrite(prepareContractWrite.config);
   const waitForTx = useWaitForTransaction({
