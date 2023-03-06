@@ -55,21 +55,23 @@ We can list the top 3 main benefits:
 
 ## Current deployment
 
-At the moment the solution is deployed on Hyperspace (FEVM) and Polygon Mumbai
+At the moment the solution is deployed on Hyperspace (FEVM) and Polygon Mumbai.
+
+We have also a [LIVE deployed version of the frontend](https://master.d1yjc3iv5vpzcb.amplifyapp.com/).
 
 ### Hyperspace FEVM smart contracts
 
-* **Operator.sol**  [0x9bcBf2b8468B8985e07E057EC3F339Ad9c886eE0](https://hyperspace.filfox.info/en/address/0x9bcBf2b8468B8985e07E057EC3F339Ad9c886eE0)
-* **EndorseCIDRegistry.sol** [0x58Ef2EDBf4808C3ab0538eA19d5f510Fc07e4E83](https://hyperspace.filfox.info/en/address/0x58Ef2EDBf4808C3ab0538eA19d5f510Fc07e4E83)
-* **CID2HashRegistry.sol** [0xe04892004FD581Ed14A8eB3C6CBf4F97394c16Dd](https://hyperspace.filfox.info/en/address/0xe04892004FD581Ed14A8eB3C6CBf4F97394c16Dd)
-* **CID2HashOracleLogic.sol** [0xFA052A2794DC5194b3900De74D605deb12c941BB](https://hyperspace.filfox.info/en/address/0xFA052A2794DC5194b3900De74D605deb12c941BB)
+* **Operator.sol**  [0xA65e4D8B969C8D83222A77F1c0237D3e6D5fDac2](https://hyperspace.filfox.info/en/address/0xA65e4D8B969C8D83222A77F1c0237D3e6D5fDac2)
+* **EndorseCIDRegistry.sol** [0xb16bD9690eA46805735e9330FdB78cC048BfbD18](https://hyperspace.filfox.info/en/address/0xb16bD9690eA46805735e9330FdB78cC048BfbD18)
+* **CID2HashRegistry.sol** [0x0813582fcd664A0a3B14ED0c2a31c0fF47Da0c21](https://hyperspace.filfox.info/en/address/0x0813582fcd664A0a3B14ED0c2a31c0fF47Da0c21)
+* **CID2HashOracleLogic.sol** [0xB9cCC8AacDc8995faFC60591c4F7d3A678AD4b30](https://hyperspace.filfox.info/en/address/0xB9cCC8AacDc8995faFC60591c4F7d3A678AD4b30)
 
 ### Polygon Mumbai smart contracts
 
 * **Operator.sol**  [0x3c72382DB6FB9410fe33f72e9e04619b6737A965](https://mumbai.polygonscan.com/address/0x3c72382db6fb9410fe33f72e9e04619b6737a965)
-* **EndorseCIDRegistry.sol** [0xD843359f82D82306CB9d6c5FC1290a93b558AF87](https://mumbai.polygonscan.com/address/0xd843359f82d82306cb9d6c5fc1290a93b558af87)
-* **CID2HashRegistry.sol** [0x35912ec51ED76af08311346A118047dBC1d06Fe7](https://mumbai.polygonscan.com/address/0x35912ec51ed76af08311346a118047dbc1d06fe7)
-* **CID2HashOracleLogic.sol** [0x3B558E71D2A6203D08B2FA8751d743Fa9F181Eac](https://mumbai.polygonscan.com/address/0x3b558e71d2a6203d08b2fa8751d743fa9f181eac)
+* **EndorseCIDRegistry.sol** [0xb16bD9690eA46805735e9330FdB78cC048BfbD18](https://mumbai.polygonscan.com/address/0xb16bD9690eA46805735e9330FdB78cC048BfbD18)
+* **CID2HashRegistry.sol** [0x0813582fcd664A0a3B14ED0c2a31c0fF47Da0c21](https://mumbai.polygonscan.com/address/0x0813582fcd664A0a3B14ED0c2a31c0fF47Da0c21)
+* **CID2HashOracleLogic.sol** [0xB9cCC8AacDc8995faFC60591c4F7d3A678AD4b30](https://mumbai.polygonscan.com/address/0xB9cCC8AacDc8995faFC60591c4F7d3A678AD4b30)
 
 ⚠️ FEVM is a chain currently under development. It is possible that is periodically reset, thus the addresses posted
 above may not work anymore. You can always re-deploy the smart contracts on FEVM, see `contracts` readme. 
