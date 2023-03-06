@@ -10,9 +10,7 @@ export const hyperspace: Chain = {
     name: 'tFIL',
     symbol: 'tFIL',
   },
-  // @ts-ignore
   rpcUrls: {
-    // @ts-ignore
     default: { http: ['https://api.hyperspace.node.glif.io/rpc/v1'] }
   },
   blockExplorers: {
