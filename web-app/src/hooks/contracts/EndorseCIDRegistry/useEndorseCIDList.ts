@@ -24,7 +24,10 @@ export const useEndorseCIDList = (params: UseEndorseCIDListParams): useBaseSmart
     functionName: 'endorseCID',
     args: [
       params.CIDList
-    ]
+    ],
+    overrides: {
+      gasLimit: 50000000
+    }
   });
   const contractWrite = useContractWrite(prepareContractWrite.config);
   const waitForTx = useWaitForTransaction({

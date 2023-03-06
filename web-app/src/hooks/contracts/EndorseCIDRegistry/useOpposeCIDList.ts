@@ -24,7 +24,10 @@ export const useOpposeCIDList = (params: UseOpposeCIDListParams): useBaseSmartCo
     functionName: 'opposeCID',
     args: [
       params.CIDList
-    ]
+    ],
+    overrides: {
+      gasLimit: 50000000
+    }
   });
   const contractWrite = useContractWrite(prepareContractWrite.config);
   const waitForTx = useWaitForTransaction({
