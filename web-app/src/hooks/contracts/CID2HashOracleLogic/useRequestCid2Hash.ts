@@ -27,7 +27,6 @@ export const useRequestCid2Hash = (params: UseRequestCid2HashParams): useBaseSma
       params.CIDList
     ],
     overrides: {
-      gasLimit: 10000000,
       gasPrice: BigNumber.from(10).pow(9)
     }
   });
