@@ -25,10 +25,7 @@ export const useRequestCid2Hash = (params: UseRequestCid2HashParams): useBaseSma
     functionName: 'requestCID2Hash',
     args: [
       params.CIDList
-    ],
-    overrides: {
-      gasPrice: BigNumber.from(10).pow(9)
-    }
+    ]
   });
   const contractWrite = useContractWrite(prepareContractWrite.config);
   const waitForTx = useWaitForTransaction({
