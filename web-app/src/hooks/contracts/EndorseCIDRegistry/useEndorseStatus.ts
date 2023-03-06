@@ -1,4 +1,4 @@
-import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
+import {useBaseAsyncHook} from "../../utils/useBaseAsyncHook";
 import {useContractRead, useNetwork} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {useBaseSmartContractReadReturn} from "../../utils/useBaseSmartContractRead";

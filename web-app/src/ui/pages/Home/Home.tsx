@@ -4,7 +4,6 @@ import {useNavigate} from 'react-router-dom';
 import {theme} from "../../../GlobalStyles";
 import CommonUploadFileDialog from "../../organisms/Common.UploadFileDialog/Common.UploadFileDialog";
 import SearchBar from "../../atoms/SearchBar/SearchBar";
-import {Simulate} from "react-dom/test-utils";
 
 /**
  *

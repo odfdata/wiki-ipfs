@@ -1,12 +1,10 @@
 import {
-  useBaseSmartContractWrite, useBaseSmartContractWriteExternalReturn,
-  useBaseSmartContractWriteReturn,
-  useBaseSmartContractWriteState
+  useBaseSmartContractWrite,
+  useBaseSmartContractWriteExternalReturn
 } from "../../utils/useBaseSmartContractWrite";
 import {useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {useEffect} from "react";
-import {BigNumber} from "@ethersproject/bignumber/lib.esm";
 
 export interface UseRequestCid2HashParams {
   CIDList: string[]

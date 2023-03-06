@@ -1,11 +1,9 @@
 import React from 'react';
 import {FoundCid} from "../../pages/Search/Search";
-import {Box, Button, CircularProgress, Typography} from "@mui/material";
+import {Box, CircularProgress, Typography} from "@mui/material";
 import {useSearchCID} from "../../../hooks/api/useSearchCID";
-import prettyBytes from "pretty-bytes";
 import {useGetNumberOfEndorser} from "../../../hooks/contracts/EndorseCIDRegistry/useGetNumberOfEndorser";
 import {useNetwork} from "wagmi";
-import {useEndorseCIDList} from "../../../hooks/contracts/EndorseCIDRegistry/useEndorseCIDList";
 import {theme} from "../../../GlobalStyles";
 import EndorseButtonOption from "./EndorseButtonOption";
 

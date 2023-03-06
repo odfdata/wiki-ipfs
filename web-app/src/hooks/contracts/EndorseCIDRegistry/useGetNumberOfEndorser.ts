@@ -1,4 +1,4 @@
-import {useBaseAsyncHook, useBaseAsyncHookState} from "../../utils/useBaseAsyncHook";
+import {useBaseAsyncHook} from "../../utils/useBaseAsyncHook";
 import {useContractRead} from "wagmi";
 import {CONTRACTS_DETAILS} from "../../../utils/constants";
 import {BigNumber} from "@ethersproject/bignumber";

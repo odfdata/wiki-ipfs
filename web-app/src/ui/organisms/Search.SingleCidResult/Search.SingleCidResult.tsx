@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {Box, Button, IconButton, Paper, Tooltip, Typography} from "@mui/material";
 import {FoundCid} from "../../pages/Search/Search";
-import {Download, FindInPage, Plagiarism, PlagiarismOutlined, Search} from "@mui/icons-material";
+import {Download, FindInPage, PlagiarismOutlined, Search} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {RouteKey} from "../../../App.Routes";
 import SearchFileExtraInfo from "./SearchFileExtraInfo";

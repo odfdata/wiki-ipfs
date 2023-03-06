@@ -1,9 +1,5 @@
 import React from 'react';
-import {Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
-import FilePicker from "./Common.UploadFileDialog/FilePicker";
-import SingleFileSelected from "./Common.UploadFileDialog/SingleFileSelected";
-import CidWithLink from "./Common.UploadFileDialog/CidWithLink";
-import CommmonPublishCidOnChain from "./Common.PublishCidOnChain/CommmonPublishCidOnChain";
+import {Box, Dialog, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import ConnectWalletButton from "../atoms/ConnectWalletButton/ConnectWalletButton";
 
 /**

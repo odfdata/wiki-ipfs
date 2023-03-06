@@ -1,5 +1,4 @@
-import {useBaseAsyncHookReturn, useBaseAsyncHookState} from "./useBaseAsyncHook";
-import {useBaseSmartContractWriteState} from "./useBaseSmartContractWrite";
+import {useBaseAsyncHookState} from "./useBaseAsyncHook";
 
 /**
  * The object returned by a smart contract read hook
