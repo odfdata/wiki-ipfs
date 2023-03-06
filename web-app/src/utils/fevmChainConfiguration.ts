@@ -1,5 +1,6 @@
 import {Chain} from "wagmi";
 
+
 export const hyperspace: Chain = {
   id: 3141,
   name: 'hyperspace',
@@ -9,9 +10,10 @@ export const hyperspace: Chain = {
     name: 'tFIL',
     symbol: 'tFIL',
   },
+  // @ts-ignore
   rpcUrls: {
-    default: { http: ['https://api.hyperspace.node.glif.io/rpc/v1'] },
-    public: { http: ['https://api.hyperspace.node.glif.io/rpc/v1'] }
+    // @ts-ignore
+    default: { http: ['https://api.hyperspace.node.glif.io/rpc/v1'] }
   },
   blockExplorers: {
     default: { name: 'SnowTrace', url: 'https://hyperspace.filfox.info/' },
