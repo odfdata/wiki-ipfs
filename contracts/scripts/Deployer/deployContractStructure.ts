@@ -1,4 +1,4 @@
-import {ethers} from "hardhat";
+import {ethers, network} from "hardhat";
 import {CHAIN_CONSTANTS} from "../ProjectConstants";
 import {deployEndorseCIDRegistry} from "./SingleContracts/EndorseCIDRegistry";
 import {CID2HashOracleLogic, CID2HashRegistry, EndorseCIDRegistry} from "../../typechain-types";
@@ -59,7 +59,11 @@ export const deployContractStructure = async (
 
 
 if (typeof require !== 'undefined' && require.main === module) {
-  let chainId: "80001" | "3141" | "1337" = "3141";
+  let chainId: "80001" | "3141" | "1337" = network.config.chainId?.toString() as "80001" | "3141" | "1337";
+  console.log("Deploying on chain " + chainId);
+  console.log("JOD_ID " + CHAIN_CONSTANTS[chainId].JOD_ID);
+  console.log("ORACLE_ADDRESS " + CHAIN_CONSTANTS[chainId].ORACLE_ADDRESS);
+  console.log("PAY_TOKEN_ADDRESS " + CHAIN_CONSTANTS[chainId].PAY_TOKEN_ADDRESS);
   deployContractStructure(
     CHAIN_CONSTANTS[chainId].JOD_ID,
     CHAIN_CONSTANTS[chainId].ORACLE_ADDRESS,
